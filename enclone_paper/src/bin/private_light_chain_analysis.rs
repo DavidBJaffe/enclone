@@ -12,7 +12,7 @@
 //         > per_cell_stuff
 //
 // Optional second argument: SHOW -- instead print data for pairs of cells from the same
-// donor at 90% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
+// donor at 100% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
 // For this, the order of output lines is nondeterministic.
 //
 // Optional second argument: J.  Require different J genes rather than different V genes.
@@ -155,7 +155,7 @@ fn main() {
                     if eq_light {
                         res.2[d + 1][ident].2 += 1;
                         res.2[0][ident].2 += 1;
-                        if show && ident == 9 {
+                        if show && ident == 10 {
                             println!(
                                 "{} {} {} {}",
                                 data[k1].6, data[k1].7, data[k2].6, data[k2].7
