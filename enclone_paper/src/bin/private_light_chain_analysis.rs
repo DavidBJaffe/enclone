@@ -14,6 +14,8 @@
 // Optional second argument: SHOW -- instead print data for pairs of cells from the same
 // donor at 90% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
 // For this, the order of output lines is nondeterministic.
+//
+// Optional second argument: J.  Require different J genes rather than different V genes.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -29,7 +31,18 @@ fn main() {
     PrettyTrace::new().on();
     let args: Vec<String> = env::args().collect();
     let f = open_for_read![&args[1]];
-    let show = args.len() > 2 && args[2] == "SHOW";
+    let mut show = false;
+    let mut use_j = false;
+    for i in 2..args.len() {
+        if args[i] == "SHOW" {
+            show = true;
+        } else if args[i] == "J" {
+            use_j = true;
+        } else {
+            eprintln!("\nIllegal argument.\n");
+            std::process::exit(1);
+        }
+    }
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
     let mut data = Vec::<(
@@ -39,6 +52,7 @@ fn main() {
         String,
         String,
         usize,
+        String,
         String,
         String,
     )>::new();
@@ -63,6 +77,7 @@ fn main() {
                 /* 5 */ fields[tof["dref"]].force_usize(),
                 /* 6 */ fields[tof["datasets_cell"]].to_string(),
                 /* 7 */ fields[tof["barcode"]].to_string(),
+                /* 8 */ fields[tof["j_name1"]].to_string(),
             ));
         }
     }
@@ -105,9 +120,12 @@ fn main() {
         let d = data[i].0.after("d").force_usize() - 1;
         for k1 in i..j {
             for k2 in k1 + 1..j {
-                // Require different heavy chain V genes.
+                // Require different heavy chain V or J genes.
 
-                if data[k1].3 == data[k2].3 {
+                if !use_j && data[k1].3 == data[k2].3 {
+                    continue;
+                }
+                if use_j && data[k1].8 == data[k2].8 {
                     continue;
                 }
 
