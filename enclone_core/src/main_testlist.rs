@@ -1,6 +1,6 @@
 // Copyright (c) 2021 10X Genomics, Inc. All rights reserved.
 
-pub const TESTS: [&str; 305] = [
+pub const TESTS: [&str; 309] = [
     // 1. tests variant base after CDR3, parseable output
     r###"BCR=123089 CDR3=CVRDRQYYFDYW POUT=stdout
      PCOLS=exact_subclonotype_id,n,v_name1,v_name2,nchains,var_indices_aa1,barcodes"###,
@@ -763,4 +763,12 @@ pub const TESTS: [&str; 305] = [
          CDR3="CARDELDILTGYNIPTFGGCVYW|CAHHGSARYSSSWHAAPGPYYFDYW" BUILT_IN"###,
     // 305. test that LVARSP=gex fails on Ab-only data
     r###"BCR=1031851 GEX=1031779 NGEX LVARSP=gex EXPECT_FAIL"###,
+    // 306. test leader_dna
+    r###"BCR=86237 CELLS=3 POUT=stdout PCOLS=leader_dna1"###,
+    // 307. test leader_aa
+    r###"BCR=86237 CELLS=3 POUT=stdout PCOLS=leader_aa1"###,
+    // 308. test leader_dna_ref
+    r###"BCR=86237 CELLS=3 POUT=stdout PCOLS=leader_dna_ref1"###,
+    // 309. test leader_aa_ref
+    r###"BCR=86237 CELLS=3 POUT=stdout PCOLS=leader_aa_ref1"###,
 ];

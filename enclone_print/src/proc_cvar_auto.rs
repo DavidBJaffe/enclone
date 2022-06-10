@@ -1080,6 +1080,48 @@ pub fn proc_cvar_auto(
             Vec::new(),
             "clono".to_string(),
         )
+    } else if vname == "leader_aa" {
+        let x = &ex.share[mid];
+        let mut dna = Vec::<u8>::new();
+        for p in 0..x.fr1_start {
+            for j in 0..x.ins.len() {
+                if x.ins[j].0 == p {
+                    let mut z = x.ins[j].1.clone();
+                    dna.append(&mut z);
+                }
+            }
+            if x.seq_del_amino[p] != b'-' {
+                dna.push(x.seq_del_amino[p]);
+            }
+        }
+
+        (stringme(&aa_seq(&dna, 0)), Vec::new(), "exact".to_string())
+    } else if vname == "leader_aa_ref" {
+        let x = &ex.share[mid];
+        let dna = refdata.refs[x.v_ref_id].to_ascii_vec()[0..x.fr1_start].to_vec();
+
+        (stringme(&aa_seq(&dna, 0)), Vec::new(), "clono".to_string())
+    } else if vname == "leader_dna" {
+        let x = &ex.share[mid];
+        let mut dna = Vec::<u8>::new();
+        for p in 0..x.fr1_start {
+            for j in 0..x.ins.len() {
+                if x.ins[j].0 == p {
+                    let mut z = x.ins[j].1.clone();
+                    dna.append(&mut z);
+                }
+            }
+            if x.seq_del_amino[p] != b'-' {
+                dna.push(x.seq_del_amino[p]);
+            }
+        }
+
+        (stringme(&dna), Vec::new(), "exact".to_string())
+    } else if vname == "leader_dna_ref" {
+        let x = &ex.share[mid];
+        let dna = refdata.refs[x.v_ref_id].to_ascii_vec()[0..x.fr1_start].to_vec();
+
+        (stringme(&dna), Vec::new(), "clono".to_string())
     } else if vname.starts_with("ndiff")
         && vname.ends_with("vj")
         && vname.between2("ndiff", "vj").parse::<i64>().is_ok()
