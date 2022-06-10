@@ -10,6 +10,10 @@
 // enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL ECHOC
 //         PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1,clonotype_ncells,const1,hcomp
 //         > per_cell_stuff
+//
+// Optional second argument: SHOW -- instead print data for pairs of cells from the same
+// donor at 90% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
+// For this, the order of output lines is nondeterministic.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -25,9 +29,19 @@ fn main() {
     PrettyTrace::new().on();
     let args: Vec<String> = env::args().collect();
     let f = open_for_read![&args[1]];
+    let show = args.len() > 2 && args[2] == "SHOW";
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
-    let mut data = Vec::<(String, usize, Vec<u8>, String, String, usize)>::new();
+    let mut data = Vec::<(
+        String,
+        usize,
+        Vec<u8>,
+        String,
+        String,
+        usize,
+        String,
+        String,
+    )>::new();
     for line in f.lines() {
         let s = line.unwrap();
         if s.starts_with("#") {
@@ -41,12 +55,14 @@ fn main() {
             first = false;
         } else {
             data.push((
-                fields[tof["donors_cell"]].to_string(),
-                fields[tof["cdr3_aa1"]].len(),
-                fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
-                fields[tof["v_name1"]].to_string(),
-                fields[tof["v_name2"]].to_string(),
-                fields[tof["dref"]].force_usize(),
+                /* 0 */ fields[tof["donors_cell"]].to_string(),
+                /* 1 */ fields[tof["cdr3_aa1"]].len(),
+                /* 2 */ fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
+                /* 3 */ fields[tof["v_name1"]].to_string(),
+                /* 4 */ fields[tof["v_name2"]].to_string(),
+                /* 5 */ fields[tof["dref"]].force_usize(),
+                /* 6 */ fields[tof["datasets_cell"]].to_string(),
+                /* 7 */ fields[tof["barcode"]].to_string(),
             ));
         }
     }
@@ -121,6 +137,12 @@ fn main() {
                     if eq_light {
                         res.2[d + 1][ident].2 += 1;
                         res.2[0][ident].2 += 1;
+                        if show && ident == 9 {
+                            println!(
+                                "{} {} {} {}",
+                                data[k1].6, data[k1].7, data[k2].6, data[k2].7
+                            );
+                        }
                     } else {
                         res.2[d + 1][ident].3 += 1;
                         res.2[0][ident].3 += 1;
@@ -129,6 +151,9 @@ fn main() {
             }
         }
     });
+    if show {
+        std::process::exit(0);
+    }
 
     // Sum.
 
