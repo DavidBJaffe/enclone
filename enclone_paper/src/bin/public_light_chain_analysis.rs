@@ -15,7 +15,8 @@
 // - FLOW: compute using flow classification of naive/memory rather than dref
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
-// - REVERSE: reverse role of heavy and light.
+// - REVERSE: reverse role of heavy and light
+// - SOLO: reduce to one cell per clonotype.
 
 use enclone_core::hcat;
 use enclone_core::test_def::test_donor_id;
@@ -28,7 +29,7 @@ use std::io::BufRead;
 use std::mem::swap;
 use string_utils::{add_commas, TextUtils};
 use tables::*;
-use vector_utils::{bin_position, unique_sort};
+use vector_utils::{bin_position, erase_if, unique_sort};
 
 const NAIVE: [usize; 40] = [
     1279049, 1279053, 1279057, 1279061, 1279065, 1279069, 1279073, 1279077, 1287144, 1287145,
@@ -71,6 +72,11 @@ fn main() {
     } else {
         false
     };
+    let opt_solo = if args.len() >= 3 && args[2] == "SOLO" {
+        true
+    } else {
+        false
+    };
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
@@ -93,6 +99,7 @@ fn main() {
         usize,
         String,
     )>::new();
+    let mut clonotype = Vec::<usize>::new();
     for line in f.lines() {
         let s = line.unwrap();
         if s.starts_with("#") {
@@ -104,38 +111,60 @@ fn main() {
                 tof.insert(fields[i].to_string(), i);
             }
             first = false;
-        } else if !opt_reverse {
-            data.push((
-                /* 0 */ fields[tof["v_name1"]].to_string(),
-                /* 1 */ fields[tof["cdr3_aa1"]].len(),
-                /* 2 */ fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
-                /* 3 */ fields[tof["donors_cell"]].to_string(),
-                /* 4 */ fields[tof["v_name2"]].to_string(),
-                /* 5 */ fields[tof["dref"]].force_usize(),
-                /* 6 */ fields[tof["jun_mat"]].force_usize(),
-                /* 7 */ fields[tof["jun_sub"]].force_usize(),
-                /* 8 */ fields[tof["hcomp"]].force_usize(),
-                /* 9 */ fields[tof["jun_ins"]].force_usize(),
-                /* 10 */ fields[tof["datasets_cell"]].force_usize(),
-                /* 11 */ fields[tof["d1_name1"]].to_string(),
-            ));
         } else {
-            data.push((
-                /* 0 */ fields[tof["v_name2"]].to_string(),
-                /* 1 */ fields[tof["cdr3_aa2"]].len(),
-                /* 2 */ fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
-                /* 3 */ fields[tof["donors_cell"]].to_string(),
-                /* 4 */ fields[tof["v_name1"]].to_string(),
-                /* 5 */ fields[tof["dref"]].force_usize(),
-                /* 6 */ fields[tof["jun_mat"]].force_usize(),
-                /* 7 */ fields[tof["jun_sub"]].force_usize(),
-                /* 8 */ fields[tof["hcomp"]].force_usize(),
-                /* 9 */ fields[tof["jun_ins"]].force_usize(),
-                /* 10 */ fields[tof["datasets_cell"]].force_usize(),
-                /* 11 */ fields[tof["d1_name1"]].to_string(),
-            ));
+            if !opt_reverse {
+                data.push((
+                    /* 0 */ fields[tof["v_name1"]].to_string(),
+                    /* 1 */ fields[tof["cdr3_aa1"]].len(),
+                    /* 2 */ fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
+                    /* 3 */ fields[tof["donors_cell"]].to_string(),
+                    /* 4 */ fields[tof["v_name2"]].to_string(),
+                    /* 5 */ fields[tof["dref"]].force_usize(),
+                    /* 6 */ fields[tof["jun_mat"]].force_usize(),
+                    /* 7 */ fields[tof["jun_sub"]].force_usize(),
+                    /* 8 */ fields[tof["hcomp"]].force_usize(),
+                    /* 9 */ fields[tof["jun_ins"]].force_usize(),
+                    /* 10 */ fields[tof["datasets_cell"]].force_usize(),
+                    /* 11 */ fields[tof["d1_name1"]].to_string(),
+                ));
+            } else {
+                data.push((
+                    /* 0 */ fields[tof["v_name2"]].to_string(),
+                    /* 1 */ fields[tof["cdr3_aa2"]].len(),
+                    /* 2 */ fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
+                    /* 3 */ fields[tof["donors_cell"]].to_string(),
+                    /* 4 */ fields[tof["v_name1"]].to_string(),
+                    /* 5 */ fields[tof["dref"]].force_usize(),
+                    /* 6 */ fields[tof["jun_mat"]].force_usize(),
+                    /* 7 */ fields[tof["jun_sub"]].force_usize(),
+                    /* 8 */ fields[tof["hcomp"]].force_usize(),
+                    /* 9 */ fields[tof["jun_ins"]].force_usize(),
+                    /* 10 */ fields[tof["datasets_cell"]].force_usize(),
+                    /* 11 */ fields[tof["d1_name1"]].to_string(),
+                ));
+            }
+            clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
+
+    // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+    // In solo case, reduce to one cell per clonotype.
+
+    if opt_solo {
+        let mut to_delete = vec![false; data.len()];
+        for i in 0..clonotype.len() {
+            if i > 0 && clonotype[i] == clonotype[i - 1] {
+                to_delete[i] = true;
+            }
+        }
+        erase_if(&mut data, &to_delete);
+    }
+
+    // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+    // Sort.
+
     data.sort();
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
