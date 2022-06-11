@@ -21,7 +21,6 @@ use enclone_core::hcat;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
 use rayon::prelude::*;
-use std::cmp::min;
 use std::collections::HashMap;
 use std::env;
 use std::io::{BufRead, Write};
@@ -158,7 +157,9 @@ fn main() {
                             let mut ref2 = data[k2].9.as_bytes().to_vec();
                             let mut seq1 = data[k1].10.as_bytes().to_vec();
                             let mut seq2 = data[k2].10.as_bytes().to_vec();
-                            let n = min(ref1.len(), ref2.len());
+                            seq1 = seq1[0..seq1.len() - 1].to_vec();
+                            seq2 = seq2[0..seq2.len() - 1].to_vec();
+                            let n = 24;
                             ref1 = ref1[ref1.len() - n..].to_vec();
                             ref2 = ref2[ref2.len() - n..].to_vec();
                             seq1 = seq1[seq1.len() - n..].to_vec();
