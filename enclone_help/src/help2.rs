@@ -382,17 +382,6 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
         );
         h.doc2("the universal reference V(D)J concatenation");
 
-        h.ldoc("leader_aa", "the leader amino acid sequence");
-        h.doc("leader_dna", "the leader nucleotide sequence");
-        h.ldoc(
-            "leader_aa_ref",
-            "the leader amino acid sequence, for universal reference",
-        );
-        h.doc(
-            "leader_dna_ref",
-            "the leader nucleotide sequence, for universal reference",
-        );
-
         h.ldoc(
             "cdr*_aa",
             "the CDR*_AA sequence, or \"unknown\" if not computed",
