@@ -30,6 +30,18 @@ command-line help that comes with your copy of #enclone will always match its be
 
 <! –– ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
 
+<table rules="all" cellpadding="3" style="border: 1px solid black">
+
+<p>On June 1, 2022, #enclone was forked.  Changes after that date are in this fork and not
+part of a release.</p>
+
+<table rules="all" cellpadding="3" style="border: 1px solid black">
+
+<p><b>6/11/22</b>: Fix bug that caused the cvar <code>fwr4_dna_ref</code> to have its rightmost
+base removed.</p>
+
+<! –– ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+
 <p><b>5/9/22</b>: Add ability to create #enclone_visual sessions from the command line.  Please
 see <a href="../../pages/auto/visual.html">#enclone_visual</a>.</p>
 
