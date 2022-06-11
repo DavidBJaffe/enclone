@@ -40,6 +40,8 @@ part of a release.</p>
 <p><b>6/11/22</b>: Fix bug that caused the cvar <code>fwr4_dna_ref</code> to have its rightmost
 base removed.</p>
 
+<! –– ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ -->
+
 <p><b>5/9/22</b>: Add ability to create #enclone_visual sessions from the command line.  Please
 see <a href="../../pages/auto/visual.html">#enclone_visual</a>.</p>
 
