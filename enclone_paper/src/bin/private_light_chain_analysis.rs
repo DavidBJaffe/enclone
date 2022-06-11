@@ -21,9 +21,11 @@ use enclone_core::hcat;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
 use rayon::prelude::*;
+use std::cmp::min;
 use std::collections::HashMap;
 use std::env;
-use std::io::BufRead;
+use std::io::{BufRead, Write};
+use string_utils::strme;
 use string_utils::TextUtils;
 use tables::print_tabular_vbox;
 
@@ -45,17 +47,7 @@ fn main() {
     }
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
-    let mut data = Vec::<(
-        String,
-        usize,
-        Vec<u8>,
-        String,
-        String,
-        usize,
-        String,
-        String,
-        String,
-    )>::new();
+    let mut data = Vec::new();
     for line in f.lines() {
         let s = line.unwrap();
         if s.starts_with("#") {
@@ -78,6 +70,8 @@ fn main() {
                 /* 6 */ fields[tof["datasets_cell"]].to_string(),
                 /* 7 */ fields[tof["barcode"]].to_string(),
                 /* 8 */ fields[tof["j_name1"]].to_string(),
+                /* 9 */ fields[tof["fwr4_dna_ref1"]].to_string(),
+                /* 10 */ fields[tof["fwr4_dna1"]].to_string(),
             ));
         }
     }
@@ -157,9 +151,52 @@ fn main() {
                         res.2[0][ident].2 += 1;
                         if show && ident == 10 {
                             println!(
-                                "{} {} {} {}",
+                                "\n{} {} {} {}",
                                 data[k1].6, data[k1].7, data[k2].6, data[k2].7
                             );
+                            let mut ref1 = data[k1].9.as_bytes().to_vec();
+                            let mut ref2 = data[k2].9.as_bytes().to_vec();
+                            let mut seq1 = data[k1].10.as_bytes().to_vec();
+                            let mut seq2 = data[k2].10.as_bytes().to_vec();
+                            let n = min(ref1.len(), ref2.len());
+                            ref1 = ref1[ref1.len() - n..].to_vec();
+                            ref2 = ref2[ref2.len() - n..].to_vec();
+                            seq1 = seq1[seq1.len() - n..].to_vec();
+                            seq2 = seq2[seq2.len() - n..].to_vec();
+                            for i in 0..n {
+                                if ref1[i] == ref2[i] {
+                                    print!(" ");
+                                } else {
+                                    print!("*");
+                                }
+                            }
+                            let mut log = Vec::<u8>::new();
+                            fwriteln!(log, "\n{} ref1", strme(&ref1));
+                            fwriteln!(log, "{} ref2", strme(&ref2));
+                            fwriteln!(log, "{} seq1", strme(&seq1));
+                            fwriteln!(log, "{} seq2", strme(&seq2));
+                            let mut supp = 0;
+                            let mut sup1 = 0;
+                            let mut sup2 = 0;
+                            let mut other = 0;
+                            for i in 0..n {
+                                if ref1[i] != ref2[i] {
+                                    if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                                        supp += 1;
+                                    } else if seq1[i] == ref1[i] && seq2[i] == ref1[i] {
+                                        sup1 += 1;
+                                    } else if seq1[i] == ref2[i] && seq2[i] == ref2[i] {
+                                        sup2 += 1;
+                                    } else {
+                                        other += 1;
+                                    }
+                                }
+                            }
+                            fwriteln!(log, "right = {supp}");
+                            fwriteln!(log, "wrong1 = {sup1}");
+                            fwriteln!(log, "wrong2 = {sup2}");
+                            fwriteln!(log, "dunno = {other}");
+                            print!("{}", strme(&log));
                         }
                     } else {
                         res.2[d + 1][ident].3 += 1;
