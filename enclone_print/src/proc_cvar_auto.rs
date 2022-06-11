@@ -1001,7 +1001,7 @@ pub fn proc_cvar_auto(
                 aa_len = 9;
             }
             let dna = refdata.refs[x.j_ref_id].to_ascii_vec();
-            let dna = dna[dna.len() - 1 - 3 * aa_len..dna.len() - 1].to_vec();
+            let dna = dna[dna.len() - 1 - 3 * aa_len..dna.len()].to_vec();
             y = stringme(&dna);
         }
 
