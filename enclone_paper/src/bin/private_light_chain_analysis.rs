@@ -14,6 +14,7 @@
 // Optional second argument: SHOW -- instead print data for pairs of cells from the same
 // donor at 100% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
 // For this, the order of output lines is nondeterministic.
+// Designed for use with J option.
 //
 // Optional second argument: J.  Require different J genes rather than different V genes.
 
@@ -164,11 +165,13 @@ fn main() {
                             ref2 = ref2[ref2.len() - n..].to_vec();
                             seq1 = seq1[seq1.len() - n..].to_vec();
                             seq2 = seq2[seq2.len() - n..].to_vec();
+                            let mut refdiffs = 0;
                             for i in 0..n {
                                 if ref1[i] == ref2[i] {
                                     print!(" ");
                                 } else {
                                     print!("*");
+                                    refdiffs += 1;
                                 }
                             }
                             let mut log = Vec::<u8>::new();
@@ -197,6 +200,16 @@ fn main() {
                             fwriteln!(log, "wrong1 = {sup1}");
                             fwriteln!(log, "wrong2 = {sup2}");
                             fwriteln!(log, "dunno = {other}");
+                            fwrite!(log, "summary: ");
+                            if refdiffs == 0 {
+                                fwriteln!(log, "no reference differences");
+                            } else if supp > 0 && sup1 == 0 && sup2 == 0 {
+                                fwriteln!(log, "right > 0 and wrongs = 0");
+                            } else if supp == 0 && ((sup1 > 0) ^ (sup2 > 0)) {
+                                fwriteln!(log, "right = 0 and one wrong > 0");
+                            } else {
+                                fwriteln!(log, "other");
+                            }
                             print!("{}", strme(&log));
                         }
                     } else {
