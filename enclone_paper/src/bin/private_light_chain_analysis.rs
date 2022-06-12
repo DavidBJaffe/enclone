@@ -22,6 +22,8 @@
 // JPLUS -- J, and also require that there are at least three positions in the last 25 bases of
 // the different J gene reference sequences at which the reference sequences differ and the two
 // cells both agree with their assigned J gene reference.
+//
+// SOLO: reduce to one cell per clonotype.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -33,6 +35,7 @@ use std::io::{BufRead, Write};
 use string_utils::strme;
 use string_utils::TextUtils;
 use tables::print_tabular_vbox;
+use vector_utils::erase_if;
 
 fn main() {
     PrettyTrace::new().on();
@@ -41,11 +44,14 @@ fn main() {
     let mut show = false;
     let mut use_j = false;
     let mut jplus = false;
+    let mut solo = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
         } else if args[i] == "J" {
             use_j = true;
+        } else if args[i] == "SOLO" {
+            solo = true;
         } else if args[i] == "JPLUS" {
             jplus = true;
             use_j = true;
@@ -57,6 +63,7 @@ fn main() {
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
     let mut data = Vec::new();
+    let mut clonotype = Vec::<usize>::new();
     for line in f.lines() {
         let s = line.unwrap();
         if s.starts_with("#") {
@@ -82,6 +89,7 @@ fn main() {
                 /* 9 */ fields[tof["fwr4_dna_ref1"]].to_string(),
                 /* 10 */ fields[tof["fwr4_dna1"]].to_string(),
             ));
+            clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
     data.sort();
@@ -90,6 +98,18 @@ fn main() {
 
     for i in 0..data.len() {
         data[i].4 = data[i].4.replace("D", "");
+    }
+
+    // In solo case, reduce to one cell per clonotype.
+
+    if solo {
+        let mut to_delete = vec![false; data.len()];
+        for i in 0..clonotype.len() {
+            if i > 0 && clonotype[i] == clonotype[i - 1] {
+                to_delete[i] = true;
+            }
+        }
+        erase_if(&mut data, &to_delete);
     }
 
     // Define groups based on equal donor and CDR3H length.
