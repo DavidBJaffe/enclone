@@ -11,12 +11,17 @@
 //         PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1,clonotype_ncells,const1,hcomp
 //         > per_cell_stuff
 //
-// Optional second argument: SHOW -- instead print data for pairs of cells from the same
-// donor at 100% identity with dref1 > 0 and dref2 > 0 and having the same light chain gene.
-// For this, the order of output lines is nondeterministic.
-// Designed for use with J option.
+// Optional arguments:
 //
-// Optional second argument: J.  Require different J genes rather than different V genes.
+// SHOW -- Instead print data for pairs of cells from the same donor at 100% identity with
+// dref1 > 0 and dref2 > 0 and having the same light chain gene.
+// For this, the order of output lines is nondeterministic.  Designed for use with J option.
+//
+// J -- Require different J genes rather than different V genes.
+//
+// JPLUS -- J, and also require that there are at least three positions in the last 25 bases of
+// the different J gene reference sequences at which the reference sequences differ and the two
+// cells both agree with their assigned J gene reference.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -35,10 +40,14 @@ fn main() {
     let f = open_for_read![&args[1]];
     let mut show = false;
     let mut use_j = false;
+    let mut jplus = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
         } else if args[i] == "J" {
+            use_j = true;
+        } else if args[i] == "JPLUS" {
+            jplus = true;
             use_j = true;
         } else {
             eprintln!("\nIllegal argument.\n");
@@ -86,7 +95,7 @@ fn main() {
     // Define groups based on equal donor and CDR3H length.
     // Plus placeholder for results, see next.
 
-    let mut bounds = Vec::<(usize, usize, Vec<Vec<(usize, usize, usize, usize)>>)>::new();
+    let mut bounds = Vec::new();
     let mut i = 0;
     while i < data.len() {
         let mut j = i + 1;
@@ -123,6 +132,34 @@ fn main() {
                     continue;
                 }
 
+                // Require additional evidence that the two cells lie in different clonotypes.
+
+                let n = 25;
+                let mut ref1 = data[k1].9.as_bytes();
+                let mut ref2 = data[k2].9.as_bytes();
+                let mut seq1 = data[k1].10.as_bytes();
+                let mut seq2 = data[k2].10.as_bytes();
+                if seq1.len() < n || seq2.len() < n {
+                    // This case is odd and may represent incorrect computation of fwr4.
+                    // It occurs less than 0.001% of the time, so we did not investigate further.
+                    continue;
+                }
+                ref1 = &ref1[ref1.len() - n..];
+                ref2 = &ref2[ref2.len() - n..];
+                seq1 = &seq1[seq1.len() - n..];
+                seq2 = &seq2[seq2.len() - n..];
+                let mut supp = 0;
+                for i in 0..n {
+                    if ref1[i] != ref2[i] {
+                        if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                            supp += 1;
+                        }
+                    }
+                }
+                if jplus && supp < 3 && !show {
+                    continue;
+                }
+
                 // Compute stuff.
 
                 let mut same = 0;
@@ -154,17 +191,6 @@ fn main() {
                                 "\n{} {} {} {}",
                                 data[k1].6, data[k1].7, data[k2].6, data[k2].7
                             );
-                            let mut ref1 = data[k1].9.as_bytes().to_vec();
-                            let mut ref2 = data[k2].9.as_bytes().to_vec();
-                            let mut seq1 = data[k1].10.as_bytes().to_vec();
-                            let mut seq2 = data[k2].10.as_bytes().to_vec();
-                            seq1 = seq1[0..seq1.len() - 1].to_vec();
-                            seq2 = seq2[0..seq2.len() - 1].to_vec();
-                            let n = 24;
-                            ref1 = ref1[ref1.len() - n..].to_vec();
-                            ref2 = ref2[ref2.len() - n..].to_vec();
-                            seq1 = seq1[seq1.len() - n..].to_vec();
-                            seq2 = seq2[seq2.len() - n..].to_vec();
                             let mut refdiffs = 0;
                             for i in 0..n {
                                 if ref1[i] == ref2[i] {
@@ -203,10 +229,24 @@ fn main() {
                             fwrite!(log, "summary: ");
                             if refdiffs == 0 {
                                 fwriteln!(log, "no reference differences");
-                            } else if supp > 0 && sup1 == 0 && sup2 == 0 {
-                                fwriteln!(log, "right > 0 and wrongs = 0");
+                            } else if supp == 1 && sup1 == 0 && sup2 == 0 {
+                                fwriteln!(log, "right == 1 and wrongs = 0");
+                            } else if supp == 2 && sup1 == 0 && sup2 == 0 {
+                                fwriteln!(log, "right == 2 and wrongs = 0");
+                            } else if supp == 3 && sup1 == 0 && sup2 == 0 {
+                                fwriteln!(log, "right == 3 and wrongs = 0");
+                            } else if supp >= 4 && sup1 == 0 && sup2 == 0 {
+                                fwriteln!(log, "right >= 4 and wrongs = 0");
+                            } else if supp == 1 && (sup1 > 0 || sup2 > 0) {
+                                fwriteln!(log, "right = 1 and at least one wrong > 0");
+                            } else if supp == 2 && (sup1 > 0 || sup2 > 0) {
+                                fwriteln!(log, "right = 2 and at least one wrong > 0");
+                            } else if supp == 3 && (sup1 > 0 || sup2 > 0) {
+                                fwriteln!(log, "right = 3 and at least one wrong > 0");
+                            } else if supp >= 4 && (sup1 > 0 || sup2 > 0) {
+                                fwriteln!(log, "right >= 4 and at least one wrong > 0");
                             } else if supp == 0 && ((sup1 > 0) ^ (sup2 > 0)) {
-                                fwriteln!(log, "right = 0 and one wrong > 0");
+                                fwriteln!(log, "right = 0 and exactly one wrong > 0");
                             } else {
                                 fwriteln!(log, "other");
                             }
