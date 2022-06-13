@@ -193,7 +193,7 @@ fn main() {
                 let d1 = &data[k1];
                 let d2 = &data[k2];
 
-                // Calculate framework support and set floor on it.
+                // Calculate framework support.
 
                 let mut supp = 0;
                 for i in 0..d1.fwr1_dna1.len() {
@@ -220,27 +220,17 @@ fn main() {
                         }
                     }
                 }
-                let n = 25;
-                let mut ref1 = &d1.fwr4_dna_ref1 as &[u8];
-                let mut ref2 = &d2.fwr4_dna_ref1 as &[u8];
-                let mut seq1 = &d1.fwr4_dna1 as &[u8];
-                let mut seq2 = &d2.fwr4_dna1 as &[u8];
-                if seq1.len() < n || seq2.len() < n {
-                    // This case is odd and may represent incorrect computation of fwr4.
-                    // It occurs less than 0.001% of the time, so we did not investigate further.
-                    continue;
-                }
-                ref1 = &ref1[ref1.len() - n..];
-                ref2 = &ref2[ref2.len() - n..];
-                seq1 = &seq1[seq1.len() - n..];
-                seq2 = &seq2[seq2.len() - n..];
-                for i in 0..n {
-                    if ref1[i] != ref2[i] {
-                        if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                for i in 0..d1.fwr4_dna1.len() {
+                    if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
+                        if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
                             supp += 1;
                         }
                     }
                 }
+
+                // Set floor on support.
+
                 if supp < 3 {
                     continue;
                 }
@@ -280,7 +270,7 @@ fn main() {
                             let mut sup2 = 0;
                             let mut other = 0;
                             let mut refdiffs = 0;
-                            fwriteln!(log, "{}\n", strme(&vec![b'='; 100]));
+                            fwriteln!(log, "\n{}", strme(&vec![b'='; 100]));
                             fwriteln!(log,
                                 "\n{} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
@@ -389,8 +379,8 @@ fn main() {
                             // Process FWR4.
 
                             fwriteln!(log, "\nFWR4");
-                            for i in 0..n {
-                                if ref1[i] == ref2[i] {
+                            for i in 0..d1.fwr4_dna1.len() {
+                                if d1.fwr4_dna_ref1[i] == d2.fwr4_dna_ref1[i] {
                                     fwrite!(log, " ");
                                 } else {
                                     fwrite!(log, "*");
@@ -398,17 +388,20 @@ fn main() {
                                 }
                             }
                             fwriteln!(log, "");
-                            fwriteln!(log, "{} ref1", strme(&ref1));
-                            fwriteln!(log, "{} ref2", strme(&ref2));
-                            fwriteln!(log, "{} seq1", strme(&seq1));
-                            fwriteln!(log, "{} seq2", strme(&seq2));
-                            for i in 0..n {
-                                if ref1[i] != ref2[i] {
-                                    if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                            fwriteln!(log, "{} ref1", strme(&d1.fwr4_dna_ref1));
+                            fwriteln!(log, "{} ref2", strme(&d2.fwr4_dna_ref1));
+                            fwriteln!(log, "{} seq1", strme(&d1.fwr4_dna1));
+                            fwriteln!(log, "{} seq2", strme(&d2.fwr4_dna1));
+                            for i in 0..d1.fwr4_dna1.len() {
+                                if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
+                                    if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] 
+                                        && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
                                         supp += 1;
-                                    } else if seq1[i] == ref1[i] && seq2[i] == ref1[i] {
+                                    } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] 
+                                        && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
                                         sup1 += 1;
-                                    } else if seq1[i] == ref2[i] && seq2[i] == ref2[i] {
+                                    } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] 
+                                        && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
                                         sup2 += 1;
                                     } else {
                                         other += 1;
