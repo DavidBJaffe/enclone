@@ -59,6 +59,7 @@ fn main() {
         fwr1_dna_len1: usize,
         fwr2_dna_len1: usize,
         fwr3_dna_len1: usize,
+        fwr4_dna_len1: usize,
         cdr3_aa1: Vec<u8>,
         v_name1: String,
         v_name2: String,
@@ -98,6 +99,7 @@ fn main() {
                 fwr1_dna_len1: fields[tof["fwr1_dna1"]].to_string().len(),
                 fwr2_dna_len1: fields[tof["fwr2_dna1"]].to_string().len(),
                 fwr3_dna_len1: fields[tof["fwr3_dna1"]].to_string().len(),
+                fwr4_dna_len1: fields[tof["fwr4_dna1"]].to_string().len(),
                 cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
                 v_name1: fields[tof["v_name1"]].to_string(),
                 v_name2: fields[tof["v_name2"]].to_string(),
@@ -130,6 +132,9 @@ fn main() {
             to_delete[i] = true;
         }
         if data[i].fwr3_dna1.len() != data[i].fwr3_dna_ref1.len() {
+            to_delete[i] = true;
+        }
+        if data[i].fwr4_dna1.len() != data[i].fwr4_dna_ref1.len() {
             to_delete[i] = true;
         }
     }
@@ -166,7 +171,8 @@ fn main() {
             if data[j].donor != data[i].donor || data[j].cdr3_len1 != data[i].cdr3_len1
                 || data[j].fwr1_dna_len1 != data[i].fwr1_dna_len1
                 || data[j].fwr2_dna_len1 != data[i].fwr2_dna_len1
-                || data[j].fwr3_dna_len1 != data[i].fwr3_dna_len1 {
+                || data[j].fwr3_dna_len1 != data[i].fwr3_dna_len1
+                || data[j].fwr4_dna_len1 != data[i].fwr4_dna_len1 {
                 break;
             }
             j += 1;
