@@ -58,6 +58,7 @@ fn main() {
         cdr3_len1: usize,
         fwr1_dna_len1: usize,
         fwr2_dna_len1: usize,
+        fwr3_dna_len1: usize,
         cdr3_aa1: Vec<u8>,
         v_name1: String,
         v_name2: String,
@@ -69,6 +70,8 @@ fn main() {
         fwr1_dna1: Vec<u8>,
         fwr2_dna_ref1: Vec<u8>,
         fwr2_dna1: Vec<u8>,
+        fwr3_dna_ref1: Vec<u8>,
+        fwr3_dna1: Vec<u8>,
         fwr4_dna_ref1: Vec<u8>,
         fwr4_dna1: Vec<u8>,
     }
@@ -94,6 +97,7 @@ fn main() {
                 cdr3_len1: fields[tof["cdr3_aa1"]].len(),
                 fwr1_dna_len1: fields[tof["fwr1_dna1"]].to_string().len(),
                 fwr2_dna_len1: fields[tof["fwr2_dna1"]].to_string().len(),
+                fwr3_dna_len1: fields[tof["fwr3_dna1"]].to_string().len(),
                 cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
                 v_name1: fields[tof["v_name1"]].to_string(),
                 v_name2: fields[tof["v_name2"]].to_string(),
@@ -105,6 +109,8 @@ fn main() {
                 fwr1_dna1: fields[tof["fwr1_dna1"]].to_string().as_bytes().to_vec(),
                 fwr2_dna_ref1: fields[tof["fwr2_dna_ref1"]].to_string().as_bytes().to_vec(),
                 fwr2_dna1: fields[tof["fwr2_dna1"]].to_string().as_bytes().to_vec(),
+                fwr3_dna_ref1: fields[tof["fwr3_dna_ref1"]].to_string().as_bytes().to_vec(),
+                fwr3_dna1: fields[tof["fwr3_dna1"]].to_string().as_bytes().to_vec(),
                 fwr4_dna_ref1: fields[tof["fwr4_dna_ref1"]].to_string().as_bytes().to_vec(),
                 fwr4_dna1: fields[tof["fwr4_dna1"]].to_string().as_bytes().to_vec(),
             });
@@ -140,7 +146,9 @@ fn main() {
         let mut j = i + 1;
         while j < data.len() {
             if data[j].donor != data[i].donor || data[j].cdr3_len1 != data[i].cdr3_len1
-                || data[j].fwr1_dna_len1 != data[i].fwr1_dna_len1 {
+                || data[j].fwr1_dna_len1 != data[i].fwr1_dna_len1
+                || data[j].fwr2_dna_len1 != data[i].fwr2_dna_len1
+                || data[j].fwr3_dna_len1 != data[i].fwr3_dna_len1 {
                 break;
             }
             j += 1;
@@ -164,18 +172,20 @@ fn main() {
         let d = data[i].donor.after("d").force_usize() - 1;
         for k1 in i..j {
             for k2 in k1 + 1..j {
+                let d1 = &data[k1];
+                let d2 = &data[k2];
 
                 // Require that FWR1 have the same length on both cells, and same as ref.
 
-                if data[k1].fwr1_dna1.len() != data[k1].fwr1_dna_ref1.len() {
+                if d1.fwr1_dna1.len() != d1.fwr1_dna_ref1.len() {
                     continue;
                 }
 
                 let mut supp = 0;
-                for i in 0..data[k1].fwr1_dna1.len() {
-                    if data[k1].fwr1_dna_ref1[i] != data[k2].fwr1_dna_ref1[i] {
-                        if data[k1].fwr1_dna1[i] == data[k1].fwr1_dna_ref1[i]
-                            && data[k2].fwr1_dna1[i] == data[k2].fwr1_dna_ref1[i] {
+                for i in 0..d1.fwr1_dna1.len() {
+                    if d1.fwr1_dna_ref1[i] != d2.fwr1_dna_ref1[i] {
+                        if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i]
+                            && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
                             supp += 1;
                         }
                     }
@@ -183,14 +193,29 @@ fn main() {
 
                 // Require that FWR2 have the same length on both cells, and same as ref.
 
-                if data[k1].fwr2_dna1.len() != data[k1].fwr2_dna_ref1.len() {
+                if d1.fwr2_dna1.len() != d1.fwr2_dna_ref1.len() {
                     continue;
                 }
 
-                for i in 0..data[k1].fwr2_dna1.len() {
-                    if data[k1].fwr2_dna_ref1[i] != data[k2].fwr2_dna_ref1[i] {
-                        if data[k1].fwr2_dna1[i] == data[k1].fwr2_dna_ref1[i]
-                            && data[k2].fwr2_dna1[i] == data[k2].fwr2_dna_ref1[i] {
+                for i in 0..d1.fwr2_dna1.len() {
+                    if d1.fwr2_dna_ref1[i] != d2.fwr2_dna_ref1[i] {
+                        if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i]
+                            && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
+                            supp += 1;
+                        }
+                    }
+                }
+
+                // Require that FWR3 have the same length on both cells, and same as ref.
+
+                if d1.fwr3_dna1.len() != d1.fwr3_dna_ref1.len() {
+                    continue;
+                }
+
+                for i in 0..d1.fwr3_dna1.len() {
+                    if d1.fwr3_dna_ref1[i] != d2.fwr3_dna_ref1[i] {
+                        if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i]
+                            && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
                             supp += 1;
                         }
                     }
@@ -199,10 +224,10 @@ fn main() {
                 // Require additional evidence that the two cells lie in different clonotypes.
 
                 let n = 25;
-                let mut ref1 = &data[k1].fwr4_dna_ref1 as &[u8];
-                let mut ref2 = &data[k2].fwr4_dna_ref1 as &[u8];
-                let mut seq1 = &data[k1].fwr4_dna1 as &[u8];
-                let mut seq2 = &data[k2].fwr4_dna1 as &[u8];
+                let mut ref1 = &d1.fwr4_dna_ref1 as &[u8];
+                let mut ref2 = &d2.fwr4_dna_ref1 as &[u8];
+                let mut seq1 = &d1.fwr4_dna1 as &[u8];
+                let mut seq2 = &d2.fwr4_dna1 as &[u8];
                 if seq1.len() < n || seq2.len() < n {
                     // This case is odd and may represent incorrect computation of fwr4.
                     // It occurs less than 0.001% of the time, so we did not investigate further.
@@ -226,16 +251,16 @@ fn main() {
                 // Compute stuff.
 
                 let mut same = 0;
-                for m in 0..data[k1].cdr3_aa1.len() {
-                    if data[k1].cdr3_aa1[m] == data[k2].cdr3_aa1[m] {
+                for m in 0..d1.cdr3_aa1.len() {
+                    if d1.cdr3_aa1[m] == d2.cdr3_aa1[m] {
                         same += 1;
                     }
                 }
                 let ident = 100.0 * same as f64 / data[k1].cdr3_aa1.len() as f64;
                 let ident = ident.floor() as usize;
                 let ident = ident / 10;
-                let (dref1, dref2) = (data[k1].dref, data[k2].dref);
-                let eq_light = data[k1].v_name2 == data[k2].v_name2;
+                let (dref1, dref2) = (d1.dref, d2.dref);
+                let eq_light = d1.v_name2 == d2.v_name2;
 
                 if dref1 == 0 && dref2 == 0 {
                     if eq_light {
@@ -258,13 +283,12 @@ fn main() {
                             let mut sup2 = 0;
                             let mut other = 0;
                             let mut refdiffs = 0;
+                            fwriteln!(log, "{}\n", strme(&vec![b'='; 100]));
                             fwriteln!(log,
                                 "\n{} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
                                 data[k2].dataset, data[k2].barcode,
                             );
-                            let d1 = &data[k1];
-                            let d2 = &data[k2];
 
                             // Process FWR1.
 
@@ -325,6 +349,39 @@ fn main() {
                                         sup1 += 1;
                                     } else if d1.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] 
                                         && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
+                                        sup2 += 1;
+                                    } else {
+                                        other += 1;
+                                    }
+                                }
+                            }
+
+                            // Process FWR3.
+
+                            fwriteln!(log, "\nFWR3");
+                            for i in 0..d1.fwr3_dna1.len() {
+                                if d1.fwr3_dna_ref1[i] == d2.fwr3_dna_ref1[i] {
+                                    fwrite!(log, " ");
+                                } else {
+                                    fwrite!(log, "*");
+                                    refdiffs += 1;
+                                }
+                            }
+                            fwriteln!(log, "");
+                            fwriteln!(log, "{} ref1", strme(&d1.fwr3_dna_ref1));
+                            fwriteln!(log, "{} ref2", strme(&d2.fwr3_dna_ref1));
+                            fwriteln!(log, "{} seq1", strme(&d1.fwr3_dna1));
+                            fwriteln!(log, "{} seq2", strme(&d2.fwr3_dna1));
+                            for i in 0..d1.fwr3_dna1.len() {
+                                if d1.fwr3_dna_ref1[i] != d2.fwr3_dna_ref1[i] {
+                                    if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] 
+                                        && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
+                                        supp += 1;
+                                    } else if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] 
+                                        && d2.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] {
+                                        sup1 += 1;
+                                    } else if d1.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] 
+                                        && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
                                         sup2 += 1;
                                     } else {
                                         other += 1;
