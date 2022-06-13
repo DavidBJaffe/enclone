@@ -119,6 +119,23 @@ fn main() {
     }
     data.sort();
 
+    // Require no indels in certain places.
+
+    let mut to_delete = vec![false; data.len()];
+    for i in 0..data.len() {
+        if data[i].fwr1_dna1.len() != data[i].fwr1_dna_ref1.len() {
+            to_delete[i] = true;
+        }
+        if data[i].fwr2_dna1.len() != data[i].fwr2_dna_ref1.len() {
+            to_delete[i] = true;
+        }
+        if data[i].fwr3_dna1.len() != data[i].fwr3_dna_ref1.len() {
+            to_delete[i] = true;
+        }
+    }
+    erase_if(&mut data, &to_delete);
+    erase_if(&mut clonotype, &to_delete);
+
     // Replace paralogous light chain gene names.
 
     for i in 0..data.len() {
@@ -135,6 +152,7 @@ fn main() {
             }
         }
         erase_if(&mut data, &to_delete);
+        erase_if(&mut clonotype, &to_delete);
     }
 
     // Define groups based on equal donor and CDR3H length.
@@ -175,11 +193,7 @@ fn main() {
                 let d1 = &data[k1];
                 let d2 = &data[k2];
 
-                // Require that FWR1 have the same length on both cells, and same as ref.
-
-                if d1.fwr1_dna1.len() != d1.fwr1_dna_ref1.len() {
-                    continue;
-                }
+                // Calculate framework support and set floor on it.
 
                 let mut supp = 0;
                 for i in 0..d1.fwr1_dna1.len() {
@@ -190,13 +204,6 @@ fn main() {
                         }
                     }
                 }
-
-                // Require that FWR2 have the same length on both cells, and same as ref.
-
-                if d1.fwr2_dna1.len() != d1.fwr2_dna_ref1.len() {
-                    continue;
-                }
-
                 for i in 0..d1.fwr2_dna1.len() {
                     if d1.fwr2_dna_ref1[i] != d2.fwr2_dna_ref1[i] {
                         if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i]
@@ -205,16 +212,6 @@ fn main() {
                         }
                     }
                 }
-
-                // Require that FWR3 have the same length on both cells, and same as ref.
-
-                if d1.fwr3_dna1.len() != d1.fwr3_dna_ref1.len() {
-                    continue;
-                }
-                if d2.fwr3_dna1.len() != d2.fwr3_dna_ref1.len() {
-                    continue;
-                }
-
                 for i in 0..d1.fwr3_dna1.len() {
                     if d1.fwr3_dna_ref1[i] != d2.fwr3_dna_ref1[i] {
                         if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i]
@@ -223,9 +220,6 @@ fn main() {
                         }
                     }
                 }
-
-                // Require additional evidence that the two cells lie in different clonotypes.
-
                 let n = 25;
                 let mut ref1 = &d1.fwr4_dna_ref1 as &[u8];
                 let mut ref2 = &d2.fwr4_dna_ref1 as &[u8];
