@@ -27,6 +27,7 @@ use enclone_core::hcat;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
 use rayon::prelude::*;
+use std::cmp::max;
 use std::collections::HashMap;
 use std::env;
 use std::io::{BufRead, Write};
@@ -202,11 +203,19 @@ fn main() {
                 // Calculate framework support.
 
                 let mut supp = 0;
+                let mut sup1 = 0;
+                let mut sup2 = 0;
                 for i in 0..d1.fwr1_dna1.len() {
                     if d1.fwr1_dna_ref1[i] != d2.fwr1_dna_ref1[i] {
                         if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i]
                             && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
                             supp += 1;
+                        } else if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] 
+                            && d2.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] {
+                            sup1 += 1;
+                        } else if d1.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] 
+                            && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
+                            sup2 += 1;
                         }
                     }
                 }
@@ -215,6 +224,12 @@ fn main() {
                         if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i]
                             && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
                             supp += 1;
+                        } else if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] 
+                            && d2.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] {
+                            sup1 += 1;
+                        } else if d1.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] 
+                            && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
+                            sup2 += 1;
                         }
                     }
                 }
@@ -223,6 +238,12 @@ fn main() {
                         if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i]
                             && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
                             supp += 1;
+                        } else if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] 
+                            && d2.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] {
+                            sup1 += 1;
+                        } else if d1.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] 
+                            && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
+                            sup2 += 1;
                         }
                     }
                 }
@@ -231,13 +252,19 @@ fn main() {
                         if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
                             && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
                             supp += 1;
+                        } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] 
+                            && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                            sup1 += 1;
+                        } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] 
+                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                            sup2 += 1;
                         }
                     }
                 }
 
                 // Set floor on support.
 
-                if supp < 3 {
+                if supp < 3 || supp < 3 * max(sup1, sup2) {
                     continue;
                 }
 
@@ -271,10 +298,6 @@ fn main() {
 
                             // Start analysis of cell pair.
 
-                            let mut supp = 0;
-                            let mut sup1 = 0;
-                            let mut sup2 = 0;
-                            let mut other = 0;
                             let mut refdiffs = 0;
                             fwriteln!(log, "\n{}", strme(&vec![b'='; 100]));
                             fwriteln!(log,
@@ -299,22 +322,6 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr1_dna_ref1));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr1_dna1));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr1_dna1));
-                            for i in 0..d1.fwr1_dna1.len() {
-                                if d1.fwr1_dna_ref1[i] != d2.fwr1_dna_ref1[i] {
-                                    if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] 
-                                        && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
-                                        supp += 1;
-                                    } else if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] 
-                                        && d2.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] {
-                                        sup1 += 1;
-                                    } else if d1.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] 
-                                        && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
-                                        sup2 += 1;
-                                    } else {
-                                        other += 1;
-                                    }
-                                }
-                            }
 
                             // Process FWR2.
 
@@ -332,22 +339,6 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr2_dna_ref1));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr2_dna1));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr2_dna1));
-                            for i in 0..d1.fwr2_dna1.len() {
-                                if d1.fwr2_dna_ref1[i] != d2.fwr2_dna_ref1[i] {
-                                    if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] 
-                                        && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
-                                        supp += 1;
-                                    } else if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] 
-                                        && d2.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] {
-                                        sup1 += 1;
-                                    } else if d1.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] 
-                                        && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
-                                        sup2 += 1;
-                                    } else {
-                                        other += 1;
-                                    }
-                                }
-                            }
 
                             // Process FWR3.
 
@@ -365,22 +356,6 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr3_dna_ref1));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr3_dna1));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr3_dna1));
-                            for i in 0..d1.fwr3_dna1.len() {
-                                if d1.fwr3_dna_ref1[i] != d2.fwr3_dna_ref1[i] {
-                                    if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] 
-                                        && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
-                                        supp += 1;
-                                    } else if d1.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] 
-                                        && d2.fwr3_dna1[i] == d1.fwr3_dna_ref1[i] {
-                                        sup1 += 1;
-                                    } else if d1.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] 
-                                        && d2.fwr3_dna1[i] == d2.fwr3_dna_ref1[i] {
-                                        sup2 += 1;
-                                    } else {
-                                        other += 1;
-                                    }
-                                }
-                            }
 
                             // Process FWR4.
 
@@ -398,29 +373,12 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr4_dna_ref1));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr4_dna1));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr4_dna1));
-                            for i in 0..d1.fwr4_dna1.len() {
-                                if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
-                                    if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] 
-                                        && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
-                                        supp += 1;
-                                    } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] 
-                                        && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
-                                        sup1 += 1;
-                                    } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] 
-                                        && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
-                                        sup2 += 1;
-                                    } else {
-                                        other += 1;
-                                    }
-                                }
-                            }
 
                             // Summarize.
 
                             fwriteln!(log, "\nright = {supp}");
                             fwriteln!(log, "wrong1 = {sup1}");
                             fwriteln!(log, "wrong2 = {sup2}");
-                            fwriteln!(log, "dunno = {other}");
                             fwrite!(log, "summary: ");
                             if refdiffs == 0 {
                                 fwriteln!(log, "no reference differences");
