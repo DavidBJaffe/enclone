@@ -2,6 +2,11 @@
 //
 // See also public_light_chain_analysis.rs.
 //
+// Consider pairs of cells from the same donor, having the same CDRH3 lengths and same FWR1 
+// lengths.  Compute supp, the support for the assertion that the two cells are from different
+// clonotypes.  This is the number of positions for which the FWR1 references differ, and both
+// cells agree with their reference there.
+//
 // Analyze light chains.  Supply a single file of data, with one line per cell, and fields
 // including donors_cell,v_name1,v_name2,dref,cdr3_aa1,clonotype_ncells,const1.
 //
@@ -51,6 +56,8 @@ fn main() {
     struct CellData {
         donor: String,
         cdr3_len1: usize,
+        fwr1_dna_len1: usize,
+        fwr2_dna_len1: usize,
         cdr3_aa1: Vec<u8>,
         v_name1: String,
         v_name2: String,
@@ -60,6 +67,8 @@ fn main() {
         j_name1: String,
         fwr1_dna_ref1: Vec<u8>,
         fwr1_dna1: Vec<u8>,
+        fwr2_dna_ref1: Vec<u8>,
+        fwr2_dna1: Vec<u8>,
         fwr4_dna_ref1: Vec<u8>,
         fwr4_dna1: Vec<u8>,
     }
@@ -83,6 +92,8 @@ fn main() {
             data.push( CellData {
                 donor: fields[tof["donors_cell"]].to_string(),
                 cdr3_len1: fields[tof["cdr3_aa1"]].len(),
+                fwr1_dna_len1: fields[tof["fwr1_dna1"]].to_string().len(),
+                fwr2_dna_len1: fields[tof["fwr2_dna1"]].to_string().len(),
                 cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
                 v_name1: fields[tof["v_name1"]].to_string(),
                 v_name2: fields[tof["v_name2"]].to_string(),
@@ -92,6 +103,8 @@ fn main() {
                 j_name1: fields[tof["j_name1"]].to_string(),
                 fwr1_dna_ref1: fields[tof["fwr1_dna_ref1"]].to_string().as_bytes().to_vec(),
                 fwr1_dna1: fields[tof["fwr1_dna1"]].to_string().as_bytes().to_vec(),
+                fwr2_dna_ref1: fields[tof["fwr2_dna_ref1"]].to_string().as_bytes().to_vec(),
+                fwr2_dna1: fields[tof["fwr2_dna1"]].to_string().as_bytes().to_vec(),
                 fwr4_dna_ref1: fields[tof["fwr4_dna_ref1"]].to_string().as_bytes().to_vec(),
                 fwr4_dna1: fields[tof["fwr4_dna1"]].to_string().as_bytes().to_vec(),
             });
@@ -126,7 +139,8 @@ fn main() {
     while i < data.len() {
         let mut j = i + 1;
         while j < data.len() {
-            if data[j].donor != data[i].donor || data[j].cdr3_len1 != data[i].cdr3_len1 {
+            if data[j].donor != data[i].donor || data[j].cdr3_len1 != data[i].cdr3_len1
+                || data[j].fwr1_dna_len1 != data[i].fwr1_dna_len1 {
                 break;
             }
             j += 1;
@@ -153,9 +167,6 @@ fn main() {
 
                 // Require that FWR1 have the same length on both cells, and same as ref.
 
-                if data[k1].fwr1_dna1.len() != data[k2].fwr1_dna1.len() {
-                    continue;
-                }
                 if data[k1].fwr1_dna1.len() != data[k1].fwr1_dna_ref1.len() {
                     continue;
                 }
@@ -165,6 +176,21 @@ fn main() {
                     if data[k1].fwr1_dna_ref1[i] != data[k2].fwr1_dna_ref1[i] {
                         if data[k1].fwr1_dna1[i] == data[k1].fwr1_dna_ref1[i]
                             && data[k2].fwr1_dna1[i] == data[k2].fwr1_dna_ref1[i] {
+                            supp += 1;
+                        }
+                    }
+                }
+
+                // Require that FWR2 have the same length on both cells, and same as ref.
+
+                if data[k1].fwr2_dna1.len() != data[k1].fwr2_dna_ref1.len() {
+                    continue;
+                }
+
+                for i in 0..data[k1].fwr2_dna1.len() {
+                    if data[k1].fwr2_dna_ref1[i] != data[k2].fwr2_dna_ref1[i] {
+                        if data[k1].fwr2_dna1[i] == data[k1].fwr2_dna_ref1[i]
+                            && data[k2].fwr2_dna1[i] == data[k2].fwr2_dna_ref1[i] {
                             supp += 1;
                         }
                     }
@@ -243,7 +269,7 @@ fn main() {
                             // Process FWR1.
 
                             fwriteln!(log, "\nFWR1");
-                            for i in 0..n {
+                            for i in 0..d1.fwr1_dna1.len() {
                                 if d1.fwr1_dna_ref1[i] == d2.fwr1_dna_ref1[i] {
                                     fwrite!(log, " ");
                                 } else {
@@ -256,7 +282,7 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr1_dna_ref1));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr1_dna1));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr1_dna1));
-                            for i in 0..n {
+                            for i in 0..d1.fwr1_dna1.len() {
                                 if d1.fwr1_dna_ref1[i] != d2.fwr1_dna_ref1[i] {
                                     if d1.fwr1_dna1[i] == d1.fwr1_dna_ref1[i] 
                                         && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
@@ -266,6 +292,39 @@ fn main() {
                                         sup1 += 1;
                                     } else if d1.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] 
                                         && d2.fwr1_dna1[i] == d2.fwr1_dna_ref1[i] {
+                                        sup2 += 1;
+                                    } else {
+                                        other += 1;
+                                    }
+                                }
+                            }
+
+                            // Process FWR2.
+
+                            fwriteln!(log, "\nFWR2");
+                            for i in 0..d1.fwr2_dna1.len() {
+                                if d1.fwr2_dna_ref1[i] == d2.fwr2_dna_ref1[i] {
+                                    fwrite!(log, " ");
+                                } else {
+                                    fwrite!(log, "*");
+                                    refdiffs += 1;
+                                }
+                            }
+                            fwriteln!(log, "");
+                            fwriteln!(log, "{} ref1", strme(&d1.fwr2_dna_ref1));
+                            fwriteln!(log, "{} ref2", strme(&d2.fwr2_dna_ref1));
+                            fwriteln!(log, "{} seq1", strme(&d1.fwr2_dna1));
+                            fwriteln!(log, "{} seq2", strme(&d2.fwr2_dna1));
+                            for i in 0..d1.fwr2_dna1.len() {
+                                if d1.fwr2_dna_ref1[i] != d2.fwr2_dna_ref1[i] {
+                                    if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] 
+                                        && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
+                                        supp += 1;
+                                    } else if d1.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] 
+                                        && d2.fwr2_dna1[i] == d1.fwr2_dna_ref1[i] {
+                                        sup1 += 1;
+                                    } else if d1.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] 
+                                        && d2.fwr2_dna1[i] == d2.fwr2_dna_ref1[i] {
                                         sup2 += 1;
                                     } else {
                                         other += 1;
@@ -305,7 +364,7 @@ fn main() {
 
                             // Summarize.
 
-                            fwriteln!(log, "right = {supp}");
+                            fwriteln!(log, "\nright = {supp}");
                             fwriteln!(log, "wrong1 = {sup1}");
                             fwriteln!(log, "wrong2 = {sup2}");
                             fwriteln!(log, "dunno = {other}");
