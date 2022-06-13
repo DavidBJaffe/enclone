@@ -211,6 +211,9 @@ fn main() {
                 if d1.fwr3_dna1.len() != d1.fwr3_dna_ref1.len() {
                     continue;
                 }
+                if d2.fwr3_dna1.len() != d2.fwr3_dna_ref1.len() {
+                    continue;
+                }
 
                 for i in 0..d1.fwr3_dna1.len() {
                     if d1.fwr3_dna_ref1[i] != d2.fwr3_dna_ref1[i] {
