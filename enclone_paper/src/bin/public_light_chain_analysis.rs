@@ -16,7 +16,8 @@
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
 // - REVERSE: reverse role of heavy and light
-// - SOLO: reduce to one cell per clonotype.
+// - SOLO: reduce to one cell per clonotype
+// - SHOW: show information about each cell pair.
 
 use enclone_core::hcat;
 use enclone_core::test_def::test_donor_id;
@@ -77,6 +78,31 @@ fn main() {
     } else {
         false
     };
+    let opt_show = if args.len() >= 3 && args[2] == "SHOW" {
+        true
+    } else {
+        false
+    };
+
+    // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+    #[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+    struct CellData {
+        v_name1: String,
+        cdr3_aa1_len: usize,
+        cdr3_aa1: Vec<u8>,
+        donor: String,
+        v_name2: String,
+        dref: usize,
+        jun_mat: usize,
+        jun_sub: usize,
+        hcomp: usize,
+        jun_ins: usize,
+        dataset: usize,
+        d1_name1: String,
+        j_name2: String,
+        barcode: String,
+    }
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
@@ -85,20 +111,7 @@ fn main() {
     let f = open_for_read![&args[1]];
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
-    let mut data = Vec::<(
-        String,
-        usize,
-        Vec<u8>,
-        String,
-        String,
-        usize,
-        usize,
-        usize,
-        usize,
-        usize,
-        usize,
-        String,
-    )>::new();
+    let mut data = Vec::new();
     let mut clonotype = Vec::<usize>::new();
     for line in f.lines() {
         let s = line.unwrap();
@@ -113,35 +126,39 @@ fn main() {
             first = false;
         } else {
             if !opt_reverse {
-                data.push((
-                    /* 0 */ fields[tof["v_name1"]].to_string(),
-                    /* 1 */ fields[tof["cdr3_aa1"]].len(),
-                    /* 2 */ fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
-                    /* 3 */ fields[tof["donors_cell"]].to_string(),
-                    /* 4 */ fields[tof["v_name2"]].to_string(),
-                    /* 5 */ fields[tof["dref"]].force_usize(),
-                    /* 6 */ fields[tof["jun_mat"]].force_usize(),
-                    /* 7 */ fields[tof["jun_sub"]].force_usize(),
-                    /* 8 */ fields[tof["hcomp"]].force_usize(),
-                    /* 9 */ fields[tof["jun_ins"]].force_usize(),
-                    /* 10 */ fields[tof["datasets_cell"]].force_usize(),
-                    /* 11 */ fields[tof["d1_name1"]].to_string(),
-                ));
+                data.push( CellData {
+                    v_name1: fields[tof["v_name1"]].to_string(),
+                    cdr3_aa1_len: fields[tof["cdr3_aa1"]].len(),
+                    cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
+                    donor: fields[tof["donors_cell"]].to_string(),
+                    v_name2: fields[tof["v_name2"]].to_string(),
+                    dref: fields[tof["dref"]].force_usize(),
+                    jun_mat: fields[tof["jun_mat"]].force_usize(),
+                    jun_sub: fields[tof["jun_sub"]].force_usize(),
+                    hcomp: fields[tof["hcomp"]].force_usize(),
+                    jun_ins: fields[tof["jun_ins"]].force_usize(),
+                    dataset: fields[tof["datasets_cell"]].force_usize(),
+                    d1_name1: fields[tof["d1_name1"]].to_string(),
+                    j_name2: fields[tof["j_name2"]].to_string(),
+                    barcode: fields[tof["barcode"]].to_string(),
+                });
             } else {
-                data.push((
-                    /* 0 */ fields[tof["v_name2"]].to_string(),
-                    /* 1 */ fields[tof["cdr3_aa2"]].len(),
-                    /* 2 */ fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
-                    /* 3 */ fields[tof["donors_cell"]].to_string(),
-                    /* 4 */ fields[tof["v_name1"]].to_string(),
-                    /* 5 */ fields[tof["dref"]].force_usize(),
-                    /* 6 */ fields[tof["jun_mat"]].force_usize(),
-                    /* 7 */ fields[tof["jun_sub"]].force_usize(),
-                    /* 8 */ fields[tof["hcomp"]].force_usize(),
-                    /* 9 */ fields[tof["jun_ins"]].force_usize(),
-                    /* 10 */ fields[tof["datasets_cell"]].force_usize(),
-                    /* 11 */ fields[tof["d1_name1"]].to_string(),
-                ));
+                data.push( CellData {
+                    v_name1: fields[tof["v_name2"]].to_string(),
+                    cdr3_aa1_len: fields[tof["cdr3_aa2"]].len(),
+                    cdr3_aa1: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
+                    donor: fields[tof["donors_cell"]].to_string(),
+                    v_name2: fields[tof["v_name1"]].to_string(),
+                    dref: fields[tof["dref"]].force_usize(),
+                    jun_mat: fields[tof["jun_mat"]].force_usize(),
+                    jun_sub: fields[tof["jun_sub"]].force_usize(),
+                    hcomp: fields[tof["hcomp"]].force_usize(),
+                    jun_ins: fields[tof["jun_ins"]].force_usize(),
+                    dataset: fields[tof["datasets_cell"]].force_usize(),
+                    d1_name1: fields[tof["d1_name1"]].to_string(),
+                    j_name2: fields[tof["j_name2"]].to_string(),
+                    barcode: fields[tof["barcode"]].to_string(),
+                });
             }
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
@@ -173,7 +190,7 @@ fn main() {
 
     if !opt_no_paralogs && !opt_reverse {
         for i in 0..data.len() {
-            data[i].4 = data[i].4.replace("D", "");
+            data[i].v_name2 = data[i].v_name2.replace("D", "");
         }
     }
 
@@ -187,20 +204,20 @@ fn main() {
         while i < data.len() {
             let mut j = i + 1;
             while j < data.len() {
-                if data[j].0 != data[i].0 || data[j].2 != data[i].2 {
+                if data[j].v_name1 != data[i].v_name1 || data[j].cdr3_aa1 != data[i].cdr3_aa1 {
                     break;
                 }
                 j += 1;
             }
             let mut dx = Vec::new();
             for k in i..j {
-                if (pass == 1 && data[k].5 == 0) || (pass == 2 && data[k].5 > 0) {
+                if (pass == 1 && data[k].dref == 0) || (pass == 2 && data[k].dref > 0) {
                     dx.push(data[k].clone());
                 }
             }
             let mut donors = Vec::<String>::new();
             for k in 0..dx.len() {
-                donors.push(dx[k].3.clone());
+                donors.push(dx[k].donor.clone());
             }
             unique_sort(&mut donors);
             if donors.len() > 1 {
@@ -208,10 +225,12 @@ fn main() {
             }
             i = j;
         }
-        if pass == 1 {
-            println!("\n{} public naive cells", p);
-        } else {
-            println!("{} public memory cells", p);
+        if !opt_show {
+            if pass == 1 {
+                println!("\n{} public naive cells", p);
+            } else {
+                println!("{} public memory cells", p);
+            }
         }
     }
 
@@ -219,25 +238,27 @@ fn main() {
 
     // Show the CDRH3 length distribution for naive cells.
 
-    println!("\nCDRH3 length distribution for naive cells");
-    let mut bins = vec![0; 100];
-    let mut total = 0;
-    for k in 0..data.len() {
-        let dref = data[k].5;
-        if dref == 0 {
-            let len = data[k].1;
-            bins[len / 5] += 1;
-            total += 1;
+    if !opt_show {
+        println!("\nCDRH3 length distribution for naive cells");
+        let mut bins = vec![0; 100];
+        let mut total = 0;
+        for k in 0..data.len() {
+            let dref = data[k].dref;
+            if dref == 0 {
+                let len = data[k].cdr3_aa1_len;
+                bins[len / 5] += 1;
+                total += 1;
+            }
         }
-    }
-    for i in 0..bins.len() {
-        if bins[i] > 0 {
-            println!(
-                "{}-{} ==> {:.1}%",
-                5 * i,
-                5 * (i + 1),
-                100.0 * bins[i] as f64 / total as f64
-            );
+        for i in 0..bins.len() {
+            if bins[i] > 0 {
+                println!(
+                    "{}-{} ==> {:.1}%",
+                    5 * i,
+                    5 * (i + 1),
+                    100.0 * bins[i] as f64 / total as f64
+                );
+            }
         }
     }
 
@@ -265,8 +286,8 @@ fn main() {
         let mut cells = vec![(0, 0); all.len()];
         for pass in 1..=2 {
             for i in 0..data.len() {
-                let dref = data[i].5;
-                let dataset = data[i].10;
+                let dref = data[i].dref;
+                let dataset = data[i].dataset;
                 if pass == 1 && dataset.to_string().starts_with("128") {
                     continue;
                 }
@@ -434,8 +455,8 @@ fn main() {
     let mut naive = (0, 0);
     let mut memory = (0, 0);
     for i in 0..data.len() {
-        let dref = data[i].5;
-        let d = &data[i].11;
+        let dref = data[i].dref;
+        let d = &data[i].d1_name1;
         if dref == 0 {
             naive.1 += 1;
             if d.contains(":") {
@@ -448,16 +469,18 @@ fn main() {
             }
         }
     }
-    println!(
-        "\nDD in naive cells = {} = {:.2}%",
-        naive.0,
-        100.0 * naive.0 as f64 / naive.1 as f64
-    );
-    println!(
-        "DD in memory cells = {} = {:.2}%",
-        memory.0,
-        100.0 * memory.0 as f64 / memory.1 as f64
-    );
+    if !opt_show {
+        println!(
+            "\nDD in naive cells = {} = {:.2}%",
+            naive.0,
+            100.0 * naive.0 as f64 / naive.1 as f64
+        );
+        println!(
+            "DD in memory cells = {} = {:.2}%",
+            memory.0,
+            100.0 * memory.0 as f64 / memory.1 as f64
+        );
+    }
 
     // Compute DD stuff.
 
@@ -469,27 +492,27 @@ fn main() {
     while i < data.len() {
         let mut j = i + 1;
         while j < data.len() {
-            if data[j].0 != data[i].0 || data[j].2 != data[i].2 {
+            if data[j].v_name1 != data[i].v_name1 || data[j].cdr3_aa1 != data[i].cdr3_aa1 {
                 break;
             }
             j += 1;
         }
         let mut donors = Vec::<String>::new();
         for k in i..j {
-            donors.push(data[k].3.clone());
+            donors.push(data[k].donor.clone());
         }
         unique_sort(&mut donors);
         if donors.len() > 1 {
             for k in i..j {
-                let dref = data[k].5;
+                let dref = data[k].dref;
                 if dref == 0 {
                     total[1] += 1;
-                    if data[k].11.contains(":") {
+                    if data[k].d1_name1.contains(":") {
                         dd_naive += 1;
                     }
                 } else {
                     total[0] += 1;
-                    if data[k].11.contains(":") {
+                    if data[k].d1_name1.contains(":") {
                         dd_memory += 1;
                     }
                 }
@@ -497,16 +520,18 @@ fn main() {
         }
         i = j;
     }
-    println!(
-        "DD public memory cells = {} = {:.1}%",
-        dd_memory,
-        100.0 * dd_memory as f64 / total[0] as f64,
-    );
-    println!(
-        "DD public naive cells = {} = {:.1}%",
-        dd_naive,
-        100.0 * dd_naive as f64 / total[1] as f64,
-    );
+    if !opt_show {
+        println!(
+            "DD public memory cells = {} = {:.1}%",
+            dd_memory,
+            100.0 * dd_memory as f64 / total[0] as f64,
+        );
+        println!(
+            "DD public naive cells = {} = {:.1}%",
+            dd_naive,
+            100.0 * dd_naive as f64 / total[1] as f64,
+        );
+    }
 
     // Define groups based on equal heavy chain gene names and CDRH3 length.
     // Plus placeholder for results, see next.
@@ -518,7 +543,7 @@ fn main() {
         // let j = next_diff12_9(&data, i as i32) as usize;
         let mut j = i + 1;
         while j < data.len() {
-            if data[j].0 != data[i].0 || data[j].1 != data[i].1 {
+            if data[j].v_name1 != data[i].v_name1 || data[j].cdr3_aa1_len != data[i].cdr3_aa1_len {
                 break;
             }
             j += 1;
@@ -545,10 +570,10 @@ fn main() {
             for k2 in k1 + 1..j {
                 // Require different donors.
 
-                if data[k1].3 == data[k2].3 {
+                if data[k1].donor == data[k2].donor {
                     continue;
                 }
-                let (mut d1, mut d2) = (data[k1].3.clone(), data[k2].3.clone());
+                let (mut d1, mut d2) = (data[k1].donor.clone(), data[k2].donor.clone());
                 if d1 > d2 {
                     swap(&mut d1, &mut d2);
                 }
@@ -556,16 +581,16 @@ fn main() {
                 // Compute stuff.
 
                 let mut same = 0;
-                for m in 0..data[k1].2.len() {
-                    if data[k1].2[m] == data[k2].2[m] {
+                for m in 0..data[k1].cdr3_aa1.len() {
+                    if data[k1].cdr3_aa1[m] == data[k2].cdr3_aa1[m] {
                         same += 1;
                     }
                 }
-                let ident = 100.0 * same as f64 / data[k1].2.len() as f64;
+                let ident = 100.0 * same as f64 / data[k1].cdr3_aa1.len() as f64;
                 let ident = ident.floor() as usize;
                 let ident = ident / 10;
-                let (dref1, dref2) = (data[k1].5, data[k2].5);
-                let eq_light = data[k1].4 == data[k2].4;
+                let (dref1, dref2) = (data[k1].dref, data[k2].dref);
+                let eq_light = data[k1].v_name2 == data[k2].v_name2;
 
                 // Go through passes.
 
@@ -573,6 +598,14 @@ fn main() {
                     // Require specific donors.
 
                     if pass == 0 {
+                        if opt_show {
+                            println!("{} {} {} {} ==> {} {} {} {}",
+                                data[k1].dataset, data[k1].barcode, 
+                                data[k1].v_name2, data[k1].j_name2,
+                                data[k2].dataset, data[k2].barcode, 
+                                data[k2].v_name2, data[k2].j_name2,
+                            );
+                        }
                     } else if pass == 1 {
                         if d1 != "d1" || d2 != "d2" {
                             continue;
@@ -624,6 +657,9 @@ fn main() {
             }
         }
     });
+    if opt_show {
+        std::process::exit(0);
+    }
 
     // Sum.
 
