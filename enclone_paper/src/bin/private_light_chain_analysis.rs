@@ -732,8 +732,8 @@ fn main() {
         for i in 0..bounds.len() {
             print!("{}", strme(&bounds[i].3));
         }
-        std::process::exit(0);
     }
+
 
     // Sum.
 
