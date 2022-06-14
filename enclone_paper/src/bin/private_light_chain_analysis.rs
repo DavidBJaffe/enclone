@@ -180,6 +180,11 @@ fn main() {
                     if data[k1].v_name1 != data[k2].v_name1 {
                         continue;
                     }
+                    if data[k1].v_name2_orig == data[k2].v_name2_orig 
+                        && data[k1].j_name2 == data[k2].j_name2
+                        && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len() {
+                        continue;
+                    }
                 }
                 if !opt_same {
                     if !use_j && data[k1].v_name1 == data[k2].v_name1 {
