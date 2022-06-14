@@ -23,7 +23,9 @@
 // the different J gene reference sequences at which the reference sequences differ and the two
 // cells both agree with their assigned J gene reference.
 //
-// SOLO: reduce to one cell per clonotype.
+// SOLO -- reduce to one cell per clonotype.
+//
+// SAME -- instead require same heavy chain gene.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -45,6 +47,7 @@ fn main() {
     let mut use_j = false;
     let mut jplus = false;
     let mut solo = false;
+    let mut same = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
@@ -52,6 +55,8 @@ fn main() {
             use_j = true;
         } else if args[i] == "SOLO" {
             solo = true;
+        } else if args[i] == "SAME" {
+            same = true;
         } else if args[i] == "JPLUS" {
             jplus = true;
             use_j = true;
@@ -62,6 +67,26 @@ fn main() {
     }
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
+
+
+    #[derive(Eq, Ord, PartialEq, PartialOrd)]
+    struct CellData {
+        donor: String,
+        cdr3_len1: usize,
+        cdr3_aa1: Vec<u8>,
+        v_name1: String,
+        v_name2: String,
+        dref: usize,
+        dataset: String,
+        barcode: String,
+        j_name1: String,
+        fwr4_dna_ref1: Vec<u8>,
+        fwr4_dna1: Vec<u8>,
+        v_name2_orig: String,
+        j_name2: String,
+    }
+
+
     let mut data = Vec::new();
     let mut clonotype = Vec::<usize>::new();
     for line in f.lines() {
@@ -76,19 +101,21 @@ fn main() {
             }
             first = false;
         } else {
-            data.push((
-                /* 0 */ fields[tof["donors_cell"]].to_string(),
-                /* 1 */ fields[tof["cdr3_aa1"]].len(),
-                /* 2 */ fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
-                /* 3 */ fields[tof["v_name1"]].to_string(),
-                /* 4 */ fields[tof["v_name2"]].to_string(),
-                /* 5 */ fields[tof["dref"]].force_usize(),
-                /* 6 */ fields[tof["datasets_cell"]].to_string(),
-                /* 7 */ fields[tof["barcode"]].to_string(),
-                /* 8 */ fields[tof["j_name1"]].to_string(),
-                /* 9 */ fields[tof["fwr4_dna_ref1"]].to_string(),
-                /* 10 */ fields[tof["fwr4_dna1"]].to_string(),
-            ));
+            data.push( CellData {
+                donor: fields[tof["donors_cell"]].to_string(),
+                cdr3_len1: fields[tof["cdr3_aa1"]].len(),
+                cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
+                v_name1: fields[tof["v_name1"]].to_string(),
+                v_name2: fields[tof["v_name2"]].to_string(),
+                dref: fields[tof["dref"]].force_usize(),
+                dataset: fields[tof["datasets_cell"]].to_string(),
+                barcode: fields[tof["barcode"]].to_string(),
+                j_name1: fields[tof["j_name1"]].to_string(),
+                fwr4_dna_ref1: fields[tof["fwr4_dna_ref1"]].to_string().as_bytes().to_vec(),
+                fwr4_dna1: fields[tof["fwr4_dna1"]].to_string().as_bytes().to_vec(),
+                v_name2_orig: fields[tof["v_name2"]].to_string(),
+                j_name2: fields[tof["j_name2"]].to_string(),
+            });
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
@@ -97,7 +124,7 @@ fn main() {
     // Replace paralogous gene names.
 
     for i in 0..data.len() {
-        data[i].4 = data[i].4.replace("D", "");
+        data[i].v_name2 = data[i].v_name2.replace("D", "");
     }
 
     // In solo case, reduce to one cell per clonotype.
@@ -120,7 +147,7 @@ fn main() {
     while i < data.len() {
         let mut j = i + 1;
         while j < data.len() {
-            if data[j].0 != data[i].0 || data[j].1 != data[i].1 {
+            if data[j].donor != data[i].donor || data[j].cdr3_len1 != data[i].cdr3_len1 {
                 break;
             }
             j += 1;
@@ -140,59 +167,63 @@ fn main() {
     bounds.par_iter_mut().for_each(|res| {
         let i = res.0;
         let j = res.1;
-        let d = data[i].0.after("d").force_usize() - 1;
+        let d = data[i].donor.after("d").force_usize() - 1;
         for k1 in i..j {
             for k2 in k1 + 1..j {
                 // Require different heavy chain V or J genes.
 
-                if !use_j && data[k1].3 == data[k2].3 {
+                if same && data[k1].v_name1 != data[k2].v_name1 {
                     continue;
-                }
-                if use_j && data[k1].8 == data[k2].8 {
+                } else if !use_j && data[k1].v_name1 == data[k2].v_name1 {
+                    continue;
+                } else if use_j && data[k1].j_name1 == data[k2].j_name1 {
                     continue;
                 }
 
                 // Require additional evidence that the two cells lie in different clonotypes.
 
                 let n = 25;
-                let mut ref1 = data[k1].9.as_bytes();
-                let mut ref2 = data[k2].9.as_bytes();
-                let mut seq1 = data[k1].10.as_bytes();
-                let mut seq2 = data[k2].10.as_bytes();
-                if seq1.len() < n || seq2.len() < n {
-                    // This case is odd and may represent incorrect computation of fwr4.
-                    // It occurs less than 0.001% of the time, so we did not investigate further.
-                    continue;
-                }
-                ref1 = &ref1[ref1.len() - n..];
-                ref2 = &ref2[ref2.len() - n..];
-                seq1 = &seq1[seq1.len() - n..];
-                seq2 = &seq2[seq2.len() - n..];
-                let mut supp = 0;
-                for i in 0..n {
-                    if ref1[i] != ref2[i] {
-                        if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
-                            supp += 1;
+                let mut ref1 = data[k1].fwr4_dna_ref1.clone();
+                let mut ref2 = data[k2].fwr4_dna_ref1.clone();
+                let mut seq1 = data[k1].fwr4_dna1.clone();
+                let mut seq2 = data[k2].fwr4_dna1.clone();
+                if !same {
+                    if seq1.len() < n || seq2.len() < n {
+                        // This case is odd and may represent incorrect computation of fwr4.
+                        // It occurs less than 0.001% of the time, so we did not investigate 
+                        // further.
+                        continue;
+                    }
+                    ref1 = ref1[ref1.len() - n..].to_vec();
+                    ref2 = ref2[ref2.len() - n..].to_vec();
+                    seq1 = seq1[seq1.len() - n..].to_vec();
+                    seq2 = seq2[seq2.len() - n..].to_vec();
+                    let mut supp = 0;
+                    for i in 0..n {
+                        if ref1[i] != ref2[i] {
+                            if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                                supp += 1;
+                            }
                         }
                     }
-                }
-                if jplus && supp < 3 && !show {
-                    continue;
+                    if jplus && supp < 3 && !show {
+                        continue;
+                    }
                 }
 
                 // Compute stuff.
 
                 let mut same = 0;
-                for m in 0..data[k1].2.len() {
-                    if data[k1].2[m] == data[k2].2[m] {
+                for m in 0..data[k1].cdr3_aa1.len() {
+                    if data[k1].cdr3_aa1[m] == data[k2].cdr3_aa1[m] {
                         same += 1;
                     }
                 }
-                let ident = 100.0 * same as f64 / data[k1].2.len() as f64;
+                let ident = 100.0 * same as f64 / data[k1].cdr3_aa1.len() as f64;
                 let ident = ident.floor() as usize;
                 let ident = ident / 10;
-                let (dref1, dref2) = (data[k1].5, data[k2].5);
-                let eq_light = data[k1].4 == data[k2].4;
+                let (dref1, dref2) = (data[k1].dref, data[k2].dref);
+                let eq_light = data[k1].v_name2 == data[k2].v_name2;
 
                 if dref1 == 0 && dref2 == 0 {
                     if eq_light {
@@ -207,9 +238,18 @@ fn main() {
                         res.2[d + 1][ident].2 += 1;
                         res.2[0][ident].2 += 1;
                         if show && ident == 10 {
+                            let mut comment = String::new();
+                            if data[k1].v_name2_orig != data[k2].v_name2_orig 
+                                || data[k1].j_name2 != data[k2].j_name2 {
+                                comment = " ***".to_string();
+                            }
                             println!(
-                                "\n{} {} {} {}",
-                                data[k1].6, data[k1].7, data[k2].6, data[k2].7
+                                "\n{} {} {} {} ==> {} {} {} {} {}",
+                                data[k1].dataset, data[k1].barcode, 
+                                data[k1].v_name2_orig, data[k1].j_name2, 
+                                data[k2].dataset, data[k2].barcode,
+                                data[k2].v_name2_orig, data[k2].j_name2, 
+                                comment,
                             );
                             let mut refdiffs = 0;
                             for i in 0..n {
