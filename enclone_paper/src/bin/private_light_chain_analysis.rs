@@ -119,13 +119,6 @@ fn main() {
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
-    data.sort();
-
-    // Replace paralogous gene names.
-
-    for i in 0..data.len() {
-        data[i].v_name2 = data[i].v_name2.replace("D", "");
-    }
 
     // In solo case, reduce to one cell per clonotype.
 
@@ -137,6 +130,17 @@ fn main() {
             }
         }
         erase_if(&mut data, &to_delete);
+        erase_if(&mut clonotype, &to_delete);
+    }
+
+    // Sort.
+
+    data.sort();
+
+    // Replace paralogous gene names.
+
+    for i in 0..data.len() {
+        data[i].v_name2 = data[i].v_name2.replace("D", "");
     }
 
     // Define groups based on equal donor and CDR3H length.

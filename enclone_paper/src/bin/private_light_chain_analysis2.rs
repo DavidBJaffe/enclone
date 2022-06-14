@@ -120,6 +120,22 @@ fn main() {
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
+
+    // In solo case, reduce to one cell per clonotype.
+
+    if solo {
+        let mut to_delete = vec![false; data.len()];
+        for i in 0..clonotype.len() {
+            if i > 0 && clonotype[i] == clonotype[i - 1] {
+                to_delete[i] = true;
+            }
+        }
+        erase_if(&mut data, &to_delete);
+        erase_if(&mut clonotype, &to_delete);
+    }
+
+    // Sort.
+
     data.sort();
 
     // Require no indels in certain places.
@@ -146,19 +162,6 @@ fn main() {
 
     for i in 0..data.len() {
         data[i].v_name2 = data[i].v_name2.replace("D", "");
-    }
-
-    // In solo case, reduce to one cell per clonotype.
-
-    if solo {
-        let mut to_delete = vec![false; data.len()];
-        for i in 0..clonotype.len() {
-            if i > 0 && clonotype[i] == clonotype[i - 1] {
-                to_delete[i] = true;
-            }
-        }
-        erase_if(&mut data, &to_delete);
-        erase_if(&mut clonotype, &to_delete);
     }
 
     // Define groups based on equal donor and CDR3H length.
