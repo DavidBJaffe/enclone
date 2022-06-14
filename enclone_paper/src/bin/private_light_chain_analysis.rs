@@ -25,7 +25,7 @@
 //
 // SOLO -- reduce to one cell per clonotype.
 //
-// SAME -- instead require same heavy chain gene.
+// SAME -- instead require same heavy chain gene, and different light chain genes.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -83,6 +83,7 @@ fn main() {
         fwr4_dna1: Vec<u8>,
         v_name2_orig: String,
         j_name2: String,
+        cdr3_aa2: Vec<u8>,
     }
 
     let mut data = Vec::new();
@@ -113,6 +114,7 @@ fn main() {
                 fwr4_dna1: fields[tof["fwr4_dna1"]].to_string().as_bytes().to_vec(),
                 v_name2_orig: fields[tof["v_name2"]].to_string(),
                 j_name2: fields[tof["j_name2"]].to_string(),
+                cdr3_aa2: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
             });
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
@@ -174,8 +176,10 @@ fn main() {
             for k2 in k1 + 1..j {
                 // Require different heavy chain V or J genes.
 
-                if opt_same && data[k1].v_name1 != data[k2].v_name1 {
-                    continue;
+                if opt_same {
+                    if data[k1].v_name1 != data[k2].v_name1 {
+                        continue;
+                    }
                 }
                 if !opt_same {
                     if !use_j && data[k1].v_name1 == data[k2].v_name1 {
@@ -249,11 +253,13 @@ fn main() {
                                 comment = " ***".to_string();
                             }
                             println!(
-                                "\n{} {} {} {} ==> {} {} {} {} {}",
+                                "\n{} {} {} {} {} ==> {} {} {} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
                                 data[k1].v_name2_orig, data[k1].j_name2, 
+                                data[k1].cdr3_aa2.len(),
                                 data[k2].dataset, data[k2].barcode,
                                 data[k2].v_name2_orig, data[k2].j_name2, 
+                                data[k2].cdr3_aa2.len(),
                                 comment,
                             );
                             if !opt_same {
