@@ -102,6 +102,7 @@ fn main() {
         cdr1_dna2: Vec<u8>,
         cdr2_dna_ref2: Vec<u8>,
         cdr2_dna2: Vec<u8>,
+        cdr3_dna2: Vec<u8>,
 
     }
 
@@ -148,6 +149,7 @@ fn main() {
                 cdr1_dna2: fields[tof["cdr1_dna2"]].to_string().as_bytes().to_vec(),
                 cdr2_dna_ref2: fields[tof["cdr2_dna_ref2"]].to_string().as_bytes().to_vec(),
                 cdr2_dna2: fields[tof["cdr2_dna2"]].to_string().as_bytes().to_vec(),
+                cdr3_dna2: fields[tof["cdr3_dna2"]].to_string().as_bytes().to_vec(),
             });
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
@@ -630,13 +632,12 @@ fn main() {
 
                             // Process CDR3.
 
-                            /*
                             if d1.cdr3_dna2.len() != d2.cdr3_dna2.len() {
                                 fwriteln!(log, "\nCDR3: unequal lengths");
                             } else {
                                 fwriteln!(log, "\nCDR3");
-                                for i in 0..d1.cdr2_dna2.len() {
-                                    if d1.cdr3_dna2[i] == d2.cdr3.dna2[i] {
+                                for i in 0..d1.cdr3_dna2.len() {
+                                    if d1.cdr3_dna2[i] == d2.cdr3_dna2[i] {
                                         fwrite!(log, " ");
                                     } else {
                                         fwrite!(log, "*");
@@ -644,10 +645,9 @@ fn main() {
                                     }
                                 }
                                 fwriteln!(log, "");
-                                fwriteln!(log, "{} seq1", strme(&d1.cdr2_dna2));
-                                fwriteln!(log, "{} seq2", strme(&d2.cdr2_dna2));
+                                fwriteln!(log, "{} seq1", strme(&d1.cdr3_dna2));
+                                fwriteln!(log, "{} seq2", strme(&d2.cdr3_dna2));
                             }
-                            */
 
                             // Summarize. 
 
