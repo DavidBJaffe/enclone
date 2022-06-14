@@ -11,7 +11,7 @@
 //
 // public_light_chain_analysis per_cell_stuff
 //
-// Optional second arguments:
+// Optional arguments:
 // - FLOW: compute using flow classification of naive/memory rather than dref
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
@@ -54,37 +54,28 @@ const UNSWITCHED: [usize; 24] = [
 fn main() {
     PrettyTrace::new().on();
     let args: Vec<String> = env::args().collect();
-    let opt_flow = if args.len() >= 3 && args[2] == "FLOW" {
-        true
-    } else {
-        false
-    };
-    let opt_naive = if args.len() >= 3 && args[2] == "NAIVE" {
-        true
-    } else {
-        false
-    };
-    let opt_no_paralogs = if args.len() >= 3 && args[2] == "NO_PARALOGS" {
-        true
-    } else {
-        false
-    };
-    let opt_reverse = if args.len() >= 3 && args[2] == "REVERSE" {
-        true
-    } else {
-        false
-    };
-    let opt_solo = if args.len() >= 3 && args[2] == "SOLO" {
-        true
-    } else {
-        false
-    };
-    let opt_show = if args.len() >= 3 && args[2] == "SHOW" {
-        true
-    } else {
-        false
-    };
-
+    let mut opt_flow = false;
+    let mut opt_naive = false;
+    let mut opt_no_paralogs = false;
+    let mut opt_reverse = false;
+    let mut opt_solo = false;
+    let mut opt_show = false;
+    for i in 2..args.len() {
+        if args[i] == "FLOW" {
+            opt_flow = true;
+        } else if args[i] == "NAIVE" {
+            opt_naive = true;
+        } else if args[i] == "NO_PARALOGS" {
+            opt_no_paralogs = true;
+        } else if args[i] == "REVERSE" {
+            opt_reverse = true;
+        } else if args[i] == "SOLO" {
+            opt_solo = true;
+        } else if args[i] == "SHOW" {
+            opt_show = true;
+        }
+    }
+        
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
     #[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
