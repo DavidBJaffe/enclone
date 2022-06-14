@@ -594,11 +594,17 @@ fn main() {
 
                     if pass == 0 {
                         if opt_show && ident == 10 && eq_light {
-                            println!("{} {} {} {} ==> {} {} {} {}",
+                            let mut comment = String::new();
+                            if data[k1].j_name2 != data[k2].j_name2
+                                || data[k1].v_name2_orig != data[k2].v_name2_orig {
+                                comment = " ***".to_string();
+                            }
+                            println!("{} {} {} {} ==> {} {} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
                                 data[k1].v_name2_orig, data[k1].j_name2,
                                 data[k2].dataset, data[k2].barcode, 
                                 data[k2].v_name2_orig, data[k2].j_name2,
+                                comment,
                             );
                         }
                     } else if pass == 1 {
