@@ -17,7 +17,8 @@
 // - NO_PARALOGS: do not make paralogs equivalent
 // - REVERSE: reverse role of heavy and light
 // - SOLO: reduce to one cell per clonotype
-// - SHOW: show information about each cell pair.
+// - SHOW: show information about each cell pair, and just for the 100% identity, equal
+//         light chain case.
 
 use enclone_core::hcat;
 use enclone_core::test_def::test_donor_id;
@@ -598,7 +599,7 @@ fn main() {
                     // Require specific donors.
 
                     if pass == 0 {
-                        if opt_show {
+                        if opt_show && ident == 10 && eq_light {
                             println!("{} {} {} {} ==> {} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
                                 data[k1].v_name2, data[k1].j_name2,
