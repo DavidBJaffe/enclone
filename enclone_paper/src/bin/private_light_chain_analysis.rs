@@ -249,7 +249,8 @@ fn main() {
                         if show && ident == 10 {
                             let mut comment = String::new();
                             if data[k1].v_name2_orig != data[k2].v_name2_orig 
-                                || data[k1].j_name2 != data[k2].j_name2 {
+                                || data[k1].j_name2 != data[k2].j_name2
+                                || data[k1].cdr3_aa2.len() != data[k2].cdr3_aa2.len() {
                                 comment = " ***".to_string();
                             }
                             println!(
