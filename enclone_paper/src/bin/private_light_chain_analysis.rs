@@ -68,7 +68,6 @@ fn main() {
     let mut first = true;
     let mut tof = HashMap::<String, usize>::new();
 
-
     #[derive(Eq, Ord, PartialEq, PartialOrd)]
     struct CellData {
         donor: String,
@@ -85,7 +84,6 @@ fn main() {
         v_name2_orig: String,
         j_name2: String,
     }
-
 
     let mut data = Vec::new();
     let mut clonotype = Vec::<usize>::new();
@@ -178,10 +176,13 @@ fn main() {
 
                 if same && data[k1].v_name1 != data[k2].v_name1 {
                     continue;
-                } else if !use_j && data[k1].v_name1 == data[k2].v_name1 {
-                    continue;
-                } else if use_j && data[k1].j_name1 == data[k2].j_name1 {
-                    continue;
+                }
+                if !same {
+                    if !use_j && data[k1].v_name1 == data[k2].v_name1 {
+                        continue;
+                    } else if use_j && data[k1].j_name1 == data[k2].j_name1 {
+                        continue;
+                    }
                 }
 
                 // Require additional evidence that the two cells lie in different clonotypes.
