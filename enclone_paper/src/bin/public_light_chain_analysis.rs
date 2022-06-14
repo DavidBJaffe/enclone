@@ -94,6 +94,7 @@ fn main() {
         d1_name1: String,
         j_name2: String,
         barcode: String,
+        v_name2_orig: String,
     }
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
@@ -133,6 +134,7 @@ fn main() {
                     d1_name1: fields[tof["d1_name1"]].to_string(),
                     j_name2: fields[tof["j_name2"]].to_string(),
                     barcode: fields[tof["barcode"]].to_string(),
+                    v_name2_orig: fields[tof["v_name2"]].to_string(),
                 });
             } else {
                 data.push( CellData {
@@ -148,8 +150,9 @@ fn main() {
                     jun_ins: fields[tof["jun_ins"]].force_usize(),
                     dataset: fields[tof["datasets_cell"]].force_usize(),
                     d1_name1: fields[tof["d1_name1"]].to_string(),
-                    j_name2: fields[tof["j_name2"]].to_string(),
+                    j_name2: fields[tof["j_name1"]].to_string(),
                     barcode: fields[tof["barcode"]].to_string(),
+                    v_name2_orig: fields[tof["v_name1"]].to_string(),
                 });
             }
             clonotype.push(fields[tof["group_id"]].force_usize());
@@ -593,9 +596,9 @@ fn main() {
                         if opt_show && ident == 10 && eq_light {
                             println!("{} {} {} {} ==> {} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
-                                data[k1].v_name2, data[k1].j_name2,
+                                data[k1].v_name2_orig, data[k1].j_name2,
                                 data[k2].dataset, data[k2].barcode, 
-                                data[k2].v_name2, data[k2].j_name2,
+                                data[k2].v_name2_orig, data[k2].j_name2,
                             );
                         }
                     } else if pass == 1 {
