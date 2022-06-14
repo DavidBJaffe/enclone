@@ -84,14 +84,14 @@ fn main() {
         v_name2_orig: String,
         j_name2: String,
         cdr3_aa2: Vec<u8>,
-        fwr1_dna_ref2: Vec<u8>,
-        fwr1_dna2: Vec<u8>,
-        fwr2_dna_ref2: Vec<u8>,
-        fwr2_dna2: Vec<u8>,
-        fwr3_dna_ref2: Vec<u8>,
-        fwr3_dna2: Vec<u8>,
-        fwr4_dna_ref2: Vec<u8>,
-        fwr4_dna2: Vec<u8>,
+        // fwr1_dna_ref2: Vec<u8>,
+        // fwr1_dna2: Vec<u8>,
+        // fwr2_dna_ref2: Vec<u8>,
+        // fwr2_dna2: Vec<u8>,
+        // fwr3_dna_ref2: Vec<u8>,
+        // fwr3_dna2: Vec<u8>,
+        // fwr4_dna_ref2: Vec<u8>,
+        // fwr4_dna2: Vec<u8>,
 
     }
 
@@ -124,6 +124,7 @@ fn main() {
                 v_name2_orig: fields[tof["v_name2"]].to_string(),
                 j_name2: fields[tof["j_name2"]].to_string(),
                 cdr3_aa2: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
+                /*
                 fwr1_dna_ref2: fields[tof["fwr1_dna_ref2"]].to_string().as_bytes().to_vec(),
                 fwr1_dna2: fields[tof["fwr1_dna2"]].to_string().as_bytes().to_vec(),
                 fwr2_dna_ref2: fields[tof["fwr2_dna_ref2"]].to_string().as_bytes().to_vec(),
@@ -132,6 +133,7 @@ fn main() {
                 fwr3_dna2: fields[tof["fwr3_dna2"]].to_string().as_bytes().to_vec(),
                 fwr4_dna_ref2: fields[tof["fwr4_dna_ref2"]].to_string().as_bytes().to_vec(),
                 fwr4_dna2: fields[tof["fwr4_dna2"]].to_string().as_bytes().to_vec(),
+                */
             });
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
@@ -200,7 +202,8 @@ fn main() {
                     }
                     if data[k1].v_name2_orig == data[k2].v_name2_orig 
                         && data[k1].j_name2 == data[k2].j_name2
-                        && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len() {
+                        && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len()
+                        && data[k1].j_name1 == data[k2].j_name1 {
                         continue;
                     }
                 }
@@ -273,24 +276,30 @@ fn main() {
                             let mut comment = String::new();
                             if data[k1].v_name2_orig != data[k2].v_name2_orig 
                                 || data[k1].j_name2 != data[k2].j_name2
+                                || data[k1].j_name1 != data[k2].j_name1
                                 || data[k1].cdr3_aa2.len() != data[k2].cdr3_aa2.len() {
                                 comment = " ***".to_string();
                             }
                             fwriteln!(log,
-                                "\n{} {} {} {} {} ==> {} {} {} {} {} {}",
+                                "\n{} {} {} {} {} {} ==> {} {} {} {} {} {} {}",
                                 data[k1].dataset, data[k1].barcode, 
+                                data[k1].j_name1,
                                 data[k1].v_name2_orig, data[k1].j_name2, 
                                 data[k1].cdr3_aa2.len(),
                                 data[k2].dataset, data[k2].barcode,
+                                data[k1].j_name1,
                                 data[k2].v_name2_orig, data[k2].j_name2, 
                                 data[k2].cdr3_aa2.len(),
                                 comment,
                             );
 
+                            let mut refdiffs = 0;
+
+                            /*
+
                             // Process FWR1.
 
                             fwriteln!(log, "\nFWR1");
-                            let mut refdiffs = 0;
                             let d1 = &data[k1];
                             let d2 = &data[k2];
                             for i in 0..d1.fwr1_dna2.len() {
@@ -357,6 +366,8 @@ fn main() {
                             fwriteln!(log, "{} ref2", strme(&d2.fwr4_dna_ref2));
                             fwriteln!(log, "{} seq1", strme(&d1.fwr4_dna2));
                             fwriteln!(log, "{} seq2", strme(&d2.fwr4_dna2));
+
+                            */
 
                             if !opt_same {
                                 for i in 0..n {
