@@ -47,7 +47,7 @@ fn main() {
     let mut use_j = false;
     let mut jplus = false;
     let mut solo = false;
-    let mut same = false;
+    let mut opt_same = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
@@ -56,7 +56,7 @@ fn main() {
         } else if args[i] == "SOLO" {
             solo = true;
         } else if args[i] == "SAME" {
-            same = true;
+            opt_same = true;
         } else if args[i] == "JPLUS" {
             jplus = true;
             use_j = true;
@@ -174,10 +174,10 @@ fn main() {
             for k2 in k1 + 1..j {
                 // Require different heavy chain V or J genes.
 
-                if same && data[k1].v_name1 != data[k2].v_name1 {
+                if opt_same && data[k1].v_name1 != data[k2].v_name1 {
                     continue;
                 }
-                if !same {
+                if !opt_same {
                     if !use_j && data[k1].v_name1 == data[k2].v_name1 {
                         continue;
                     } else if use_j && data[k1].j_name1 == data[k2].j_name1 {
@@ -192,7 +192,7 @@ fn main() {
                 let mut ref2 = data[k2].fwr4_dna_ref1.clone();
                 let mut seq1 = data[k1].fwr4_dna1.clone();
                 let mut seq2 = data[k2].fwr4_dna1.clone();
-                if !same {
+                if !opt_same {
                     if seq1.len() < n || seq2.len() < n {
                         // This case is odd and may represent incorrect computation of fwr4.
                         // It occurs less than 0.001% of the time, so we did not investigate 
@@ -256,66 +256,68 @@ fn main() {
                                 data[k2].v_name2_orig, data[k2].j_name2, 
                                 comment,
                             );
-                            let mut refdiffs = 0;
-                            for i in 0..n {
-                                if ref1[i] == ref2[i] {
-                                    print!(" ");
-                                } else {
-                                    print!("*");
-                                    refdiffs += 1;
-                                }
-                            }
-                            let mut log = Vec::<u8>::new();
-                            fwriteln!(log, "\n{} ref1", strme(&ref1));
-                            fwriteln!(log, "{} ref2", strme(&ref2));
-                            fwriteln!(log, "{} seq1", strme(&seq1));
-                            fwriteln!(log, "{} seq2", strme(&seq2));
-                            let mut supp = 0;
-                            let mut sup1 = 0;
-                            let mut sup2 = 0;
-                            let mut other = 0;
-                            for i in 0..n {
-                                if ref1[i] != ref2[i] {
-                                    if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
-                                        supp += 1;
-                                    } else if seq1[i] == ref1[i] && seq2[i] == ref1[i] {
-                                        sup1 += 1;
-                                    } else if seq1[i] == ref2[i] && seq2[i] == ref2[i] {
-                                        sup2 += 1;
+                            if !opt_same {
+                                let mut refdiffs = 0;
+                                for i in 0..n {
+                                    if ref1[i] == ref2[i] {
+                                        print!(" ");
                                     } else {
-                                        other += 1;
+                                        print!("*");
+                                        refdiffs += 1;
                                     }
                                 }
+                                let mut log = Vec::<u8>::new();
+                                fwriteln!(log, "\n{} ref1", strme(&ref1));
+                                fwriteln!(log, "{} ref2", strme(&ref2));
+                                fwriteln!(log, "{} seq1", strme(&seq1));
+                                fwriteln!(log, "{} seq2", strme(&seq2));
+                                let mut supp = 0;
+                                let mut sup1 = 0;
+                                let mut sup2 = 0;
+                                let mut other = 0;
+                                for i in 0..n {
+                                    if ref1[i] != ref2[i] {
+                                        if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
+                                            supp += 1;
+                                        } else if seq1[i] == ref1[i] && seq2[i] == ref1[i] {
+                                            sup1 += 1;
+                                        } else if seq1[i] == ref2[i] && seq2[i] == ref2[i] {
+                                            sup2 += 1;
+                                        } else {
+                                            other += 1;
+                                        }
+                                    }
+                                }
+                                fwriteln!(log, "right = {supp}");
+                                fwriteln!(log, "wrong1 = {sup1}");
+                                fwriteln!(log, "wrong2 = {sup2}");
+                                fwriteln!(log, "dunno = {other}");
+                                fwrite!(log, "summary: ");
+                                if refdiffs == 0 {
+                                    fwriteln!(log, "no reference differences");
+                                } else if supp == 1 && sup1 == 0 && sup2 == 0 {
+                                    fwriteln!(log, "right == 1 and wrongs = 0");
+                                } else if supp == 2 && sup1 == 0 && sup2 == 0 {
+                                    fwriteln!(log, "right == 2 and wrongs = 0");
+                                } else if supp == 3 && sup1 == 0 && sup2 == 0 {
+                                    fwriteln!(log, "right == 3 and wrongs = 0");
+                                } else if supp >= 4 && sup1 == 0 && sup2 == 0 {
+                                    fwriteln!(log, "right >= 4 and wrongs = 0");
+                                } else if supp == 1 && (sup1 > 0 || sup2 > 0) {
+                                    fwriteln!(log, "right = 1 and at least one wrong > 0");
+                                } else if supp == 2 && (sup1 > 0 || sup2 > 0) {
+                                    fwriteln!(log, "right = 2 and at least one wrong > 0");
+                                } else if supp == 3 && (sup1 > 0 || sup2 > 0) {
+                                    fwriteln!(log, "right = 3 and at least one wrong > 0");
+                                } else if supp >= 4 && (sup1 > 0 || sup2 > 0) {
+                                    fwriteln!(log, "right >= 4 and at least one wrong > 0");
+                                } else if supp == 0 && ((sup1 > 0) ^ (sup2 > 0)) {
+                                    fwriteln!(log, "right = 0 and exactly one wrong > 0");
+                                } else {
+                                    fwriteln!(log, "other");
+                                }
+                                print!("{}", strme(&log));
                             }
-                            fwriteln!(log, "right = {supp}");
-                            fwriteln!(log, "wrong1 = {sup1}");
-                            fwriteln!(log, "wrong2 = {sup2}");
-                            fwriteln!(log, "dunno = {other}");
-                            fwrite!(log, "summary: ");
-                            if refdiffs == 0 {
-                                fwriteln!(log, "no reference differences");
-                            } else if supp == 1 && sup1 == 0 && sup2 == 0 {
-                                fwriteln!(log, "right == 1 and wrongs = 0");
-                            } else if supp == 2 && sup1 == 0 && sup2 == 0 {
-                                fwriteln!(log, "right == 2 and wrongs = 0");
-                            } else if supp == 3 && sup1 == 0 && sup2 == 0 {
-                                fwriteln!(log, "right == 3 and wrongs = 0");
-                            } else if supp >= 4 && sup1 == 0 && sup2 == 0 {
-                                fwriteln!(log, "right >= 4 and wrongs = 0");
-                            } else if supp == 1 && (sup1 > 0 || sup2 > 0) {
-                                fwriteln!(log, "right = 1 and at least one wrong > 0");
-                            } else if supp == 2 && (sup1 > 0 || sup2 > 0) {
-                                fwriteln!(log, "right = 2 and at least one wrong > 0");
-                            } else if supp == 3 && (sup1 > 0 || sup2 > 0) {
-                                fwriteln!(log, "right = 3 and at least one wrong > 0");
-                            } else if supp >= 4 && (sup1 > 0 || sup2 > 0) {
-                                fwriteln!(log, "right >= 4 and at least one wrong > 0");
-                            } else if supp == 0 && ((sup1 > 0) ^ (sup2 > 0)) {
-                                fwriteln!(log, "right = 0 and exactly one wrong > 0");
-                            } else {
-                                fwriteln!(log, "other");
-                            }
-                            print!("{}", strme(&log));
                         }
                     } else {
                         res.2[d + 1][ident].3 += 1;
