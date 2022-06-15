@@ -237,7 +237,7 @@ fn main() {
 
     // Show the CDRH3 length distribution for naive cells.
 
-    if !opt_show {
+    if !opt_show && !opt_many {
         println!("\nCDRH3 length distribution for naive cells");
         let mut bins = vec![0; 100];
         let mut total = 0;
@@ -453,32 +453,34 @@ fn main() {
 
     let mut naive = (0, 0);
     let mut memory = (0, 0);
-    for i in 0..data.len() {
-        let dref = data[i].dref;
-        let d = &data[i].d1_name1;
-        if dref == 0 {
-            naive.1 += 1;
-            if d.contains(":") {
-                naive.0 += 1;
-            }
-        } else {
-            memory.1 += 1;
-            if d.contains(":") {
-                memory.0 += 1;
+    if !opt_many {
+        for i in 0..data.len() {
+            let dref = data[i].dref;
+            let d = &data[i].d1_name1;
+            if dref == 0 {
+                naive.1 += 1;
+                if d.contains(":") {
+                    naive.0 += 1;
+                }
+            } else {
+                memory.1 += 1;
+                if d.contains(":") {
+                    memory.0 += 1;
+                }
             }
         }
-    }
-    if !opt_show {
-        println!(
-            "\nDD in naive cells = {} = {:.2}%",
-            naive.0,
-            100.0 * naive.0 as f64 / naive.1 as f64
-        );
-        println!(
-            "DD in memory cells = {} = {:.2}%",
-            memory.0,
-            100.0 * memory.0 as f64 / memory.1 as f64
-        );
+        if !opt_show {
+            println!(
+                "\nDD in naive cells = {} = {:.2}%",
+                naive.0,
+                100.0 * naive.0 as f64 / naive.1 as f64
+            );
+            println!(
+                "DD in memory cells = {} = {:.2}%",
+                memory.0,
+                100.0 * memory.0 as f64 / memory.1 as f64
+            );
+        }
     }
 
     // Compute DD stuff.
@@ -487,49 +489,51 @@ fn main() {
     let mut total = vec![0; 2];
     let mut dd_memory = 0;
     let mut dd_naive = 0;
-    println!("");
-    while i < data.len() {
-        let mut j = i + 1;
-        while j < data.len() {
-            if data[j].v_name1 != data[i].v_name1 || data[j].cdr3_aa1 != data[i].cdr3_aa1 {
-                break;
+    if !opt_many {
+        println!("");
+        while i < data.len() {
+            let mut j = i + 1;
+            while j < data.len() {
+                if data[j].v_name1 != data[i].v_name1 || data[j].cdr3_aa1 != data[i].cdr3_aa1 {
+                    break;
+                }
+                j += 1;
             }
-            j += 1;
-        }
-        let mut donors = Vec::<String>::new();
-        for k in i..j {
-            donors.push(data[k].donor.clone());
-        }
-        unique_sort(&mut donors);
-        if donors.len() > 1 {
+            let mut donors = Vec::<String>::new();
             for k in i..j {
-                let dref = data[k].dref;
-                if dref == 0 {
-                    total[1] += 1;
-                    if data[k].d1_name1.contains(":") {
-                        dd_naive += 1;
-                    }
-                } else {
-                    total[0] += 1;
-                    if data[k].d1_name1.contains(":") {
-                        dd_memory += 1;
+                donors.push(data[k].donor.clone());
+            }
+            unique_sort(&mut donors);
+            if donors.len() > 1 {
+                for k in i..j {
+                    let dref = data[k].dref;
+                    if dref == 0 {
+                        total[1] += 1;
+                        if data[k].d1_name1.contains(":") {
+                            dd_naive += 1;
+                        }
+                    } else {
+                        total[0] += 1;
+                        if data[k].d1_name1.contains(":") {
+                            dd_memory += 1;
+                        }
                     }
                 }
             }
+            i = j;
         }
-        i = j;
-    }
-    if !opt_show {
-        println!(
-            "DD public memory cells = {} = {:.1}%",
-            dd_memory,
-            100.0 * dd_memory as f64 / total[0] as f64,
-        );
-        println!(
-            "DD public naive cells = {} = {:.1}%",
-            dd_naive,
-            100.0 * dd_naive as f64 / total[1] as f64,
-        );
+        if !opt_show {
+            println!(
+                "DD public memory cells = {} = {:.1}%",
+                dd_memory,
+                100.0 * dd_memory as f64 / total[0] as f64,
+            );
+            println!(
+                "DD public naive cells = {} = {:.1}%",
+                dd_naive,
+                100.0 * dd_naive as f64 / total[1] as f64,
+            );
+        }
     }
 
     // Define groups based on equal heavy chain gene names and CDRH3 length.
@@ -718,20 +722,28 @@ fn main() {
     for xpass in 1..=2 {
         let mut log = String::new();
         let mut rows = Vec::<Vec<String>>::new();
-        let row = vec![
+        let mut row = vec![
             "CDRH3-AA".to_string(),
             "log10(cell pairs)".to_string(),
             "any".to_string(),
+        ];
+        if !opt_many {
+            row.append( &mut vec![
             "d1,d2".to_string(),
             "d1,d3".to_string(),
             "d1,d4".to_string(),
             "d2,d3".to_string(),
             "d2,d4".to_string(),
             "d3,d4".to_string(),
-        ];
+            ]);
+        }
         rows.push(row);
         for j in 0..=10 {
-            let row = vec!["\\hline".to_string(); 9];
+            let mut cols = 9;
+            if opt_many {
+                cols = 3;
+            }
+            let row = vec!["\\hline".to_string(); cols];
             rows.push(row);
             let mut row = vec![format!("{}%", 10 * j)];
             let n = if xpass == 1 {
@@ -741,6 +753,9 @@ fn main() {
             };
             row.push(format!("{:.1}", (n as f64).log10()));
             for pass in 0..7 {
+                if opt_many && pass == 1 {
+                    break;
+                }
                 if xpass == 1 {
                     let n = res[pass][j].2 + res[pass][j].3;
                     let nznz = 100.0 * res[pass][j].2 as f64 / n as f64;
@@ -753,11 +768,15 @@ fn main() {
             }
             rows.push(row);
         }
+        let mut just = b"l|r|r|r|r|r|r|r|r".to_vec();
+        if opt_many {
+            just = b"l|r|r".to_vec();
+        }
         print_tabular_vbox(
             &mut log,
             &rows,
             0,
-            &b"l|r|r|r|r|r|r|r|r".to_vec(),
+            &just,
             false,
             false,
         );
@@ -769,7 +788,11 @@ fn main() {
         logr[xpass] = r;
     }
     print!("\n both cells have dref > 0");
-    print!("                                                 ");
+    if !opt_many {
+        print!("                                                 ");
+    } else {
+        print!("                ");
+    }
     println!("both cells have dref = 0");
     let r = hcat(&logr[0], &logr[1], 3);
     for i in 0..r.len() {
@@ -778,6 +801,9 @@ fn main() {
 
     // Print tables showing cell pair counts.
 
+    if opt_many {
+        std::process::exit(0);
+    }
     println!("Cell pair counts:");
     let mut logs = Vec::<String>::new();
     for xpass in 1..=2 {
