@@ -18,7 +18,8 @@
 // - REVERSE: reverse role of heavy and light
 // - NSOLO: use all cells in a clonotype, not just one
 // - SHOW: show information about each cell pair, and just for the 100% identity, equal
-//         light chain case.
+//         light chain case
+// - MANY: work with many donors.
 
 use enclone_core::hcat;
 use enclone_core::test_def::test_donor_id;
@@ -60,6 +61,7 @@ fn main() {
     let mut opt_reverse = false;
     let mut opt_solo = true;
     let mut opt_show = false;
+    let mut opt_many = false;
     for i in 2..args.len() {
         if args[i] == "FLOW" {
             opt_flow = true;
@@ -73,6 +75,8 @@ fn main() {
             opt_solo = false;
         } else if args[i] == "SHOW" {
             opt_show = true;
+        } else if args[i] == "MANY" {
+            opt_many = true;
         }
     }
 
@@ -263,7 +267,7 @@ fn main() {
 
     let mut is_naive = vec![false; data.len()];
     let mut is_memory = vec![false; data.len()];
-    if opt_naive || opt_flow {
+    if (opt_naive || opt_flow) && !opt_many {
         let mut all = Vec::<usize>::new();
         all.append(&mut NAIVE.to_vec());
         all.append(&mut UNSWITCHED.to_vec());
