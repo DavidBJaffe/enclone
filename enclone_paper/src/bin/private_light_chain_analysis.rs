@@ -32,7 +32,7 @@ use std::io::{BufRead, Write};
 use string_utils::strme;
 use string_utils::TextUtils;
 use tables::print_tabular_vbox;
-use vector_utils::erase_if;
+use vector_utils::{erase_if, unique_sort};
 
 fn main() {
     PrettyTrace::new().on();
@@ -163,6 +163,7 @@ fn main() {
 
     // Define groups based on equal donor and CDR3H length.
     // Plus placeholder for results, see next.
+    // We track the number of cell pairs (first vector), and the number of cells (second vector).
 
     let mut bounds = Vec::new();
     let mut i = 0;
@@ -174,7 +175,7 @@ fn main() {
             }
             j += 1;
         }
-        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 5], Vec::new()));
+        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 5], Vec::new(), vec![vec![(0, 0); 11]; 5]));
         i = j;
     }
 
@@ -189,6 +190,7 @@ fn main() {
     bounds.par_iter_mut().for_each(|res| {
         let i = res.0;
         let j = res.1;
+        let mut cells = vec![vec![(Vec::new(), Vec::new()); 11]; 5];
         let log = &mut res.3;
         let d = data[i].donor.after("d").force_usize() - 1;
         for k1 in i..j {
@@ -296,6 +298,10 @@ fn main() {
                 let eq_light = data[k1].v_name2 == data[k2].v_name2;
 
                 if dref1 == 0 && dref2 == 0 {
+                    cells[0][ident].0.push(k1);
+                    cells[0][ident].0.push(k2);
+                    cells[d + 1][ident].0.push(k1);
+                    cells[d + 1][ident].0.push(k2);
                     if eq_light {
                         res.2[d + 1][ident].0 += 1;
                         res.2[0][ident].0 += 1;
@@ -304,6 +310,10 @@ fn main() {
                         res.2[0][ident].1 += 1;
                     }
                 } else if dref1 > 0 && dref2 > 0 {
+                    cells[0][ident].1.push(k1);
+                    cells[0][ident].1.push(k2);
+                    cells[d + 1][ident].1.push(k1);
+                    cells[d + 1][ident].1.push(k2);
                     if eq_light {
                         res.2[d + 1][ident].2 += 1;
                         res.2[0][ident].2 += 1;
@@ -678,6 +688,14 @@ fn main() {
                 }
             }
         }
+        for pass in 0..5 {
+            for ident in 0..=10 {
+                unique_sort(&mut cells[pass][ident].0);
+                unique_sort(&mut cells[pass][ident].1);
+                res.4[pass][ident].0 = cells[pass][ident].0.len();
+                res.4[pass][ident].1 = cells[pass][ident].1.len();
+            }
+        }
     });
     if show {
         for i in 0..bounds.len() {
@@ -689,6 +707,7 @@ fn main() {
     // Sum.
 
     let mut res = vec![vec![(0, 0, 0, 0); 11]; 5];
+    let mut res_cell = vec![vec![(0, 0); 11]; 5];
     for pass in 0..5 {
         for i in 0..bounds.len() {
             for j in 0..=10 {
@@ -696,6 +715,8 @@ fn main() {
                 res[pass][j].1 += bounds[i].2[pass][j].1;
                 res[pass][j].2 += bounds[i].2[pass][j].2;
                 res[pass][j].3 += bounds[i].2[pass][j].3;
+                res_cell[pass][j].0 += bounds[i].4[pass][j].0;
+                res_cell[pass][j].1 += bounds[i].4[pass][j].1;
             }
         }
     }
@@ -760,4 +781,113 @@ fn main() {
     for i in 0..r.len() {
         println!("{}", r[i]);
     }
+
+    // Print tables showing cell pair counts.
+
+    println!("Cell pair counts:");
+    let mut logs = Vec::<String>::new();
+    for xpass in 1..=2 {
+        let mut log = String::new();
+        let mut rows = Vec::<Vec<String>>::new();
+        let row = vec![
+            "CDRH3-AA".to_string(),
+            "any".to_string(),
+            "d1".to_string(),
+            "d2".to_string(),
+            "d3".to_string(),
+            "d4".to_string(),
+        ];
+        rows.push(row);
+        for j in 0..=10 {
+            let row = vec!["\\hline".to_string(); 6];
+            rows.push(row);
+            let mut row = vec![format!("{}%", 10 * j)];
+            for pass in 0..5 {
+                if xpass == 1 {
+                    let n = res[pass][j].2 + res[pass][j].3;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                } else {
+                    let n = res[pass][j].0 + res[pass][j].1;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                }
+            }
+            rows.push(row);
+        }
+        print_tabular_vbox(
+            &mut log,
+            &rows,
+            0,
+            &b"l|r|r|r|r|r".to_vec(),
+            false,
+            false,
+        );
+        logs.push(log);
+    }
+    let mut logr = vec![Vec::<String>::new(); 2];
+    for xpass in 0..2 {
+        let r = logs[xpass].split('\n').map(str::to_owned).collect();
+        logr[xpass] = r;
+    }
+    print!("\n both cells have dref > 0");
+    print!("                            ");
+    println!("both cells have dref = 0");
+    let r = hcat(&logr[0], &logr[1], 3);
+    for i in 0..r.len() {
+        println!("{}", r[i]);
+    }
+
+    // Print tables showing cell counts.
+
+    println!("Cell counts:");
+    let mut logs = Vec::<String>::new();
+    for xpass in 1..=2 {
+        let mut log = String::new();
+        let mut rows = Vec::<Vec<String>>::new();
+        let row = vec![
+            "CDRH3-AA".to_string(),
+            "any".to_string(),
+            "d1".to_string(),
+            "d2".to_string(),
+            "d3".to_string(),
+            "d4".to_string(),
+        ];
+        rows.push(row);
+        for j in 0..=10 {
+            let row = vec!["\\hline".to_string(); 6];
+            rows.push(row);
+            let mut row = vec![format!("{}%", 10 * j)];
+            for pass in 0..5 {
+                if xpass == 1 {
+                    let n = res[pass][j].1;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                } else {
+                    let n = res[pass][j].0;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                }
+            }
+            rows.push(row);
+        }
+        print_tabular_vbox(
+            &mut log,
+            &rows,
+            0,
+            &b"l|r|r|r|r|r".to_vec(),
+            false,
+            false,
+        );
+        logs.push(log);
+    }
+    let mut logr = vec![Vec::<String>::new(); 2];
+    for xpass in 0..2 {
+        let r = logs[xpass].split('\n').map(str::to_owned).collect();
+        logr[xpass] = r;
+    }
+    print!("\n both cells have dref > 0");
+    print!("                            ");
+    println!("both cells have dref = 0");
+    let r = hcat(&logr[0], &logr[1], 3);
+    for i in 0..r.len() {
+        println!("{}", r[i]);
+    }
+
 }
