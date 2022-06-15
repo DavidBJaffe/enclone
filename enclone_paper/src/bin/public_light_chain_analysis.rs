@@ -16,7 +16,7 @@
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
 // - REVERSE: reverse role of heavy and light
-// NSOLO: use all cells in a clonotype, not just one
+// - NSOLO: use all cells in a clonotype, not just one
 // - SHOW: show information about each cell pair, and just for the 100% identity, equal
 //         light chain case.
 
