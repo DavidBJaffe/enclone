@@ -228,11 +228,8 @@ fn main() {
                 if !validated {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
-                    // not sure I trust the following:
-                    if d1.fwr4_dna1.len() != d2.fwr4_dna1.len()
-                        || d1.fwr4_dna_ref1.len() != d2.fwr4_dna_ref1.len() {
-                        validated = true;
-                    } else {
+                    if d1.fwr4_dna1.len() == d2.fwr4_dna1.len()
+                        && d1.fwr4_dna_ref1.len() == d2.fwr4_dna_ref1.len() {
                         for i in 0..d1.fwr4_dna1.len() {
                             if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
                                 if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
@@ -258,11 +255,8 @@ fn main() {
                 if !validated {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
-                    // not sure I trust the following:
-                    if d1.fwr4_dna2.len() != d2.fwr4_dna2.len()
-                        || d1.fwr4_dna_ref2.len() != d2.fwr4_dna_ref2.len() {
-                        validated = true;
-                    } else {
+                    if d1.fwr4_dna2.len() == d2.fwr4_dna2.len()
+                        && d1.fwr4_dna_ref2.len() == d2.fwr4_dna_ref2.len() {
                         for i in 0..d1.fwr4_dna2.len() {
                             if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
                                 if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
