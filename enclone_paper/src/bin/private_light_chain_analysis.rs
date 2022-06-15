@@ -234,6 +234,15 @@ fn main() {
                     validated = true;
                 }
 
+                // Test if light chain FWR3s have different lengths.
+                // Seems a bit fishy.
+
+                if !validated {
+                    if d1.fwr3_dna2.len() != d2.fwr3_dna2.len() {
+                        validated = true;
+                    }
+                }
+
                 // Test FWR4 on heavy chain.
 
                 if !validated {
@@ -294,6 +303,10 @@ fn main() {
                     }
                 }
 
+                if !validated {
+                    continue;
+                }
+
                 // ================================================================================
 
                 // For now requiring some reference difference.  Using gene names
@@ -305,60 +318,6 @@ fn main() {
                     && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len()  {
                     continue;
                 }
-
-                // Require different heavy chain V or J genes.
-
-                /*
-                if opt_same {
-                    if data[k1].v_name1 != data[k2].v_name1 {
-                        continue;
-                    }
-                    if data[k1].v_name2_orig == data[k2].v_name2_orig 
-                        && data[k1].j_name2 == data[k2].j_name2
-                        && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len()
-                        && data[k1].j_name1 == data[k2].j_name1 {
-                        continue;
-                    }
-                }
-                if !opt_same {
-                    if !use_j && data[k1].v_name1 == data[k2].v_name1 {
-                        continue;
-                    } else if use_j && data[k1].j_name1 == data[k2].j_name1 {
-                        continue;
-                    }
-                }
-
-                // Require additional evidence that the two cells lie in different clonotypes.
-
-                let n = 25;
-                let mut ref1 = data[k1].fwr4_dna_ref1.clone();
-                let mut ref2 = data[k2].fwr4_dna_ref1.clone();
-                let mut seq1 = data[k1].fwr4_dna1.clone();
-                let mut seq2 = data[k2].fwr4_dna1.clone();
-                if !opt_same {
-                    if seq1.len() < n || seq2.len() < n {
-                        // This case is odd and may represent incorrect computation of fwr4.
-                        // It occurs less than 0.001% of the time, so we did not investigate 
-                        // further.
-                        continue;
-                    }
-                    ref1 = ref1[ref1.len() - n..].to_vec();
-                    ref2 = ref2[ref2.len() - n..].to_vec();
-                    seq1 = seq1[seq1.len() - n..].to_vec();
-                    seq2 = seq2[seq2.len() - n..].to_vec();
-                    let mut supp = 0;
-                    for i in 0..n {
-                        if ref1[i] != ref2[i] {
-                            if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
-                                supp += 1;
-                            }
-                        }
-                    }
-                    if jplus && supp < 3 && !show {
-                        continue;
-                    }
-                }
-                */
 
                 // Compute stuff.
 
