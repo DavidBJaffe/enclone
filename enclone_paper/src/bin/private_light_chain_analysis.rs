@@ -829,7 +829,7 @@ fn main() {
         logr[xpass] = r;
     }
     print!("\n both cells have dref > 0");
-    print!("                            ");
+    print!("        ");
     println!("both cells have dref = 0");
     let r = hcat(&logr[0], &logr[1], 3);
     for i in 0..r.len() {
@@ -883,7 +883,7 @@ fn main() {
         logr[xpass] = r;
     }
     print!("\n both cells have dref > 0");
-    print!("                            ");
+    print!("         ");
     println!("both cells have dref = 0");
     let r = hcat(&logr[0], &logr[1], 3);
     for i in 0..r.len() {
