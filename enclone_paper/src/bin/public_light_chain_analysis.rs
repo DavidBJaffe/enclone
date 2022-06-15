@@ -543,7 +543,7 @@ fn main() {
             }
             j += 1;
         }
-        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7], vec![vec![(0, 0, 0, 0); 11]; 7]));
+        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7], vec![vec![(0, 0); 11]; 7]));
         i = j;
     }
 
@@ -560,7 +560,7 @@ fn main() {
     bounds.par_iter_mut().for_each(|res| {
         let i = res.0;
         let j = res.1;
-        let mut cells = vec![vec![(Vec::new(), Vec::new(), Vec::new(), Vec::new()); 11]; 7];
+        let mut cells = vec![vec![(Vec::new(), Vec::new()); 11]; 7];
         for k1 in i..j {
             for k2 in k1 + 1..j {
                 // Require different donors.
@@ -642,24 +642,20 @@ fn main() {
                         memory = is_memory[k1] && is_memory[k2];
                     }
                     if naive {
+                        cells[pass][ident].0.push(k1);
+                        cells[pass][ident].0.push(k2);
                         if eq_light {
                             res.2[pass][ident].0 += 1;
-                            cells[pass][ident].0.push(k1);
-                            cells[pass][ident].0.push(k2);
                         } else {
                             res.2[pass][ident].1 += 1;
-                            cells[pass][ident].1.push(k1);
-                            cells[pass][ident].1.push(k2);
                         }
                     } else if memory {
+                        cells[pass][ident].1.push(k1);
+                        cells[pass][ident].1.push(k2);
                         if eq_light {
                             res.2[pass][ident].2 += 1;
-                            cells[pass][ident].2.push(k1);
-                            cells[pass][ident].2.push(k2);
                         } else {
                             res.2[pass][ident].3 += 1;
-                            cells[pass][ident].3.push(k1);
-                            cells[pass][ident].3.push(k2);
                         }
                     }
                 }
@@ -669,12 +665,8 @@ fn main() {
             for ident in 0..=10 {
                 unique_sort(&mut cells[pass][ident].0);
                 unique_sort(&mut cells[pass][ident].1);
-                unique_sort(&mut cells[pass][ident].2);
-                unique_sort(&mut cells[pass][ident].3);
                 res.3[pass][ident].0 = cells[pass][ident].0.len();
                 res.3[pass][ident].1 = cells[pass][ident].1.len();
-                res.3[pass][ident].2 = cells[pass][ident].2.len();
-                res.3[pass][ident].3 = cells[pass][ident].3.len();
             }
         }
     });
@@ -685,7 +677,7 @@ fn main() {
     // Sum.
 
     let mut res = vec![vec![(0, 0, 0, 0); 11]; 7];
-    let mut res_cell = vec![vec![(0, 0, 0, 0); 11]; 7];
+    let mut res_cell = vec![vec![(0, 0); 11]; 7];
     for pass in 0..7 {
         for i in 0..bounds.len() {
             for j in 0..=10 {
@@ -695,8 +687,6 @@ fn main() {
                 res[pass][j].3 += bounds[i].2[pass][j].3;
                 res_cell[pass][j].0 += bounds[i].3[pass][j].0;
                 res_cell[pass][j].1 += bounds[i].3[pass][j].1;
-                res_cell[pass][j].2 += bounds[i].3[pass][j].2;
-                res_cell[pass][j].3 += bounds[i].3[pass][j].3;
             }
         }
     }
@@ -773,7 +763,7 @@ fn main() {
 
     // Print tables showing cell pair counts.
 
-    println!("\nCell pair counts:");
+    println!("Cell pair counts:");
     let mut logs = Vec::<String>::new();
     for xpass in 1..=2 {
         let mut log = String::new();
@@ -799,6 +789,62 @@ fn main() {
                     row.push(format!("{:.1}", (n as f64).log10()));
                 } else {
                     let n = res[pass][j].0 + res[pass][j].1;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                }
+            }
+            rows.push(row);
+        }
+        print_tabular_vbox(
+            &mut log,
+            &rows,
+            0,
+            &b"l|r|r|r|r|r|r|r".to_vec(),
+            false,
+            false,
+        );
+        logs.push(log);
+    }
+    let mut logr = vec![Vec::<String>::new(); 2];
+    for xpass in 0..2 {
+        let r = logs[xpass].split('\n').map(str::to_owned).collect();
+        logr[xpass] = r;
+    }
+    print!("\n both cells have dref > 0");
+    print!("                            ");
+    println!("both cells have dref = 0");
+    let r = hcat(&logr[0], &logr[1], 3);
+    for i in 0..r.len() {
+        println!("{}", r[i]);
+    }
+
+    // Print tables showing cell counts.
+
+    println!("Cell counts:");
+    let mut logs = Vec::<String>::new();
+    for xpass in 1..=2 {
+        let mut log = String::new();
+        let mut rows = Vec::<Vec<String>>::new();
+        let row = vec![
+            "CDRH3-AA".to_string(),
+            "any".to_string(),
+            "d1,d2".to_string(),
+            "d1,d3".to_string(),
+            "d1,d4".to_string(),
+            "d2,d3".to_string(),
+            "d2,d4".to_string(),
+            "d3,d4".to_string(),
+        ];
+        rows.push(row);
+        for j in 0..=10 {
+            let row = vec!["\\hline".to_string(); 8];
+            rows.push(row);
+            let mut row = vec![format!("{}%", 10 * j)];
+            for pass in 0..7 {
+                if xpass == 1 {
+                    let n = res[pass][j].1;
+                    row.push(format!("{:.1}", (n as f64).log10()));
+                } else {
+                    let n = res[pass][j].0;
                     row.push(format!("{:.1}", (n as f64).log10()));
                 }
             }
