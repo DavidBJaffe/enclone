@@ -530,8 +530,9 @@ fn main() {
 
     // Define groups based on equal heavy chain gene names and CDRH3 length.
     // Plus placeholder for results, see next.
+    // We track the number of cell pairs (first vector), and the number of cells (second vector).
 
-    let mut bounds = Vec::<(usize, usize, Vec<Vec<(usize, usize, usize, usize)>>)>::new();
+    let mut bounds = Vec::new();
     let mut i = 0;
     while i < data.len() {
         // let j = next_diff12_9(&data, i as i32) as usize;
@@ -542,7 +543,7 @@ fn main() {
             }
             j += 1;
         }
-        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7]));
+        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7], vec![vec![(0, 0, 0, 0); 11]; 7]));
         i = j;
     }
 
@@ -559,6 +560,7 @@ fn main() {
     bounds.par_iter_mut().for_each(|res| {
         let i = res.0;
         let j = res.1;
+        let mut cells = vec![vec![(Vec::new(), Vec::new(), Vec::new(), Vec::new()); 11]; 7];
         for k1 in i..j {
             for k2 in k1 + 1..j {
                 // Require different donors.
@@ -642,17 +644,37 @@ fn main() {
                     if naive {
                         if eq_light {
                             res.2[pass][ident].0 += 1;
+                            cells[pass][ident].0.push(k1);
+                            cells[pass][ident].0.push(k2);
                         } else {
                             res.2[pass][ident].1 += 1;
+                            cells[pass][ident].1.push(k1);
+                            cells[pass][ident].1.push(k2);
                         }
                     } else if memory {
                         if eq_light {
                             res.2[pass][ident].2 += 1;
+                            cells[pass][ident].2.push(k1);
+                            cells[pass][ident].2.push(k2);
                         } else {
                             res.2[pass][ident].3 += 1;
+                            cells[pass][ident].3.push(k1);
+                            cells[pass][ident].3.push(k2);
                         }
                     }
                 }
+            }
+        }
+        for pass in 0..7 {
+            for ident in 0..=10 {
+                unique_sort(&mut cells[pass][ident].0);
+                unique_sort(&mut cells[pass][ident].1);
+                unique_sort(&mut cells[pass][ident].2);
+                unique_sort(&mut cells[pass][ident].3);
+                res.3[pass][ident].0 = cells[pass][ident].0.len();
+                res.3[pass][ident].1 = cells[pass][ident].1.len();
+                res.3[pass][ident].2 = cells[pass][ident].2.len();
+                res.3[pass][ident].3 = cells[pass][ident].3.len();
             }
         }
     });
