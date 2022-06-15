@@ -39,14 +39,11 @@ fn main() {
     let f = open_for_read![&args[1]];
     let mut show = false;
     let mut solo = false;
-    let mut opt_same = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
         } else if args[i] == "SOLO" {
             solo = true;
-        } else if args[i] == "SAME" {
-            opt_same = true;
         } else {
             eprintln!("\nIllegal argument.\n");
             std::process::exit(1);
@@ -677,69 +674,6 @@ fn main() {
                             fwriteln!(log, "validated = {validated}");
 
                             let _refdiffs = refdiffs;
-
-                            if !opt_same {
-                                /*
-                                for i in 0..n {
-                                    if ref1[i] == ref2[i] {
-                                        print!(" ");
-                                    } else {
-                                        print!("*");
-                                        refdiffs += 1;
-                                    }
-                                }
-                                let mut log = Vec::<u8>::new();
-                                fwriteln!(log, "\n{} ref1", strme(&ref1));
-                                fwriteln!(log, "{} ref2", strme(&ref2));
-                                fwriteln!(log, "{} seq1", strme(&seq1));
-                                fwriteln!(log, "{} seq2", strme(&seq2));
-                                let mut supp = 0;
-                                let mut sup1 = 0;
-                                let mut sup2 = 0;
-                                let mut other = 0;
-                                for i in 0..n {
-                                    if ref1[i] != ref2[i] {
-                                        if seq1[i] == ref1[i] && seq2[i] == ref2[i] {
-                                            supp += 1;
-                                        } else if seq1[i] == ref1[i] && seq2[i] == ref1[i] {
-                                            sup1 += 1;
-                                        } else if seq1[i] == ref2[i] && seq2[i] == ref2[i] {
-                                            sup2 += 1;
-                                        } else {
-                                            other += 1;
-                                        }
-                                    }
-                                }
-                                fwriteln!(log, "right = {supp}");
-                                fwriteln!(log, "wrong1 = {sup1}");
-                                fwriteln!(log, "wrong2 = {sup2}");
-                                fwriteln!(log, "dunno = {other}");
-                                fwrite!(log, "summary: ");
-                                if refdiffs == 0 {
-                                    fwriteln!(log, "no reference differences");
-                                } else if supp == 1 && sup1 == 0 && sup2 == 0 {
-                                    fwriteln!(log, "right == 1 and wrongs = 0");
-                                } else if supp == 2 && sup1 == 0 && sup2 == 0 {
-                                    fwriteln!(log, "right == 2 and wrongs = 0");
-                                } else if supp == 3 && sup1 == 0 && sup2 == 0 {
-                                    fwriteln!(log, "right == 3 and wrongs = 0");
-                                } else if supp >= 4 && sup1 == 0 && sup2 == 0 {
-                                    fwriteln!(log, "right >= 4 and wrongs = 0");
-                                } else if supp == 1 && (sup1 > 0 || sup2 > 0) {
-                                    fwriteln!(log, "right = 1 and at least one wrong > 0");
-                                } else if supp == 2 && (sup1 > 0 || sup2 > 0) {
-                                    fwriteln!(log, "right = 2 and at least one wrong > 0");
-                                } else if supp == 3 && (sup1 > 0 || sup2 > 0) {
-                                    fwriteln!(log, "right = 3 and at least one wrong > 0");
-                                } else if supp >= 4 && (sup1 > 0 || sup2 > 0) {
-                                    fwriteln!(log, "right >= 4 and at least one wrong > 0");
-                                } else if supp == 0 && ((sup1 > 0) ^ (sup2 > 0)) {
-                                    fwriteln!(log, "right = 0 and exactly one wrong > 0");
-                                } else {
-                                    fwriteln!(log, "other");
-                                }
-                                */
-                            }
                         }
                     } else {
                         res.2[d + 1][ident].3 += 1;
