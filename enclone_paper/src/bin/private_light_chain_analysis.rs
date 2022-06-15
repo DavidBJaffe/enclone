@@ -85,7 +85,6 @@ fn main() {
         cdr2_dna2: Vec<u8>,
         cdr3_dna2: Vec<u8>,
         cdr3_dna1: Vec<u8>,
-
     }
 
     let mut data = Vec::new();
@@ -102,7 +101,7 @@ fn main() {
             }
             first = false;
         } else {
-            data.push( CellData {
+            data.push(CellData {
                 donor: fields[tof["donors_cell"]].to_string(),
                 cdr3_len1: fields[tof["cdr3_aa1"]].len(),
                 cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
@@ -117,7 +116,10 @@ fn main() {
                 v_name2_orig: fields[tof["v_name2"]].to_string(),
                 j_name2: fields[tof["j_name2"]].to_string(),
                 cdr3_aa2: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
-                leader_dna_ref2: fields[tof["leader_dna_ref2"]].to_string().as_bytes().to_vec(),
+                leader_dna_ref2: fields[tof["leader_dna_ref2"]]
+                    .to_string()
+                    .as_bytes()
+                    .to_vec(),
                 leader_dna2: fields[tof["leader_dna2"]].to_string().as_bytes().to_vec(),
                 fwr1_dna_ref2: fields[tof["fwr1_dna_ref2"]].to_string().as_bytes().to_vec(),
                 fwr1_dna2: fields[tof["fwr1_dna2"]].to_string().as_bytes().to_vec(),
@@ -175,7 +177,13 @@ fn main() {
             }
             j += 1;
         }
-        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 5], Vec::new(), vec![vec![(0, 0); 11]; 5]));
+        bounds.push((
+            i,
+            j,
+            vec![vec![(0, 0, 0, 0); 11]; 5],
+            Vec::new(),
+            vec![vec![(0, 0); 11]; 5],
+        ));
         i = j;
     }
 
@@ -195,7 +203,6 @@ fn main() {
         let d = data[i].donor.after("d").force_usize() - 1;
         for k1 in i..j {
             for k2 in k1 + 1..j {
-
                 // For now requiring same heavy chain gene.
 
                 if data[k1].v_name1 != data[k2].v_name1 {
@@ -231,17 +238,21 @@ fn main() {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
                     if d1.fwr4_dna1.len() == d2.fwr4_dna1.len()
-                        && d1.fwr4_dna_ref1.len() == d2.fwr4_dna_ref1.len() {
+                        && d1.fwr4_dna_ref1.len() == d2.fwr4_dna_ref1.len()
+                    {
                         for i in 0..d1.fwr4_dna1.len() {
                             if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
                                 if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                {
                                     supp += 1;
                                 } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                    && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                                    && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                {
                                     sup1 += 1;
                                 } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
-                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                {
                                     sup2 += 1;
                                 }
                             }
@@ -258,17 +269,21 @@ fn main() {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
                     if d1.fwr4_dna2.len() == d2.fwr4_dna2.len()
-                        && d1.fwr4_dna_ref2.len() == d2.fwr4_dna_ref2.len() {
+                        && d1.fwr4_dna_ref2.len() == d2.fwr4_dna_ref2.len()
+                    {
                         for i in 0..d1.fwr4_dna2.len() {
                             if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
                                 if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                {
                                     supp += 1;
                                 } else if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                    && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i] {
+                                    && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                {
                                     sup1 += 1;
                                 } else if d1.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
-                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                {
                                     sup2 += 1;
                                 }
                             }
@@ -320,15 +335,20 @@ fn main() {
                         res.2[0][ident].2 += 1;
                         if show && ident == 10 {
                             fwriteln!(log, "\n{}", strme(&vec![b'='; 100]));
-                            fwriteln!(log,
+                            fwriteln!(
+                                log,
                                 "\n{} {} {} {} {} {}\n{} {} {} {} {} {}",
-                                data[k1].dataset, data[k1].barcode, 
+                                data[k1].dataset,
+                                data[k1].barcode,
                                 data[k1].j_name1,
-                                data[k1].v_name2_orig, data[k1].j_name2, 
+                                data[k1].v_name2_orig,
+                                data[k1].j_name2,
                                 data[k1].cdr3_aa2.len(),
-                                data[k2].dataset, data[k2].barcode,
+                                data[k2].dataset,
+                                data[k2].barcode,
                                 data[k2].j_name1,
-                                data[k2].v_name2_orig, data[k2].j_name2, 
+                                data[k2].v_name2_orig,
+                                data[k2].j_name2,
                                 data[k2].cdr3_aa2.len(),
                             );
 
@@ -371,13 +391,16 @@ fn main() {
                                 for i in 0..d1.fwr4_dna1.len() {
                                     if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
                                         if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                        {
                                             supp += 1;
                                         } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                        {
                                             sup1 += 1;
                                         } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                        {
                                             sup2 += 1;
                                         }
                                     }
@@ -387,8 +410,9 @@ fn main() {
                             // Process leader
 
                             if d1.leader_dna_ref2 != d2.leader_dna_ref2 {
-                                if d1.leader_dna_ref2.len() != d2.leader_dna_ref2.len() ||
-                                   d1.leader_dna2.len() != d1.leader_dna_ref2.len() {
+                                if d1.leader_dna_ref2.len() != d2.leader_dna_ref2.len()
+                                    || d1.leader_dna2.len() != d1.leader_dna_ref2.len()
+                                {
                                     fwriteln!(log, "\nleader: unequal lengths");
                                 } else {
                                     fwriteln!(log, "\nleader");
@@ -408,13 +432,16 @@ fn main() {
                                     for i in 0..d1.leader_dna2.len() {
                                         if d1.leader_dna_ref2[i] != d2.leader_dna_ref2[i] {
                                             if d1.leader_dna2[i] == d1.leader_dna_ref2[i]
-                                                && d2.leader_dna2[i] == d2.leader_dna_ref2[i] {
+                                                && d2.leader_dna2[i] == d2.leader_dna_ref2[i]
+                                            {
                                                 supp += 1;
                                             } else if d1.leader_dna2[i] == d1.leader_dna_ref2[i]
-                                                && d2.leader_dna2[i] == d1.leader_dna_ref2[i] {
+                                                && d2.leader_dna2[i] == d1.leader_dna_ref2[i]
+                                            {
                                                 sup1 += 1;
                                             } else if d1.leader_dna2[i] == d2.leader_dna_ref2[i]
-                                                && d2.leader_dna2[i] == d2.leader_dna_ref2[i] {
+                                                && d2.leader_dna2[i] == d2.leader_dna_ref2[i]
+                                            {
                                                 sup2 += 1;
                                             }
                                         }
@@ -442,13 +469,16 @@ fn main() {
                                 for i in 0..d1.fwr1_dna2.len() {
                                     if d1.fwr1_dna_ref2[i] != d2.fwr1_dna_ref2[i] {
                                         if d1.fwr1_dna2[i] == d1.fwr1_dna_ref2[i]
-                                            && d2.fwr1_dna2[i] == d2.fwr1_dna_ref2[i] {
+                                            && d2.fwr1_dna2[i] == d2.fwr1_dna_ref2[i]
+                                        {
                                             supp += 1;
                                         } else if d1.fwr1_dna2[i] == d1.fwr1_dna_ref2[i]
-                                            && d2.fwr1_dna2[i] == d1.fwr1_dna_ref2[i] {
+                                            && d2.fwr1_dna2[i] == d1.fwr1_dna_ref2[i]
+                                        {
                                             sup1 += 1;
                                         } else if d1.fwr1_dna2[i] == d2.fwr1_dna_ref2[i]
-                                            && d2.fwr1_dna2[i] == d2.fwr1_dna_ref2[i] {
+                                            && d2.fwr1_dna2[i] == d2.fwr1_dna_ref2[i]
+                                        {
                                             sup2 += 1;
                                         }
                                     }
@@ -458,8 +488,9 @@ fn main() {
                             // Process FWR2.
 
                             if d1.fwr2_dna_ref2 != d2.fwr2_dna_ref2 {
-                                if d1.fwr2_dna_ref2.len() != d2.fwr2_dna_ref2.len() ||
-                                   d1.fwr2_dna2.len() != d1.fwr2_dna_ref2.len() {
+                                if d1.fwr2_dna_ref2.len() != d2.fwr2_dna_ref2.len()
+                                    || d1.fwr2_dna2.len() != d1.fwr2_dna_ref2.len()
+                                {
                                     fwriteln!(log, "\nFWR2: unequal lengths");
                                 } else {
                                     fwriteln!(log, "\nFWR2");
@@ -479,13 +510,16 @@ fn main() {
                                     for i in 0..d1.fwr2_dna2.len() {
                                         if d1.fwr2_dna_ref2[i] != d2.fwr2_dna_ref2[i] {
                                             if d1.fwr2_dna2[i] == d1.fwr2_dna_ref2[i]
-                                                && d2.fwr2_dna2[i] == d2.fwr2_dna_ref2[i] {
+                                                && d2.fwr2_dna2[i] == d2.fwr2_dna_ref2[i]
+                                            {
                                                 supp += 1;
                                             } else if d1.fwr2_dna2[i] == d1.fwr2_dna_ref2[i]
-                                                && d2.fwr2_dna2[i] == d1.fwr2_dna_ref2[i] {
+                                                && d2.fwr2_dna2[i] == d1.fwr2_dna_ref2[i]
+                                            {
                                                 sup1 += 1;
                                             } else if d1.fwr2_dna2[i] == d2.fwr2_dna_ref2[i]
-                                                && d2.fwr2_dna2[i] == d2.fwr2_dna_ref2[i] {
+                                                && d2.fwr2_dna2[i] == d2.fwr2_dna_ref2[i]
+                                            {
                                                 sup2 += 1;
                                             }
                                         }
@@ -496,8 +530,9 @@ fn main() {
                             // Process FWR3.
 
                             if d1.fwr3_dna_ref2 != d2.fwr3_dna_ref2 {
-                                if d1.fwr3_dna_ref2.len() != d2.fwr3_dna_ref2.len() ||
-                                   d1.fwr3_dna2.len() != d1.fwr3_dna_ref2.len() {
+                                if d1.fwr3_dna_ref2.len() != d2.fwr3_dna_ref2.len()
+                                    || d1.fwr3_dna2.len() != d1.fwr3_dna_ref2.len()
+                                {
                                     fwriteln!(log, "\nFWR3: unequal lengths");
                                 } else {
                                     fwriteln!(log, "\nFWR3");
@@ -517,13 +552,16 @@ fn main() {
                                     for i in 0..d1.fwr3_dna2.len() {
                                         if d1.fwr3_dna_ref2[i] != d2.fwr3_dna_ref2[i] {
                                             if d1.fwr3_dna2[i] == d1.fwr3_dna_ref2[i]
-                                                && d2.fwr3_dna2[i] == d2.fwr3_dna_ref2[i] {
+                                                && d2.fwr3_dna2[i] == d2.fwr3_dna_ref2[i]
+                                            {
                                                 supp += 1;
                                             } else if d1.fwr3_dna2[i] == d1.fwr3_dna_ref2[i]
-                                                && d2.fwr3_dna2[i] == d1.fwr3_dna_ref2[i] {
+                                                && d2.fwr3_dna2[i] == d1.fwr3_dna_ref2[i]
+                                            {
                                                 sup1 += 1;
                                             } else if d1.fwr3_dna2[i] == d2.fwr3_dna_ref2[i]
-                                                && d2.fwr3_dna2[i] == d2.fwr3_dna_ref2[i] {
+                                                && d2.fwr3_dna2[i] == d2.fwr3_dna_ref2[i]
+                                            {
                                                 sup2 += 1;
                                             }
                                         }
@@ -551,13 +589,16 @@ fn main() {
                                 for i in 0..d1.fwr4_dna1.len() {
                                     if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
                                         if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                        {
                                             supp += 1;
                                         } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                        {
                                             sup1 += 1;
                                         } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
-                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                            && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                        {
                                             sup2 += 1;
                                         }
                                     }
@@ -565,13 +606,16 @@ fn main() {
                                 for i in 0..d1.fwr4_dna2.len() {
                                     if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
                                         if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                            && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                            && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                        {
                                             supp += 1;
                                         } else if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                            && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i] {
+                                            && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                        {
                                             sup1 += 1;
                                         } else if d1.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
-                                            && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                            && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                        {
                                             sup2 += 1;
                                         }
                                     }
@@ -582,7 +626,8 @@ fn main() {
 
                             if d1.cdr1_dna_ref2 != d2.cdr1_dna_ref2 {
                                 if d1.cdr1_dna_ref2.len() != d2.cdr1_dna_ref2.len()
-                                    || d1.cdr1_dna2.len() != d1.cdr1_dna_ref2.len() {
+                                    || d1.cdr1_dna2.len() != d1.cdr1_dna_ref2.len()
+                                {
                                     fwriteln!(log, "\nCDR1: unequal lengths");
                                 } else {
                                     fwriteln!(log, "\nCDR1");
@@ -602,13 +647,16 @@ fn main() {
                                     for i in 0..d1.cdr1_dna2.len() {
                                         if d1.cdr1_dna_ref2[i] != d2.cdr1_dna_ref2[i] {
                                             if d1.cdr1_dna2[i] == d1.cdr1_dna_ref2[i]
-                                                && d2.cdr1_dna2[i] == d2.cdr1_dna_ref2[i] {
+                                                && d2.cdr1_dna2[i] == d2.cdr1_dna_ref2[i]
+                                            {
                                                 supp += 1;
                                             } else if d1.cdr1_dna2[i] == d1.cdr1_dna_ref2[i]
-                                                && d2.cdr1_dna2[i] == d1.cdr1_dna_ref2[i] {
+                                                && d2.cdr1_dna2[i] == d1.cdr1_dna_ref2[i]
+                                            {
                                                 sup1 += 1;
                                             } else if d1.cdr1_dna2[i] == d2.cdr1_dna_ref2[i]
-                                                && d2.cdr1_dna2[i] == d2.cdr1_dna_ref2[i] {
+                                                && d2.cdr1_dna2[i] == d2.cdr1_dna_ref2[i]
+                                            {
                                                 sup2 += 1;
                                             }
                                         }
@@ -620,7 +668,8 @@ fn main() {
 
                             if d1.cdr2_dna_ref2 != d2.cdr2_dna_ref2 {
                                 if d1.cdr2_dna_ref2.len() != d2.cdr2_dna_ref2.len()
-                                    || d1.cdr2_dna2.len() != d1.cdr2_dna_ref2.len() {
+                                    || d1.cdr2_dna2.len() != d1.cdr2_dna_ref2.len()
+                                {
                                     fwriteln!(log, "\nCDR2: unequal lengths");
                                 } else {
                                     fwriteln!(log, "\nCDR2");
@@ -640,13 +689,16 @@ fn main() {
                                     for i in 0..d1.cdr2_dna2.len() {
                                         if d1.cdr2_dna_ref2[i] != d2.cdr2_dna_ref2[i] {
                                             if d1.cdr2_dna2[i] == d1.cdr2_dna_ref2[i]
-                                                && d2.cdr2_dna2[i] == d2.cdr2_dna_ref2[i] {
+                                                && d2.cdr2_dna2[i] == d2.cdr2_dna_ref2[i]
+                                            {
                                                 supp += 1;
                                             } else if d1.cdr2_dna2[i] == d1.cdr2_dna_ref2[i]
-                                                && d2.cdr2_dna2[i] == d1.cdr2_dna_ref2[i] {
+                                                && d2.cdr2_dna2[i] == d1.cdr2_dna_ref2[i]
+                                            {
                                                 sup1 += 1;
                                             } else if d1.cdr2_dna2[i] == d2.cdr2_dna_ref2[i]
-                                                && d2.cdr2_dna2[i] == d2.cdr2_dna_ref2[i] {
+                                                && d2.cdr2_dna2[i] == d2.cdr2_dna_ref2[i]
+                                            {
                                                 sup2 += 1;
                                             }
                                         }
@@ -673,7 +725,7 @@ fn main() {
                                 fwriteln!(log, "{} seq2", strme(&d2.cdr3_dna2));
                             }
 
-                            // Summarize. 
+                            // Summarize.
 
                             fwriteln!(log, "\nright = {supp}");
                             fwriteln!(log, "wrong1 = {sup1}");
@@ -703,7 +755,6 @@ fn main() {
             print!("{}", strme(&bounds[i].3));
         }
     }
-
 
     // Sum.
 
@@ -814,14 +865,7 @@ fn main() {
             }
             rows.push(row);
         }
-        print_tabular_vbox(
-            &mut log,
-            &rows,
-            0,
-            &b"l|r|r|r|r|r".to_vec(),
-            false,
-            false,
-        );
+        print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
         logs.push(log);
     }
     let mut logr = vec![Vec::<String>::new(); 2];
@@ -868,14 +912,7 @@ fn main() {
             }
             rows.push(row);
         }
-        print_tabular_vbox(
-            &mut log,
-            &rows,
-            0,
-            &b"l|r|r|r|r|r".to_vec(),
-            false,
-            false,
-        );
+        print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
         logs.push(log);
     }
     let mut logr = vec![Vec::<String>::new(); 2];
@@ -890,5 +927,4 @@ fn main() {
     for i in 0..r.len() {
         println!("{}", r[i]);
     }
-
 }

@@ -75,7 +75,7 @@ fn main() {
             opt_show = true;
         }
     }
-        
+
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
     #[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
@@ -119,7 +119,7 @@ fn main() {
             first = false;
         } else {
             if !opt_reverse {
-                data.push( CellData {
+                data.push(CellData {
                     v_name1: fields[tof["v_name1"]].to_string(),
                     cdr3_aa1_len: fields[tof["cdr3_aa1"]].len(),
                     cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
@@ -137,7 +137,7 @@ fn main() {
                     v_name2_orig: fields[tof["v_name2"]].to_string(),
                 });
             } else {
-                data.push( CellData {
+                data.push(CellData {
                     v_name1: fields[tof["v_name2"]].to_string(),
                     cdr3_aa1_len: fields[tof["cdr3_aa2"]].len(),
                     cdr3_aa1: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
@@ -543,7 +543,12 @@ fn main() {
             }
             j += 1;
         }
-        bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7], vec![vec![(0, 0); 11]; 7]));
+        bounds.push((
+            i,
+            j,
+            vec![vec![(0, 0, 0, 0); 11]; 7],
+            vec![vec![(0, 0); 11]; 7],
+        ));
         i = j;
     }
 
@@ -596,14 +601,20 @@ fn main() {
                         if opt_show && ident == 10 && eq_light {
                             let mut comment = String::new();
                             if data[k1].j_name2 != data[k2].j_name2
-                                || data[k1].v_name2_orig != data[k2].v_name2_orig {
+                                || data[k1].v_name2_orig != data[k2].v_name2_orig
+                            {
                                 comment = " ***".to_string();
                             }
-                            println!("{} {} {} {} ==> {} {} {} {} {}",
-                                data[k1].dataset, data[k1].barcode, 
-                                data[k1].v_name2_orig, data[k1].j_name2,
-                                data[k2].dataset, data[k2].barcode, 
-                                data[k2].v_name2_orig, data[k2].j_name2,
+                            println!(
+                                "{} {} {} {} ==> {} {} {} {} {}",
+                                data[k1].dataset,
+                                data[k1].barcode,
+                                data[k1].v_name2_orig,
+                                data[k1].j_name2,
+                                data[k2].dataset,
+                                data[k2].barcode,
+                                data[k2].v_name2_orig,
+                                data[k2].j_name2,
                                 comment,
                             );
                         }
@@ -872,5 +883,4 @@ fn main() {
     for i in 0..r.len() {
         println!("{}", r[i]);
     }
-
 }
