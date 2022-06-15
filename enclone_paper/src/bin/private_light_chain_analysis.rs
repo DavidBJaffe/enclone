@@ -217,6 +217,71 @@ fn main() {
                     continue;
                 }
 
+                // ================================================================================
+
+                // Test for validated.  Work in progress, several steps.
+
+                let mut validated = false;
+                let d1 = &data[k1];
+                let d2 = &data[k2];
+                const MIN_VAL: usize = 3;
+
+                // Test if light chain CDR3s have different lengths.
+
+                if d1.cdr3_aa2.len() != d2.cdr3_aa2.len() {
+                    validated = true;
+                }
+
+                // Test FWR4 on heavy chain.
+
+                if !validated {
+                    let mut supp = 0;
+                    let (mut sup1, mut sup2) = (0, 0);
+                    for i in 0..d1.fwr4_dna1.len() {
+                        if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
+                            if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                supp += 1;
+                            } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                                sup1 += 1;
+                            } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                sup2 += 1;
+                            }
+                        }
+                    }
+                    if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                        validated = true;
+                    }
+                }
+
+                // Test FWR4 on light chain.
+
+                if !validated {
+                    let mut supp = 0;
+                    let (mut sup1, mut sup2) = (0, 0);
+                    for i in 0..d1.fwr4_dna2.len() {
+                        if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
+                            if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                supp += 1;
+                            } else if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i] {
+                                sup1 += 1;
+                            } else if d1.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                sup2 += 1;
+                            }
+                        }
+                    }
+                    if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                        validated = true;
+                    }
+                }
+
+                // ================================================================================
+
                 // For now requiring some reference difference.  Using gene names
                 // now but that's not optimal.
 
@@ -316,7 +381,7 @@ fn main() {
                                 data[k1].v_name2_orig, data[k1].j_name2, 
                                 data[k1].cdr3_aa2.len(),
                                 data[k2].dataset, data[k2].barcode,
-                                data[k1].j_name1,
+                                data[k2].j_name1,
                                 data[k2].v_name2_orig, data[k2].j_name2, 
                                 data[k2].cdr3_aa2.len(),
                             );
@@ -327,8 +392,6 @@ fn main() {
                             let mut supp = 0;
                             let mut sup1 = 0;
                             let mut sup2 = 0;
-                            let d1 = &data[k1];
-                            let d2 = &data[k2];
                             if d1.fwr4_dna_ref1 != d2.fwr4_dna_ref1 {
                                 fwriteln!(log, "\nFWR4-heavy");
                                 for i in 0..d1.fwr4_dna1.len() {
@@ -654,6 +717,7 @@ fn main() {
                             fwriteln!(log, "\nright = {supp}");
                             fwriteln!(log, "wrong1 = {sup1}");
                             fwriteln!(log, "wrong2 = {sup2}");
+                            fwriteln!(log, "validated = {validated}");
 
                             let _refdiffs = refdiffs;
 
