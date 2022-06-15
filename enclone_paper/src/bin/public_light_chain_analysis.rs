@@ -841,10 +841,10 @@ fn main() {
             let mut row = vec![format!("{}%", 10 * j)];
             for pass in 0..7 {
                 if xpass == 1 {
-                    let n = res[pass][j].1;
+                    let n = res_cell[pass][j].1;
                     row.push(format!("{:.1}", (n as f64).log10()));
                 } else {
-                    let n = res[pass][j].0;
+                    let n = res_cell[pass][j].0;
                     row.push(format!("{:.1}", (n as f64).log10()));
                 }
             }

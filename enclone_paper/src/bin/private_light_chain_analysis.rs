@@ -314,6 +314,7 @@ fn main() {
                     cells[0][ident].1.push(k2);
                     cells[d + 1][ident].1.push(k1);
                     cells[d + 1][ident].1.push(k2);
+
                     if eq_light {
                         res.2[d + 1][ident].2 += 1;
                         res.2[0][ident].2 += 1;
@@ -858,10 +859,10 @@ fn main() {
             let mut row = vec![format!("{}%", 10 * j)];
             for pass in 0..5 {
                 if xpass == 1 {
-                    let n = res[pass][j].1;
+                    let n = res_cell[pass][j].1;
                     row.push(format!("{:.1}", (n as f64).log10()));
                 } else {
-                    let n = res[pass][j].0;
+                    let n = res_cell[pass][j].0;
                     row.push(format!("{:.1}", (n as f64).log10()));
                 }
             }
