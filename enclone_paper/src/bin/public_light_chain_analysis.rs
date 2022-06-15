@@ -791,7 +791,7 @@ fn main() {
     if !opt_many {
         print!("                                                 ");
     } else {
-        print!("                ");
+        print!("             ");
     }
     println!("both cells have dref = 0");
     let r = hcat(&logr[0], &logr[1], 3);
