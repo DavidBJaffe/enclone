@@ -17,12 +17,6 @@
 // dref1 > 0 and dref2 > 0 and having the same light chain gene.
 // For this, the order of output lines is nondeterministic.  Designed for use with J option.
 //
-// J -- Require different J genes rather than different V genes.
-//
-// JPLUS -- J, and also require that there are at least three positions in the last 25 bases of
-// the different J gene reference sequences at which the reference sequences differ and the two
-// cells both agree with their assigned J gene reference.
-//
 // SOLO -- reduce to one cell per clonotype.
 //
 // SAME -- instead require same heavy chain gene, and different light chain genes.
@@ -44,26 +38,15 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let f = open_for_read![&args[1]];
     let mut show = false;
-    // let mut use_j = false;
-    // let mut jplus = false;
     let mut solo = false;
     let mut opt_same = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
-        /*
-        } else if args[i] == "J" {
-            use_j = true;
-        */
         } else if args[i] == "SOLO" {
             solo = true;
         } else if args[i] == "SAME" {
             opt_same = true;
-        /*
-        } else if args[i] == "JPLUS" {
-            jplus = true;
-            use_j = true;
-        */
         } else {
             eprintln!("\nIllegal argument.\n");
             std::process::exit(1);
@@ -219,8 +202,6 @@ fn main() {
                     continue;
                 }
 
-                // ================================================================================
-
                 // Test for validated.  Work in progress, several steps.
 
                 let mut validated = false;
@@ -304,18 +285,6 @@ fn main() {
                 }
 
                 if !validated {
-                    continue;
-                }
-
-                // ================================================================================
-
-                // For now requiring some reference difference.  Using gene names
-                // now but that's not optimal.
-
-                if data[k1].j_name1 == data[k2].j_name1 
-                    && data[k1].v_name2 == data[k2].v_name2 
-                    && data[k1].j_name2 == data[k2].j_name2 
-                    && data[k1].cdr3_aa2.len() == data[k2].cdr3_aa2.len()  {
                     continue;
                 }
 
