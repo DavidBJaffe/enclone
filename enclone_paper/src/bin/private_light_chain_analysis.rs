@@ -103,6 +103,7 @@ fn main() {
         cdr2_dna_ref2: Vec<u8>,
         cdr2_dna2: Vec<u8>,
         cdr3_dna2: Vec<u8>,
+        cdr3_dna1: Vec<u8>,
 
     }
 
@@ -150,6 +151,7 @@ fn main() {
                 cdr2_dna_ref2: fields[tof["cdr2_dna_ref2"]].to_string().as_bytes().to_vec(),
                 cdr2_dna2: fields[tof["cdr2_dna2"]].to_string().as_bytes().to_vec(),
                 cdr3_dna2: fields[tof["cdr3_dna2"]].to_string().as_bytes().to_vec(),
+                cdr3_dna1: fields[tof["cdr3_dna1"]].to_string().as_bytes().to_vec(),
             });
             clonotype.push(fields[tof["group_id"]].force_usize());
         }
@@ -237,22 +239,28 @@ fn main() {
                 if !validated {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
-                    for i in 0..d1.fwr4_dna1.len() {
-                        if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
-                            if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
-                                supp += 1;
-                            } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
-                                && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
-                                sup1 += 1;
-                            } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
-                                && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
-                                sup2 += 1;
+                    // not sure I trust the following:
+                    if d1.fwr4_dna1.len() != d2.fwr4_dna1.len()
+                        || d1.fwr4_dna_ref1.len() != d2.fwr4_dna_ref1.len() {
+                        validated = true;
+                    } else {
+                        for i in 0..d1.fwr4_dna1.len() {
+                            if d1.fwr4_dna_ref1[i] != d2.fwr4_dna_ref1[i] {
+                                if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                    supp += 1;
+                                } else if d1.fwr4_dna1[i] == d1.fwr4_dna_ref1[i]
+                                    && d2.fwr4_dna1[i] == d1.fwr4_dna_ref1[i] {
+                                    sup1 += 1;
+                                } else if d1.fwr4_dna1[i] == d2.fwr4_dna_ref1[i]
+                                    && d2.fwr4_dna1[i] == d2.fwr4_dna_ref1[i] {
+                                    sup2 += 1;
+                                }
                             }
                         }
-                    }
-                    if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
-                        validated = true;
+                        if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                            validated = true;
+                        }
                     }
                 }
 
@@ -261,22 +269,28 @@ fn main() {
                 if !validated {
                     let mut supp = 0;
                     let (mut sup1, mut sup2) = (0, 0);
-                    for i in 0..d1.fwr4_dna2.len() {
-                        if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
-                            if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
-                                supp += 1;
-                            } else if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
-                                && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i] {
-                                sup1 += 1;
-                            } else if d1.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
-                                && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
-                                sup2 += 1;
+                    // not sure I trust the following:
+                    if d1.fwr4_dna2.len() != d2.fwr4_dna2.len()
+                        || d1.fwr4_dna_ref2.len() != d2.fwr4_dna_ref2.len() {
+                        validated = true;
+                    } else {
+                        for i in 0..d1.fwr4_dna2.len() {
+                            if d1.fwr4_dna_ref2[i] != d2.fwr4_dna_ref2[i] {
+                                if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                    supp += 1;
+                                } else if d1.fwr4_dna2[i] == d1.fwr4_dna_ref2[i]
+                                    && d2.fwr4_dna2[i] == d1.fwr4_dna_ref2[i] {
+                                    sup1 += 1;
+                                } else if d1.fwr4_dna2[i] == d2.fwr4_dna_ref2[i]
+                                    && d2.fwr4_dna2[i] == d2.fwr4_dna_ref2[i] {
+                                    sup2 += 1;
+                                }
                             }
                         }
-                    }
-                    if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
-                        validated = true;
+                        if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                            validated = true;
+                        }
                     }
                 }
 
@@ -386,9 +400,24 @@ fn main() {
                                 data[k2].cdr3_aa2.len(),
                             );
 
-                            // Process FWR4 on heavy chain.
+                            // Process CDR3 on heavy chain.
 
                             let mut refdiffs = 0;
+                            fwriteln!(log, "\nCDR3-heavy");
+                            for i in 0..d1.cdr3_dna1.len() {
+                                if d1.cdr3_dna1[i] == d2.cdr3_dna1[i] {
+                                    fwrite!(log, " ");
+                                } else {
+                                    fwrite!(log, "*");
+                                    refdiffs += 1;
+                                }
+                            }
+                            fwriteln!(log, "");
+                            fwriteln!(log, "{} seq1", strme(&d1.cdr3_dna1));
+                            fwriteln!(log, "{} seq2", strme(&d2.cdr3_dna1));
+
+                            // Process FWR4 on heavy chain.
+
                             let mut supp = 0;
                             let mut sup1 = 0;
                             let mut sup2 = 0;
