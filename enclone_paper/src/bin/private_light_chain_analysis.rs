@@ -1,5 +1,8 @@
 // Copyright (c) 2022 10X Genomics, Inc. All rights reserved.
 //
+// usage:
+// private_light_chain_analysis per_cell_stuff <optional args>
+
 // See also public_light_chain_analysis.rs.
 //
 // Analyze light chains.  Supply a single file of data, with one line per cell, and fields
@@ -10,16 +13,14 @@
 // enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL ECHOC
 //         PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1,clonotype_ncells,const1,hcomp
 //         > per_cell_stuff
+// (except that more arguments were added)
 //
 // Optional arguments:
 //
 // SHOW -- Instead print data for pairs of cells from the same donor at 100% identity with
 // dref1 > 0 and dref2 > 0 and having the same light chain gene.
-// For this, the order of output lines is nondeterministic.  Designed for use with J option.
 //
 // SOLO -- reduce to one cell per clonotype.
-//
-// SAME -- instead require same heavy chain gene, and different light chain genes.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -205,6 +206,7 @@ fn main() {
                 let d1 = &data[k1];
                 let d2 = &data[k2];
                 const MIN_VAL: usize = 3;
+                const MAX_VAL_WRONG: usize = 0;
 
                 // Test if light chain CDR3s have different lengths.
 
@@ -245,7 +247,7 @@ fn main() {
                                 }
                             }
                         }
-                        if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                        if supp >= MIN_VAL && sup1 <= MAX_VAL_WRONG && sup2 <= MAX_VAL_WRONG {
                             validated = true;
                         }
                     }
@@ -275,7 +277,7 @@ fn main() {
                                 }
                             }
                         }
-                        if supp >= MIN_VAL && sup1 == 0 && sup2 == 0 {
+                        if supp >= MIN_VAL && sup1 <= MAX_VAL_WRONG && sup2 <= MAX_VAL_WRONG {
                             validated = true;
                         }
                     }
