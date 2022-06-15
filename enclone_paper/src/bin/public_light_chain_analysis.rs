@@ -532,7 +532,6 @@ fn main() {
     // Plus placeholder for results, see next.
 
     let mut bounds = Vec::<(usize, usize, Vec<Vec<(usize, usize, usize, usize)>>)>::new();
-    let mut bounds2 = Vec::<(usize, usize, Vec<usize>, Vec<usize>)>::new();
     let mut i = 0;
     while i < data.len() {
         // let j = next_diff12_9(&data, i as i32) as usize;
@@ -544,7 +543,6 @@ fn main() {
             j += 1;
         }
         bounds.push((i, j, vec![vec![(0, 0, 0, 0); 11]; 7]));
-        bounds2.push((i, j, vec![0; 100], vec![0; 100]));
         i = j;
     }
 
