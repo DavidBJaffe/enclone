@@ -59,7 +59,7 @@ FIGURE 4
 insertion_analysis per_cell_stuff
 public_light_chain_analysis per_cell_stuff
 olga_splice hpgen_sim.csv
-where hpgen_sim.csv is the file produced by OLGA (the first one produce above)
+where hpgen_sim.csv is the file produced by OLGA (the first one produced above)
 
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
