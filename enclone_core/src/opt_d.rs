@@ -159,6 +159,10 @@ pub fn opt_d(
 
         seq_start += q1 as isize - q2 as isize;
     }
+    // Workaround for very rare anomaly that would cause a subsequent assert.
+    if seq_start as usize > tig.len() {
+        seq_start = tig.len() as isize;
+    }
     let jref = refdata.refs[j_ref_id].to_ascii_vec();
     const MIN_BITS_FOR_D2: f64 = 14.0;
     for di in 0..todo.len() {
