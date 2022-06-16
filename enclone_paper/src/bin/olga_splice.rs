@@ -6,7 +6,7 @@
 //
 // Input file is to have one line per junction, with comma-separated fields as follows:
 // * junction nucleotide sequence
-// * junction CDR3 sequence
+// * junction amino_acid sequence
 // * V gene name
 // * J gene name.
 //
@@ -14,7 +14,11 @@
 // * N=n    only process n sequences
 // * CSV    emit CSV output and no other, see below for fields.
 //
-// CSV output fields:
+// CSV output fields (first four copied from input):
+// jun      = junction nucleotide sequence
+// jun_aa   = junction amino acid sequence
+// v_gene   = V gene name
+// j_gene   = J gene name
 // ins      = number of inserted bases in junction region
 // sub      = number of substituted bases in junction region
 // sub_rate = junction substitution rate
@@ -23,6 +27,7 @@
 //
 // If the computation fails, we output
 // fail,fail,fail,fail,fail
+// for the computed fields.
 
 use bio_edit::alignment::AlignmentOperation::{Del, Ins, Match, Subst};
 use debruijn::dna_string::DnaString;
@@ -526,13 +531,17 @@ fn main() {
         }
     }
     if csv {
-        println!("ins,sub,sub_rate,comp,d");
+        println!("jun,jun_aa,v_gene,j_gene,ins,sub,sub_rate,comp,d");
         for i in 0..results.len() {
             if results[i].1.fail {
                 println!("fail,fail,fail,fail,fail");
             } else {
                 println!(
-                    "{},{},{},{},{}",
+                    "{},{},{},{},{},{},{},{},{}",
+                    cdr3_dna[i],
+                    cdr3[i],
+                    hv[i],
+                    hj[i],
                     results[i].1.jun_ins,
                     results[i].1.subs,
                     results[i].1.rate,
