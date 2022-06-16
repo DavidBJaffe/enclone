@@ -18,18 +18,20 @@ fn main() {
     let f = open_for_read![&infile];
     let mut g = open_for_write_new![&outfile];
     let mut dcf = 1000000;
-    for (i, line) in f.lines().enumerate() {
+    let mut first = true;
+    for line in f.lines() {
         let s = line.unwrap();
         if s.starts_with("#") {
             fwriteln!(g, "{}", s);
         } else {
             let mut fields: Vec<String> = s.split(',').map(str::to_owned).collect();
-            if i == 0 {
+            if first {
                 for j in 0..fields.len() {
                     if fields[j] == "donors_cell" {
                         dcf = j;
                     }
                 }
+                first = false;
             } else {
                 fields[dcf] = new_donor_name.to_string();
             }
