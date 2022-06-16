@@ -1,7 +1,28 @@
 // Copyright (c) 2022 10x Genomics, Inc. All rights reserved.
 //
-// Splice junctions from olga.
-// An optional second argument is the number of sequences to process.
+// Analyze splice junctions from olga or some other program.
+//
+// usage: olga_splice input-file <optional args>
+//
+// Input file is to have one line per junction, with comma-separated fields as follows:
+// * junction nucleotide sequence
+// * junction CDR3 sequence
+// * V gene name
+// * J gene name.
+//
+// Optional arguments:
+// * N=n    only process n sequences
+// * CSV    emit CSV output and no other, see below for fields.
+//
+// CSV output fields:
+// ins      = number of inserted bases in junction region
+// sub      = number of substituted bases in junction region
+// sub_rate = junction substitution rate
+// comp     = junction complexity
+// d        = D gene (or null string, if none, or d1:d2, if two D genes)
+//
+// If the computation fails, we output
+// fail,fail,fail,fail,fail
 
 use bio_edit::alignment::AlignmentOperation::{Del, Ins, Match, Subst};
 use debruijn::dna_string::DnaString;
@@ -27,8 +48,15 @@ fn main() {
     PrettyTrace::new().on();
     let args: Vec<String> = env::args().collect();
     let mut n = 0;
-    if args.len() >= 3 {
-        n = args[2].force_usize();
+    let mut csv = false;
+    for i in 2..args.len() {
+        if args[i].starts_with("N=") {
+            n = args[i].after("N=").force_usize();
+        } else if args[i] == "CSV" {
+            csv = true;
+        } else {
+            eprintln!("\nUnrecognized argument.\n");
+        }
     }
 
     // Get the human reference used by enclone.
@@ -134,6 +162,7 @@ fn main() {
         subs: usize,
         rate: f64,
         cdrh3_len: usize,
+        hcomp: usize,
     }
     let mut results = Vec::<(usize, Data)>::new();
     for i in 0..n {
@@ -231,6 +260,7 @@ fn main() {
                 subs: 0,
                 rate: 0.0,
                 cdrh3_len: 0,
+                hcomp: 0,
             };
         } else {
             fwriteln!(log, "CDR3 = {}", strme(&cdr3x[0].1));
@@ -273,6 +303,7 @@ fn main() {
                     subs: 0,
                     rate: 0.0,
                     cdrh3_len: 0,
+                    hcomp: 0,
                 };
             } else {
                 let j_ref_id = j_ref_id.unwrap();
@@ -457,6 +488,7 @@ fn main() {
                     subs: mismatches,
                     rate: rate,
                     cdrh3_len: cdr3[i].len(),
+                    hcomp: hcomp,
                 };
             }
         }
@@ -473,7 +505,9 @@ fn main() {
     let mut dd = 0;
     let mut cdrh3_lens = Vec::<usize>::new();
     for i in 0..results.len() {
-        print!("{}", strme(&results[i].1.out));
+        if !csv {
+            print!("{}", strme(&results[i].1.out));
+        }
         if results[i].1.fail {
             fails += 1;
         } else {
@@ -485,11 +519,29 @@ fn main() {
             ds_all.push(results[i].1.d.clone());
             cdrh3_lens.push(results[i].1.cdrh3_len);
             jun_ins.push(results[i].1.jun_ins);
-            if results[i].1.jun_ins == 0 {
+            if results[i].1.jun_ins == 0 || csv {
                 subs.push(results[i].1.subs);
                 rates.push(results[i].1.rate);
             }
         }
+    }
+    if csv {
+        println!("ins,sub,sub_rate,comp,d");
+        for i in 0..results.len() {
+            if results[i].1.fail {
+                println!("fail,fail,fail,fail,fail");
+            } else {
+                println!(
+                    "{},{},{},{},{}",
+                    results[i].1.jun_ins,
+                    results[i].1.subs,
+                    results[i].1.rate,
+                    results[i].1.hcomp,
+                    results[i].1.drefname,
+                );
+            }
+        }
+        std::process::exit(0);
     }
     println!("\nThere were {} fails.\n", fails);
     println!("CDRH3 length distribution");
