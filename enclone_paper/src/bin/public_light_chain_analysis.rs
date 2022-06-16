@@ -728,13 +728,13 @@ fn main() {
             "any".to_string(),
         ];
         if !opt_many {
-            row.append( &mut vec![
-            "d1,d2".to_string(),
-            "d1,d3".to_string(),
-            "d1,d4".to_string(),
-            "d2,d3".to_string(),
-            "d2,d4".to_string(),
-            "d3,d4".to_string(),
+            row.append(&mut vec![
+                "d1,d2".to_string(),
+                "d1,d3".to_string(),
+                "d1,d4".to_string(),
+                "d2,d3".to_string(),
+                "d2,d4".to_string(),
+                "d3,d4".to_string(),
             ]);
         }
         rows.push(row);
@@ -772,14 +772,7 @@ fn main() {
         if opt_many {
             just = b"l|r|r".to_vec();
         }
-        print_tabular_vbox(
-            &mut log,
-            &rows,
-            0,
-            &just,
-            false,
-            false,
-        );
+        print_tabular_vbox(&mut log, &rows, 0, &just, false, false);
         logs.push(log);
     }
     let mut logr = vec![Vec::<String>::new(); 2];
