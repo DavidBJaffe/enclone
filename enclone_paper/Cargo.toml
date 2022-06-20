@@ -24,6 +24,7 @@ publish = false
 [dependencies]
 bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 debruijn = "0.3"
+edit-distance = "2"
 enclone_core = { path = "../enclone_core" }
 enclone_tail = { path = "../enclone_tail" }
 flate2 = "1"

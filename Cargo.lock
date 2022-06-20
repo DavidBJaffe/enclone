@@ -1424,6 +1424,7 @@ version = "0.5.216"
 dependencies = [
  "bio_edit",
  "debruijn",
+ "edit-distance",
  "enclone_core",
  "enclone_tail",
  "flate2",
