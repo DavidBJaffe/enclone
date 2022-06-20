@@ -13,6 +13,8 @@
 //
 // Optional arguments:
 // - FLOW: compute using flow classification of naive/memory rather than dref
+// - FLOW_UNSWITCHED: same as flow but require memory to be sorted as unswitched
+// - FLOW_SWITCHED: same as flow but require memory to be sorted as switched
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
 // - REVERSE: reverse role of heavy and light
@@ -63,10 +65,16 @@ fn main() {
     let mut opt_solo = false;
     let mut opt_show = false;
     let mut opt_many = false;
+    let mut flow_unswitched = false;
+    let mut flow_switched = false;
     let mut switch_as_dref = false;
     for i in 2..args.len() {
         if args[i] == "FLOW" {
             opt_flow = true;
+        } else if args[i] == "FLOW_UNSWITCHED" {
+            flow_unswitched = true;
+        } else if args[i] == "FLOW_SWITCHED" {
+            flow_switched = true;
         } else if args[i] == "NAIVE" {
             opt_naive = true;
         } else if args[i] == "NO_PARALOGS" {
@@ -285,7 +293,9 @@ fn main() {
 
     let mut is_naive = vec![false; data.len()];
     let mut is_memory = vec![false; data.len()];
-    if (opt_naive || opt_flow) && !opt_many {
+    let mut is_unswitched_flow = vec![false; data.len()];
+    let mut is_switched_flow = vec![false; data.len()];
+    if (opt_naive || opt_flow || flow_unswitched || flow_switched) && !opt_many {
         let mut all = Vec::<usize>::new();
         all.append(&mut NAIVE.to_vec());
         all.append(&mut UNSWITCHED.to_vec());
@@ -357,6 +367,7 @@ fn main() {
                         memory_subtotal[0].1 += 1;
                         memory_subtotal[donor_id].1 += 1;
                         is_memory[i] = true;
+                        is_unswitched_flow[i] = true;
                     } else {
                         unswitched_naive[0].1 += 1;
                         unswitched_naive[donor_id].1 += 1;
@@ -401,6 +412,7 @@ fn main() {
                         memory_subtotal[0].1 += 1;
                         memory_subtotal[donor_id].1 += 1;
                         is_memory[i] = true;
+                        is_switched_flow[i] = true;
                     } else {
                         switched_naive[0].1 += 1;
                         switched_naive[donor_id].1 += 1;
@@ -790,6 +802,14 @@ fn main() {
                     if opt_flow {
                         naive = is_naive[k1] && is_naive[k2];
                         memory = is_memory[k1] && is_memory[k2];
+                    }
+                    if flow_unswitched {
+                        naive = is_naive[k1] && is_naive[k2];
+                        memory = is_unswitched_flow[k1] && is_unswitched_flow[k2];
+                    }
+                    if flow_switched {
+                        naive = is_naive[k1] && is_naive[k2];
+                        memory = is_switched_flow[k1] && is_switched_flow[k2];
                     }
                     if naive {
                         cells[pass][ident].0.push(k1);
