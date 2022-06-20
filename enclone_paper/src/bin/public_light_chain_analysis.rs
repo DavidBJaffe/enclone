@@ -190,7 +190,6 @@ fn main() {
         for i in 0..data.len() {
             if data[i].dref == 0 {
                 if data[i].const1.starts_with("IGHA")
-                    || data[i].const1.starts_with("IGHD")
                     || data[i].const1.starts_with("IGHE")
                     || data[i].const1.starts_with("IGHG")
                 {
@@ -293,17 +292,20 @@ fn main() {
         all.append(&mut SWITCHED.to_vec());
         all.append(&mut PLASMABLAST.to_vec());
         all.sort();
-        let mut naive = vec![(0, 0); 5];
-        let mut unswitched = vec![(0, 0); 5];
-        let mut switched = vec![(0, 0); 5];
-        let mut plasmablast = vec![(0, 0); 5];
-        let mut memory_subtotal = vec![(0, 0); 5];
-        let mut unswitched_naive = vec![(0, 0); 5];
-        let mut switched_naive = vec![(0, 0); 5];
-        let mut total = vec![(0, 0); 5];
+        let mut naive = vec![(0, 0, 0, 0); 5];
+        let mut unswitched = vec![(0, 0, 0, 0); 5];
+        let mut switched = vec![(0, 0, 0, 0); 5];
+        let mut plasmablast = vec![(0, 0, 0, 0); 5];
+        let mut memory_subtotal = vec![(0, 0, 0, 0); 5];
+        let mut unswitched_naive = vec![(0, 0, 0, 0); 5]; // THESE ARE MIXED!
+        let mut switched_naive = vec![(0, 0, 0, 0); 5];   // THESE ARE MIXED!
+        let mut total = vec![(0, 0, 0, 0); 5];
         let mut cells = vec![(0, 0); all.len()];
         for pass in 1..=2 {
             for i in 0..data.len() {
+                let c1 = &data[i].const1;
+                let is_switched = c1.starts_with("IGHA")
+                    || c1.starts_with("IGHE") || c1.starts_with("IGHG");
                 let dref = data[i].dref;
                 let dataset = data[i].dataset;
                 if pass == 1 && dataset.to_string().starts_with("128") {
@@ -324,6 +326,14 @@ fn main() {
                     total[0].0 += 1;
                     total[donor_id].0 += 1;
                 }
+                if dref == 0 && is_switched {
+                    total[0].2 += 1;
+                    total[donor_id].2 += 1;
+                }
+                if dref > 0 && is_switched {
+                    total[0].3 += 1;
+                    total[donor_id].3 += 1;
+                }
                 if NAIVE.contains(&dataset) {
                     naive[0].1 += 1;
                     naive[donor_id].1 += 1;
@@ -331,6 +341,14 @@ fn main() {
                     if dref == 0 {
                         naive[0].0 += 1;
                         naive[donor_id].0 += 1;
+                    }
+                    if dref == 0 && is_switched {
+                        naive[0].2 += 1;
+                        naive[donor_id].2 += 1;
+                    }
+                    if dref > 0 && is_switched {
+                        naive[0].3 += 1;
+                        naive[donor_id].3 += 1;
                     }
                 } else if UNSWITCHED.contains(&dataset) {
                     if pass == 1 || donor_id == 1 {
@@ -352,6 +370,28 @@ fn main() {
                         } else {
                             unswitched_naive[0].0 += 1;
                             unswitched_naive[donor_id].0 += 1;
+                        }
+                    }
+                    if dref == 0 && is_switched {
+                        if pass == 1 || donor_id == 1 {
+                            unswitched[0].2 += 1;
+                            unswitched[donor_id].2 += 1;
+                            memory_subtotal[0].2 += 1;
+                            memory_subtotal[donor_id].2 += 1;
+                        } else {
+                            unswitched_naive[0].2 += 1;
+                            unswitched_naive[donor_id].2 += 1;
+                        }
+                    }
+                    if dref > 0 && is_switched {
+                        if pass == 1 || donor_id == 1 {
+                            unswitched[0].3 += 1;
+                            unswitched[donor_id].3 += 1;
+                            memory_subtotal[0].3 += 1;
+                            memory_subtotal[donor_id].3 += 1;
+                        } else {
+                            unswitched_naive[0].3 += 1;
+                            unswitched_naive[donor_id].3 += 1;
                         }
                     }
                 } else if SWITCHED.contains(&dataset) {
@@ -376,6 +416,28 @@ fn main() {
                             switched_naive[donor_id].0 += 1;
                         }
                     }
+                    if dref == 0 && is_switched {
+                        if pass == 1 {
+                            switched[0].2 += 1;
+                            switched[donor_id].2 += 1;
+                            memory_subtotal[0].2 += 1;
+                            memory_subtotal[donor_id].2 += 1;
+                        } else {
+                            switched_naive[0].2 += 1;
+                            switched_naive[donor_id].2 += 1;
+                        }
+                    }
+                    if dref > 0 && is_switched {
+                        if pass == 1 {
+                            switched[0].3 += 1;
+                            switched[donor_id].3 += 1;
+                            memory_subtotal[0].3 += 1;
+                            memory_subtotal[donor_id].3 += 1;
+                        } else {
+                            switched_naive[0].3 += 1;
+                            switched_naive[donor_id].3 += 1;
+                        }
+                    }
                 } else if PLASMABLAST.contains(&dataset) {
                     plasmablast[0].1 += 1;
                     plasmablast[donor_id].1 += 1;
@@ -387,6 +449,18 @@ fn main() {
                         plasmablast[donor_id].0 += 1;
                         memory_subtotal[0].0 += 1;
                         memory_subtotal[donor_id].0 += 1;
+                    }
+                    if dref == 0 && is_switched {
+                        plasmablast[0].2 += 1;
+                        plasmablast[donor_id].2 += 1;
+                        memory_subtotal[0].2 += 1;
+                        memory_subtotal[donor_id].2 += 1;
+                    }
+                    if dref > 0 && is_switched {
+                        plasmablast[0].3 += 1;
+                        plasmablast[donor_id].3 += 1;
+                        memory_subtotal[0].3 += 1;
+                        memory_subtotal[donor_id].3 += 1;
                     }
                 } else {
                     panic!("unclassified dataset");
@@ -442,6 +516,49 @@ fn main() {
             let mut log = String::new();
             print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
             println!("{}", log);
+
+            println!("naive switched cells");
+            let mut rows = vec![row1.clone()];
+            for i in 0..counts.len() {
+                rows.push(vec!["\\hline".to_string(); 6]);
+                let mut row = vec![names[i].to_string()];
+                for j in 0..5 {
+                    if counts[i][j].1 > 0 {
+                        row.push(format!(
+                            "{}",
+                            add_commas(counts[i][j].2),
+                        ));
+                    } else {
+                        row.push(String::new());
+                    }
+                }
+                rows.push(row);
+            }
+            let mut log = String::new();
+            print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
+            println!("{}", log);
+
+            println!("memory switched cells");
+            let mut rows = vec![row1.clone()];
+            for i in 0..counts.len() {
+                rows.push(vec!["\\hline".to_string(); 6]);
+                let mut row = vec![names[i].to_string()];
+                for j in 0..5 {
+                    if counts[i][j].1 > 0 {
+                        row.push(format!(
+                            "{}",
+                            add_commas(counts[i][j].3),
+                        ));
+                    } else {
+                        row.push(String::new());
+                    }
+                }
+                rows.push(row);
+            }
+            let mut log = String::new();
+            print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
+            println!("{}", log);
+
             println!("naive cell fractions");
             let mut rows = vec![row1.clone()];
             for i in 0..counts.len() {
@@ -462,6 +579,7 @@ fn main() {
             let mut log = String::new();
             print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
             println!("{}", log);
+
             std::process::exit(0);
         }
     }
