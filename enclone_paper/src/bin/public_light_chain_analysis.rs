@@ -298,14 +298,14 @@ fn main() {
         let mut plasmablast = vec![(0, 0, 0, 0); 5];
         let mut memory_subtotal = vec![(0, 0, 0, 0); 5];
         let mut unswitched_naive = vec![(0, 0, 0, 0); 5]; // THESE ARE MIXED!
-        let mut switched_naive = vec![(0, 0, 0, 0); 5];   // THESE ARE MIXED!
+        let mut switched_naive = vec![(0, 0, 0, 0); 5]; // THESE ARE MIXED!
         let mut total = vec![(0, 0, 0, 0); 5];
         let mut cells = vec![(0, 0); all.len()];
         for pass in 1..=2 {
             for i in 0..data.len() {
                 let c1 = &data[i].const1;
-                let is_switched = c1.starts_with("IGHA")
-                    || c1.starts_with("IGHE") || c1.starts_with("IGHG");
+                let is_switched =
+                    c1.starts_with("IGHA") || c1.starts_with("IGHE") || c1.starts_with("IGHG");
                 let dref = data[i].dref;
                 let dataset = data[i].dataset;
                 if pass == 1 && dataset.to_string().starts_with("128") {
@@ -524,10 +524,7 @@ fn main() {
                 let mut row = vec![names[i].to_string()];
                 for j in 0..5 {
                     if counts[i][j].1 > 0 {
-                        row.push(format!(
-                            "{}",
-                            add_commas(counts[i][j].2),
-                        ));
+                        row.push(format!("{}", add_commas(counts[i][j].2),));
                     } else {
                         row.push(String::new());
                     }
@@ -545,10 +542,7 @@ fn main() {
                 let mut row = vec![names[i].to_string()];
                 for j in 0..5 {
                     if counts[i][j].1 > 0 {
-                        row.push(format!(
-                            "{}",
-                            add_commas(counts[i][j].3),
-                        ));
+                        row.push(format!("{}", add_commas(counts[i][j].3),));
                     } else {
                         row.push(String::new());
                     }
