@@ -20,7 +20,7 @@
 // SHOW -- Instead print data for pairs of cells from the same donor at 100% identity with
 // dref1 > 0 and dref2 > 0 and having the same light chain gene.
 //
-// NSOLO -- use all cells in a clonotype, not just one.
+// SOLO -- use just one cell in a clonotype.
 
 use enclone_core::hcat;
 use io_utils::*;
@@ -39,12 +39,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let f = open_for_read![&args[1]];
     let mut show = false;
-    let mut solo = true;
+    let mut solo = false;
     for i in 2..args.len() {
         if args[i] == "SHOW" {
             show = true;
-        } else if args[i] == "NSOLO" {
-            solo = false;
+        } else if args[i] == "SOLO" {
+            solo = true;
         } else {
             eprintln!("\nIllegal argument.\n");
             std::process::exit(1);

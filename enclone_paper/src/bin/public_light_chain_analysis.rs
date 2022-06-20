@@ -16,7 +16,7 @@
 // - NAIVE: compute just some stats about naive cells
 // - NO_PARALOGS: do not make paralogs equivalent
 // - REVERSE: reverse role of heavy and light
-// - NSOLO: use all cells in a clonotype, not just one
+// - SOLO: use just one cell in a clonotype
 // - SHOW: show information about each cell pair, and just for the 100% identity, equal
 //         light chain case
 // - MANY: work with many donors.
@@ -60,7 +60,7 @@ fn main() {
     let mut opt_naive = false;
     let mut opt_no_paralogs = false;
     let mut opt_reverse = false;
-    let mut opt_solo = true;
+    let mut opt_solo = false;
     let mut opt_show = false;
     let mut opt_many = false;
     let mut switch_as_dref = false;
@@ -73,8 +73,8 @@ fn main() {
             opt_no_paralogs = true;
         } else if args[i] == "REVERSE" {
             opt_reverse = true;
-        } else if args[i] == "NSOLO" {
-            opt_solo = false;
+        } else if args[i] == "SOLO" {
+            opt_solo = true;
         } else if args[i] == "SHOW" {
             opt_show = true;
         } else if args[i] == "MANY" {
