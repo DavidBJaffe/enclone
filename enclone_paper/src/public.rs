@@ -204,4 +204,5 @@ pub fn public_print_results(
     for i in 0..r.len() {
         println!("{}", r[i]);
     }
+    println!("\npublic naive cells: {}\n", res_cell[0][10].0);
 }
