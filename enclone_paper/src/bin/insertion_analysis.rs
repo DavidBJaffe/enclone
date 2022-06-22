@@ -77,6 +77,31 @@ fn main() {
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
+    // Compute mean substitution rate for naive cells.
+
+    let mut rates = Vec::<f64>::new();
+    for k in 0..data.len() {
+        let dref = data[k].5;
+        if dref == 0 {
+            let matches = data[k].6;
+            let subs = data[k].7;
+            if subs + matches > 0 {
+                let rate = subs as f64 / (subs + matches) as f64;
+                rates.push(rate);
+            }
+        }
+    }
+    let mut mean_sub_rate = 0.0;
+    for k in 0..rates.len() {
+        mean_sub_rate += rates[k];
+    }
+    mean_sub_rate /= rates.len() as f64;
+    println!("\nmean junction substitution rate for naive cells = {:.1}%",
+        100.0 * mean_sub_rate
+    );
+
+    // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
     // For naive cells with junction insertion length zero, show the substitution and
     // substitution rate distribution.
 
