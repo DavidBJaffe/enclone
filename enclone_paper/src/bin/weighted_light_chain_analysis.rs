@@ -10,6 +10,7 @@
 // enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL ECHOC
 //         PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1 > per_cell_stuff
 
+use enclone_paper::*;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
 use rayon::prelude::*;
@@ -59,23 +60,7 @@ fn main() {
 
     let f = include_bytes!["../../../enclone_paper/data/mat.575142"].to_vec();
     let f = stringme(&f);
-    let mut m = Vec::<Vec<f64>>::new();
-    for line in f.lines() {
-        let mut s = line.to_string();
-        let sb = s.replace(" ", "");
-        if sb == "ACDEFGHIKLMNPQRSTVWY" {
-            continue;
-        }
-        if s.len() > 2 && s.as_bytes()[0] >= b'A' {
-            s = s[2..].to_string();
-        }
-        let fields = s.split(' ').collect::<Vec<&str>>();
-        let mut row = Vec::<f64>::new();
-        for i in 0..fields.len() {
-            row.push(fields[i].force_f64());
-        }
-        m.push(row);
-    }
+    let m = unpack_aa_matrix_string(&f);
     let mut penalty = vec![vec![0.0; 27]; 27];
     let aa = b"ACDEFGHIKLMNPQRSTVWY".to_vec();
     for i1 in 0..aa.len() {
