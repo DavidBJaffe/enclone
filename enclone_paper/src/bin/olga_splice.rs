@@ -556,10 +556,12 @@ fn main() {
     println!("CDRH3 length distribution");
     let mut bins = vec![0; 100];
     let mut total = 0;
+    let mut total_len = 0;
     for k in 0..cdrh3_lens.len() {
         let len = cdrh3_lens[k];
         bins[len / 5] += 1;
         total += 1;
+        total_len += len;
     }
     for i in 0..bins.len() {
         if bins[i] > 0 {
@@ -571,6 +573,7 @@ fn main() {
             );
         }
     }
+    println!("mean CDRH3 length = {:.1}", total_len as f64 / total as f64);
     let mut total = 0;
     for i in 0..jun_ins.len() {
         total += jun_ins[i];
