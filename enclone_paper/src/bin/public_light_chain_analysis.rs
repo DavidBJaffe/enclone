@@ -267,12 +267,14 @@ fn main() {
         println!("\nCDRH3 length distribution for naive cells");
         let mut bins = vec![0; 100];
         let mut total = 0;
+        let mut total_len = 0;
         for k in 0..data.len() {
             let dref = data[k].dref;
             if dref == 0 {
                 let len = data[k].cdr3_aa1_len;
                 bins[len / 5] += 1;
                 total += 1;
+                total_len += len;
             }
         }
         for i in 0..bins.len() {
@@ -285,6 +287,7 @@ fn main() {
                 );
             }
         }
+        println!("mean CDRH3 length = {:.1}", total_len as f64 / total as f64);
     }
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
