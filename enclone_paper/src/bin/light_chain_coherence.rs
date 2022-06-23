@@ -228,6 +228,7 @@ fn main() {
     let mut best_n = 0;
     let mut canonical_n = 0;
     let mut changed = false;
+    let mut nznz0 = 0.0;
     for count in 1.. {
         if count % 10000 == 0 {
             println!(
@@ -318,16 +319,20 @@ fn main() {
         // Print.
 
         let n = res.0 + res.1;
+        let nznz = 100.0 * res.0 as f64 / n as f64;
         if count == 1 {
             canonical_n = n;
+            nznz0 = nznz.min(75.0);
         }
-        let nznz = 100.0 * res.0 as f64 / n as f64;
-        if n > best_n && nznz >= 75.0 {
+        if n > best_n && nznz >= nznz0 {
             changed = true;
             if count > 1 {
                 let nrel = n as f64 / canonical_n as f64;
                 print!("count = {count}, nrel = {nrel:.4}, light chain coherence = {nznz:.1}%");
                 println!(", used {:.1} minutes", elapsed(&t) / 60.0);
+            }
+            if nznz > nznz0 {
+                nznz0 = nznz.min(75.0);
             }
             best_n = n;
         } else {
