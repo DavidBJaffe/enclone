@@ -328,7 +328,8 @@ fn main() {
             changed = true;
             if count > 1 {
                 let nrel = n as f64 / canonical_n as f64;
-                print!("count = {count}, nrel = {nrel:.4}, light chain coherence = {nznz:.1}%");
+                print!("count = {count}, nrel = {nrel:.4}, n = {n}, \
+                    light chain coherence = {nznz:.1}%");
                 println!(", used {:.1} minutes", elapsed(&t) / 60.0);
             }
             if nznz > nznz0 {
