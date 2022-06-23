@@ -89,6 +89,7 @@ fn main() {
     // However, this leader has stop codons.  Therefore we put in a FAKE leader, that for
     // IGHV3-11.
 
+    /*
     refnames.push("IGHV3-43D".to_string());
     utr.push(false);
     refs.push(
@@ -129,6 +130,7 @@ fn main() {
             .to_vec(),
     );
     utr.push(false);
+    */
     let nref = refs.len();
     let mut refdata = RefData::new();
     let ext_ref = String::new();
@@ -326,7 +328,7 @@ fn main() {
                     v_ref_id,
                     j_ref_id,
                     &seq,
-                    &ann,
+                    &annv,
                     &strme(&cdr3x[0].1),
                     &refdata,
                     &Vec::new(),
