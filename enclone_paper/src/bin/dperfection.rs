@@ -2,6 +2,10 @@
 // values, defined as dperfect/junction-region-length.  See dperfect.rs.
 //
 // usage: dperfection junction-region-file
+//
+// How to create input file from per_cell_stuff, e.g. for d1:
+//
+// cat per_cell_stuff | cut -d, -f2,7,16 | grep d1 | grep ",0," | cut -d, -f3 > d1_cdr3_dna1_naive
 
 use enclone_paper::dperfect::dperfect;
 use io_utils::*;
