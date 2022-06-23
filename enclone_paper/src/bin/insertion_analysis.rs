@@ -96,7 +96,8 @@ fn main() {
         mean_sub_rate += rates[k];
     }
     mean_sub_rate /= rates.len() as f64;
-    println!("\nmean junction substitution rate for naive cells = {:.1}%",
+    println!(
+        "\nmean junction substitution rate for naive cells = {:.1}%",
         100.0 * mean_sub_rate
     );
 

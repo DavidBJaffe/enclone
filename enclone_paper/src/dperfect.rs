@@ -1,4 +1,4 @@
-// Given a human heavy chain junction region, report the longest perfect match by a human D gene to 
+// Given a human heavy chain junction region, report the longest perfect match by a human D gene to
 // the region, where the D gene can be placed within the region.
 
 use std::cmp::max;

@@ -58,8 +58,15 @@ fn main() {
     }
     println!("\ndperfection%\tdata%");
     for i in 0..=10 {
-        let label = if i < 10 { format!("{}-", 10 * i) } else { format!("100") };
-        println!("{label}\t{:.1}", 100.0 * buckets[i] as f64 / dps.len() as f64);
+        let label = if i < 10 {
+            format!("{}-", 10 * i)
+        } else {
+            format!("100")
+        };
+        println!(
+            "{label}\t{:.1}",
+            100.0 * buckets[i] as f64 / dps.len() as f64
+        );
     }
     println!("");
 }
