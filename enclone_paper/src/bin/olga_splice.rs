@@ -88,6 +88,10 @@ fn main() {
     // GAGTGAGAAAAACTGGATTTGTGTGGCATTTTCTGATAACGGTGTCCTTCTGTTTGCAGGTGTCCAGTGT.
     // However, this leader has stop codons.  Therefore we put in a FAKE leader, that for
     // IGHV3-11.
+    //
+    // This code looks wrong because it does not modify refdata, but in fact it is OK.  We only
+    // use these extra references to infer the full length sequence of the entry.  Thereafter it
+    // is fine (and in fact better) to use our standard reference.
 
     refnames.push("IGHV3-43D".to_string());
     utr.push(false);
@@ -326,7 +330,7 @@ fn main() {
                     v_ref_id,
                     j_ref_id,
                     &seq,
-                    &ann,
+                    &annv,
                     &strme(&cdr3x[0].1),
                     &refdata,
                     &Vec::new(),
