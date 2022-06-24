@@ -11,6 +11,7 @@
 // Option args:
 // - DONORS=donor-list e.g. DONORS=1,2 to use only donors 1 and 2.
 // - INITIAL=matrix-file to start with the given matrix
+// - LOCK: don't allow initial light chain coherence to be decreased.
 //
 // Data from:
 //
@@ -70,8 +71,11 @@ fn main() {
     let f = open_for_read![&args[1]];
     let mut donors = Vec::<usize>::new();
     let mut penalty_file = String::new();
+    let mut lock = false;
     for i in 2..args.len() {
-        if args[i].starts_with("DONORS=") {
+        if args[i] == "LOCK" {
+            lock = true;
+        } else if args[i].starts_with("DONORS=") {
             let d = args[i].after("DONORS=").split(',').collect::<Vec<&str>>();
             for i in 0..d.len() {
                 donors.push(d[i].force_usize());
@@ -322,7 +326,11 @@ fn main() {
         let nznz = 100.0 * res.0 as f64 / n as f64;
         if count == 1 {
             canonical_n = n;
-            nznz0 = nznz.min(75.0);
+            if lock {
+                nznz0 = nznz;
+            } else {
+                nznz0 = nznz.min(75.0);
+            }
         }
         if n > best_n && nznz >= nznz0 {
             changed = true;
