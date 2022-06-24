@@ -335,8 +335,10 @@ fn main() {
         if n > best_n && nznz >= nznz0 {
             changed = true;
             let nrel = n as f64 / canonical_n as f64;
-            print!("count = {count}, nrel = {nrel:.4}, n = {n}, \
-                light chain coherence = {nznz:.1}%");
+            print!(
+                "count = {count}, nrel = {nrel:.4}, n = {n}, \
+                light chain coherence = {nznz:.1}%"
+            );
             println!(", used {:.1} minutes", elapsed(&t) / 60.0);
             if nznz > nznz0 && !lock {
                 nznz0 = nznz.min(75.0);
