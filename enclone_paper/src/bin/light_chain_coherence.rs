@@ -11,7 +11,7 @@
 // Option args:
 // - DONORS=donor-list e.g. DONORS=1,2 to use only donors 1 and 2.
 // - INITIAL=matrix-file to start with the given matrix
-// - LOCK: don't allow initial light chain coherence to be decreased.
+// - LOCK: don't allow initial light chain coherence to be decreased. (broken)
 //
 // Data from:
 //
