@@ -339,7 +339,7 @@ fn main() {
         } else {
             penalty = penalty_save;
         }
-        if count % 500 == 0 && changed {
+        if (count % 500 == 0 && changed) || count == 1 {
             changed = false;
             let mut rows = Vec::<Vec<String>>::new();
             let mut row = Vec::<String>::new();
