@@ -1433,6 +1433,7 @@ dependencies = [
  "perf_stats",
  "plotters",
  "pretty_trace",
+ "rand",
  "rand_chacha",
  "rayon",
  "string_utils",

@@ -23,11 +23,15 @@
 //         light chain case
 // - MANY: work with many donors.
 // - SWITCH_AS_DREF: if class switching occurs and dref = 0, change to dref = 1.
+// - PERMUTE: permute the order of light chains.
 
 use enclone_core::test_def::test_donor_id;
 use enclone_paper::public::*;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
+use rand::seq::SliceRandom;
+use rand_chacha;
+use rand_chacha::rand_core::SeedableRng;
 use rayon::prelude::*;
 use std::collections::HashMap;
 use std::env;
@@ -68,6 +72,7 @@ fn main() {
     let mut flow_unswitched = false;
     let mut flow_switched = false;
     let mut switch_as_dref = false;
+    let mut permute = false;
     for i in 2..args.len() {
         if args[i] == "FLOW" {
             opt_flow = true;
@@ -87,6 +92,8 @@ fn main() {
             opt_show = true;
         } else if args[i] == "MANY" {
             opt_many = true;
+        } else if args[i] == "PERMUTE" {
+            permute = true;
         } else if args[i] == "SWITCH_AS_DREF" {
             switch_as_dref = true;
         }
@@ -207,10 +214,6 @@ fn main() {
         }
     }
 
-    // Sort.
-
-    data.sort();
-
     // Replace paralogs.
 
     if !opt_no_paralogs && !opt_reverse {
@@ -218,6 +221,23 @@ fn main() {
             data[i].v_name2 = data[i].v_name2.replace("D", "");
         }
     }
+
+    // Permute.
+
+    if permute {
+        let mut data2 = data.clone();
+        let mut randme = rand_chacha::ChaCha8Rng::seed_from_u64(123456789);
+        data2.shuffle(&mut randme);
+        for i in 0..data.len() {
+            data[i].v_name2 = data2[i].v_name2.clone();
+            data[i].v_name2_orig = data2[i].v_name2_orig.clone();
+            data[i].j_name2 = data2[i].j_name2.clone();
+        }
+    }
+
+    // Sort.
+
+    data.sort();
 
     // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
