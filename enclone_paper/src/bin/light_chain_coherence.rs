@@ -72,7 +72,7 @@ fn main() {
     let mut penalty_file = String::new();
     for i in 2..args.len() {
         if args[i].starts_with("DONORS=") {
-            let d = args[2].after("DONORS=").split(',').collect::<Vec<&str>>();
+            let d = args[i].after("DONORS=").split(',').collect::<Vec<&str>>();
             for i in 0..d.len() {
                 donors.push(d[i].force_usize());
             }
