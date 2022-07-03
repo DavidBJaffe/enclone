@@ -35,6 +35,8 @@ fn main() {
         v_name2: String,
         donor: usize,         // 1-4 or 5-6
         cdr3_aa1: Vec<u8>,
+        clonotype_ncells: usize,
+        barcode: String,
     }
 
     // Load data.
@@ -44,6 +46,7 @@ fn main() {
     let mut seqs = Vec::<DnaString>::new();
     let mut vgenes = Vec::<String>::new();
     let mut cdrh3 = Vec::<Vec<u8>>::new();
+    let mut antigens = Vec::<String>::new();
     {
         let href = human_ref();
         let mut refdata = RefData::new();
@@ -52,6 +55,7 @@ fn main() {
         let fasta_file = include_str!["../../data/phad_clonal_structure_2022.fasta"];
         read_fasta_contents_into_vec_dna_string_plus_headers(&fasta_file, &mut seqs, &mut headers);
         for i in 0..seqs.len() {
+            antigens.push(headers[i].between("A-1 ", " specific").to_string());
             let x = &seqs[i];
             let mut ann = Vec::<(i32, i32, i32, i32, i32)>::new();
             annotate_seq(&x, &refdata, &mut ann, true, false, true);
@@ -96,9 +100,11 @@ fn main() {
                     let donor = fields[tof["donors_cell"]].to_string().after("d").force_usize();
                     data.push(CellData {
                         v_name1: fields[tof["v_name1"]].to_string(),
-                        v_name2: fields[tof["v_name1"]].to_string(),
+                        v_name2: fields[tof["v_name2"]].to_string(),
                         cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
                         donor: donor,
+                        clonotype_ncells: fields[tof["clonotype_ncells"]].to_string().force_usize(),
+                        barcode: fields[tof["barcode"]].to_string(),
                     });
                 }
             }
@@ -123,9 +129,11 @@ fn main() {
                     let donor = fields[tof["donors_cell"]].to_string().after("d").force_usize() + 4;
                     data.push(CellData {
                         v_name1: fields[tof["v_name1"]].to_string(),
-                        v_name2: fields[tof["v_name1"]].to_string(),
+                        v_name2: fields[tof["v_name2"]].to_string(),
                         cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
                         donor: donor,
+                        clonotype_ncells: fields[tof["clonotype_ncells"]].to_string().force_usize(),
+                        barcode: fields[tof["barcode"]].to_string(),
                     });
                 }
             }
@@ -145,7 +153,10 @@ fn main() {
                         }
                     }
                     if diffs <= 3 {
-                        println!("diffs = {diffs}, donor {} and sequence {}", data[i].donor, j + 1);
+                        println!("{}/{}/{}, diffs = {diffs}, donor {} bc {} seq {}, {} n = {}", 
+                            data[i].v_name1, data[i].v_name2, strme(&data[i].cdr3_aa1),
+                            data[i].donor, data[i].barcode, j + 1, antigens[j], 
+                            data[i].clonotype_ncells);
                     }
                 }
             }
