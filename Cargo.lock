@@ -1427,6 +1427,7 @@ dependencies = [
  "edit-distance",
  "enclone_core",
  "enclone_tail",
+ "fasta_tools",
  "flate2",
  "io_utils",
  "itertools",
