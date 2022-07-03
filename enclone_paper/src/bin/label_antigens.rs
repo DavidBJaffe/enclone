@@ -152,7 +152,7 @@ fn main() {
                             diffs += 1;
                         }
                     }
-                    if diffs <= 3 {
+                    if diffs <= 4 {
                         println!("{}/{}/{}, diffs = {diffs}, donor {} bc {} seq {}, {} n = {}", 
                             data[i].v_name1, data[i].v_name2, strme(&data[i].cdr3_aa1),
                             data[i].donor, data[i].barcode, j + 1, antigens[j], 
