@@ -28,7 +28,7 @@ https://github.com/psathyrella/partis.
    your data using `partis` with the following command:
 
    #!/usr/env/bin bash
-   bin/partis partition --fast --paired-loci --dont-calculate-annotations \
+   bin/partis partition --fast --paired-loci \
     --random-seed 0 --paired-outdir partis_testplus --infname --airr-output \
     /mydata/filtered_contig.fasta
 
