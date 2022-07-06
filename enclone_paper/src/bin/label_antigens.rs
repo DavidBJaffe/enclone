@@ -33,7 +33,7 @@ fn main() {
     struct CellData {
         v_name1: String,
         v_name2: String,
-        donor: usize,         // 1-4 or 5-6
+        donor: usize, // 1-4 or 5-6
         cdr3_aa1: Vec<u8>,
         clonotype_ncells: usize,
         barcode: String,
@@ -97,7 +97,10 @@ fn main() {
             } else {
                 let dref = fields[tof["dref"]].force_usize();
                 if dref > 0 {
-                    let donor = fields[tof["donors_cell"]].to_string().after("d").force_usize();
+                    let donor = fields[tof["donors_cell"]]
+                        .to_string()
+                        .after("d")
+                        .force_usize();
                     data.push(CellData {
                         v_name1: fields[tof["v_name1"]].to_string(),
                         v_name2: fields[tof["v_name2"]].to_string(),
@@ -126,7 +129,11 @@ fn main() {
             } else {
                 let dref = fields[tof["dref"]].force_usize();
                 if dref > 0 {
-                    let donor = fields[tof["donors_cell"]].to_string().after("d").force_usize() + 4;
+                    let donor = fields[tof["donors_cell"]]
+                        .to_string()
+                        .after("d")
+                        .force_usize()
+                        + 4;
                     data.push(CellData {
                         v_name1: fields[tof["v_name1"]].to_string(),
                         v_name2: fields[tof["v_name2"]].to_string(),
@@ -153,10 +160,17 @@ fn main() {
                         }
                     }
                     if diffs <= 4 {
-                        println!("{}/{}/{}, diffs = {diffs}, donor {} bc {} seq {}, {} n = {}", 
-                            data[i].v_name1, data[i].v_name2, strme(&data[i].cdr3_aa1),
-                            data[i].donor, data[i].barcode, j + 1, antigens[j], 
-                            data[i].clonotype_ncells);
+                        println!(
+                            "{}/{}/{}, diffs = {diffs}, donor {} bc {} seq {}, {} n = {}",
+                            data[i].v_name1,
+                            data[i].v_name2,
+                            strme(&data[i].cdr3_aa1),
+                            data[i].donor,
+                            data[i].barcode,
+                            j + 1,
+                            antigens[j],
+                            data[i].clonotype_ncells
+                        );
                     }
                 }
             }

@@ -112,9 +112,15 @@ fn main() {
                         }
                     }
                     if diffs <= 4 {
-                        println!("{}/{}/{}, diffs = {diffs}, {} cell {}, seq {}", 
-                            data[i].v_name1, data[i].v_name2, strme(&data[i].cdr3_aa1),
-                            i + 1, j + 1, antigens[j]);
+                        println!(
+                            "{}/{}/{}, diffs = {diffs}, {} cell {}, seq {}",
+                            data[i].v_name1,
+                            data[i].v_name2,
+                            strme(&data[i].cdr3_aa1),
+                            i + 1,
+                            j + 1,
+                            antigens[j]
+                        );
                     }
                 }
             }
