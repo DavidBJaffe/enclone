@@ -40,7 +40,5 @@ https://github.com/psathyrella/partis.
 
 Some other points that are important and worth noting:
 
-- partis is designed to emphasize sensitivity over specificity. This does not
-  mean that it is overly sensitive or insufficiently specific! Rather, users
-  can tune the specificity/sensitivity of partis by altering arguments into
-  vsearch (which is turned on above using the --fast flag). 
+- Users can tune the specificity/sensitivity of partis by altering arguments into
+  vsearch (which is turned on above using the --fast flag)
