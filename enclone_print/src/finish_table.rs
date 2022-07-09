@@ -6,6 +6,7 @@ use crate::print_utils3::{add_header_text, insert_reference_rows};
 use crate::print_utils5::{build_diff_row, insert_consensus_row};
 use enclone_core::defs::{justification, ColInfo, EncloneControl, ExactClonotype};
 use enclone_proto::types::DonorReferenceItem;
+use std::cmp::min;
 use std::collections::HashMap;
 use string_utils::TextUtils;
 use vdj_ann::refx::RefData;
@@ -240,6 +241,74 @@ pub fn finish_table(
         }
     }
     make_table(ctl, &mut rows, &justify, mlog, logz);
+
+    // Carry out DIFF_DIST.
+
+    if ctl.gen_opt.diff_dist {
+        let mut dist = 1_000_000;
+        for u1 in 0..nexacts {
+            for u2 in u1..nexacts {
+                let ex1 = &exact_clonotypes[exacts[u1]];
+                let ex2 = &exact_clonotypes[exacts[u2]];
+                let mut diff_donor = false;
+                for k1 in 0..ex1.clones.len() {
+                    for k2 in 0..ex2.clones.len() {
+                        if ex1.clones[k1][0].donor_index.is_some()
+                            && ex2.clones[k2][0].donor_index.is_some()
+                            && ex1.clones[k1][0].donor_index != ex2.clones[k2][0].donor_index
+                        {
+                            diff_donor = true;
+                        }
+                    }
+                }
+                if !diff_donor {
+                    continue;
+                }
+                if ex1.share.len() != 2 || ex2.share.len() != 2 {
+                    continue;
+                }
+                if ex1.share[0].left && ex1.share[1].left {
+                    continue;
+                }
+                if !ex1.share[0].left && !ex1.share[1].left {
+                    continue;
+                }
+                if ex2.share[0].left && ex2.share[1].left {
+                    continue;
+                }
+                if !ex2.share[0].left && !ex2.share[1].left {
+                    continue;
+                }
+                let mut d = 0;
+                for pass in 0..2 {
+                    for j1 in 0..2 {
+                        for j2 in 0..2 {
+                            if pass == 0 {
+                                if !ex1.share[j1].left || !ex2.share[j2].left {
+                                    continue;
+                                }
+                            } else {
+                                if ex1.share[j1].left || ex2.share[j2].left {
+                                    continue;
+                                }
+                            }
+                            let x1 = &ex1.share[j1];
+                            let x2 = &ex2.share[j2];
+                            for k in 0..x1.seq_del_amino.len() {
+                                if x1.seq_del_amino[k] != x2.seq_del_amino[k] {
+                                    d += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+                dist = min(d, dist);
+            }
+        }
+        if dist < 1_000_000 {
+            *logz += &mut format!("\nmin dist between cells from different donors = {dist}\n");
+        }
+    }
 
     // Add phylogeny.
 

@@ -362,3 +362,5 @@ verbose logging, which really should be controlled by a separate option.
 LOG_NONPRODUCTIVE: log some information for nonproductive contigs.  Ugly because is_valid
 does two passes.
 
+DIFF_DIST: compute the minimum nucleotide distance between two cells having two standard chains
+and from different donors
