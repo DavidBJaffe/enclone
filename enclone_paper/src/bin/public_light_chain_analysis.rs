@@ -11,6 +11,9 @@
 //
 // public_light_chain_analysis per_cell_stuff
 //
+// We allow per_cell_stuff to be replaced by a comma-separated list, in which case each element
+// in the list is treated as having a single donor, unique to that list.
+//
 // Optional arguments:
 // - FLOW: compute using flow classification of naive/memory rather than dref
 // - FLOW_UNSWITCHED: same as flow but require memory to be sorted as unswitched
@@ -125,63 +128,70 @@ fn main() {
 
     // Load data.
 
-    let f = open_for_read![&args[1]];
-    let mut first = true;
-    let mut tof = HashMap::<String, usize>::new();
+    let inputs = args[1].split(',').collect::<Vec<&str>>();
     let mut data = Vec::new();
     let mut clonotype = Vec::<usize>::new();
-    for line in f.lines() {
-        let s = line.unwrap();
-        if s.starts_with("#") {
-            continue;
-        }
-        let fields = s.split(',').collect::<Vec<&str>>();
-        if first {
-            for i in 0..fields.len() {
-                tof.insert(fields[i].to_string(), i);
+    for i in 0..inputs.len() {
+        let f = open_for_read![&inputs[i]];
+        let mut first = true;
+        let mut tof = HashMap::<String, usize>::new();
+        for line in f.lines() {
+            let s = line.unwrap();
+            if s.starts_with("#") {
+                continue;
             }
-            first = false;
-        } else {
-            if !opt_reverse {
-                data.push(CellData {
-                    v_name1: fields[tof["v_name1"]].to_string(),
-                    cdr3_aa1_len: fields[tof["cdr3_aa1"]].len(),
-                    cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
-                    donor: fields[tof["donors_cell"]].to_string(),
-                    v_name2: fields[tof["v_name2"]].to_string(),
-                    dref: fields[tof["dref"]].force_usize(),
-                    jun_mat: fields[tof["jun_mat"]].force_usize(),
-                    jun_sub: fields[tof["jun_sub"]].force_usize(),
-                    hcomp: fields[tof["hcomp"]].force_usize(),
-                    jun_ins: fields[tof["jun_ins"]].force_usize(),
-                    dataset: fields[tof["datasets_cell"]].to_string(),
-                    d1_name1: fields[tof["d1_name1"]].to_string(),
-                    j_name2: fields[tof["j_name2"]].to_string(),
-                    barcode: fields[tof["barcode"]].to_string(),
-                    v_name2_orig: fields[tof["v_name2"]].to_string(),
-                    const1: fields[tof["const1"]].to_string(),
-                });
+            let fields = s.split(',').collect::<Vec<&str>>();
+            if first {
+                for i in 0..fields.len() {
+                    tof.insert(fields[i].to_string(), i);
+                }
+                first = false;
             } else {
-                data.push(CellData {
-                    v_name1: fields[tof["v_name2"]].to_string(),
-                    cdr3_aa1_len: fields[tof["cdr3_aa2"]].len(),
-                    cdr3_aa1: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
-                    donor: fields[tof["donors_cell"]].to_string(),
-                    v_name2: fields[tof["v_name1"]].to_string(),
-                    dref: fields[tof["dref"]].force_usize(),
-                    jun_mat: fields[tof["jun_mat"]].force_usize(),
-                    jun_sub: fields[tof["jun_sub"]].force_usize(),
-                    hcomp: fields[tof["hcomp"]].force_usize(),
-                    jun_ins: fields[tof["jun_ins"]].force_usize(),
-                    dataset: fields[tof["datasets_cell"]].to_string(),
-                    d1_name1: fields[tof["d1_name1"]].to_string(),
-                    j_name2: fields[tof["j_name1"]].to_string(),
-                    barcode: fields[tof["barcode"]].to_string(),
-                    v_name2_orig: fields[tof["v_name1"]].to_string(),
-                    const1: fields[tof["const1"]].to_string(),
-                });
+                let mut donor = fields[tof["donors_cell"]].to_string();
+                if inputs.len() > 1 {
+                    donor = format!("d{}", i + 1);
+                }
+                if !opt_reverse {
+                    data.push(CellData {
+                        v_name1: fields[tof["v_name1"]].to_string(),
+                        cdr3_aa1_len: fields[tof["cdr3_aa1"]].len(),
+                        cdr3_aa1: fields[tof["cdr3_aa1"]].to_string().as_bytes().to_vec(),
+                        donor: donor,
+                        v_name2: fields[tof["v_name2"]].to_string(),
+                        dref: fields[tof["dref"]].force_usize(),
+                        jun_mat: fields[tof["jun_mat"]].force_usize(),
+                        jun_sub: fields[tof["jun_sub"]].force_usize(),
+                        hcomp: fields[tof["hcomp"]].force_usize(),
+                        jun_ins: fields[tof["jun_ins"]].force_usize(),
+                        dataset: fields[tof["datasets_cell"]].to_string(),
+                        d1_name1: fields[tof["d1_name1"]].to_string(),
+                        j_name2: fields[tof["j_name2"]].to_string(),
+                        barcode: fields[tof["barcode"]].to_string(),
+                        v_name2_orig: fields[tof["v_name2"]].to_string(),
+                        const1: fields[tof["const1"]].to_string(),
+                    });
+                } else {
+                    data.push(CellData {
+                        v_name1: fields[tof["v_name2"]].to_string(),
+                        cdr3_aa1_len: fields[tof["cdr3_aa2"]].len(),
+                        cdr3_aa1: fields[tof["cdr3_aa2"]].to_string().as_bytes().to_vec(),
+                        donor: donor,
+                        v_name2: fields[tof["v_name1"]].to_string(),
+                        dref: fields[tof["dref"]].force_usize(),
+                        jun_mat: fields[tof["jun_mat"]].force_usize(),
+                        jun_sub: fields[tof["jun_sub"]].force_usize(),
+                        hcomp: fields[tof["hcomp"]].force_usize(),
+                        jun_ins: fields[tof["jun_ins"]].force_usize(),
+                        dataset: fields[tof["datasets_cell"]].to_string(),
+                        d1_name1: fields[tof["d1_name1"]].to_string(),
+                        j_name2: fields[tof["j_name1"]].to_string(),
+                        barcode: fields[tof["barcode"]].to_string(),
+                        v_name2_orig: fields[tof["v_name1"]].to_string(),
+                        const1: fields[tof["const1"]].to_string(),
+                    });
+                }
+                clonotype.push(fields[tof["group_id"]].force_usize());
             }
-            clonotype.push(fields[tof["group_id"]].force_usize());
         }
     }
 
