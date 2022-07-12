@@ -41,7 +41,7 @@ with several values substituted for 90.
 enclone PRE=enclone/datasets,repos/enclone,repos/enclone-data/big_inputs/version15/phad META=enclone_core/src/test_def.meta,phad.56.meta GROUP=v_heavy_refname,cdr3_heavy_len,cdr3_aa_heavy≥90% MIN_CHAINS_EXACT=2 CHAINS=2 ECHOC BUILT_IN KEEP_CLONO_IF_CELL_MIN="dref>0" LVARSP=donors,dref AMINO=cdr3 GROUP_CDR3=CIKDILPGGADSW POUT=stdout PCELL PCOLS=cdr3_aa1,cdr3_aa2,v_name2,j_name2 HONEY=out=efs/results/plot.90.six.CIKDILPGGADSW.full.svg,color=catvar,v_name2+donors_cell,maxcat:20
 
 which generated a plot of cells as plot.svg and generated CDR3 values as standard output, from 
-which the logo plots were created.
+which the logo plots were created.  The color of three cells was manually changed.
 
 The PRE argument would need to be adjusted, depending on the location of one's data.
 
