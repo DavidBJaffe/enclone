@@ -906,7 +906,36 @@ fn main() {
         }
     
         // Print results.
-    
-        public_print_results(&res, &res_cell, opt_many);
+
+        if permute > 0 {
+            for xpass in 1..=2 {
+                let pass = 0;
+                if xpass == 1 {
+                    print!("memory:");
+                    for j in 0..=10 {
+                        if j > 0 { 
+                            print!(",");
+                        }
+                        let n = res[pass][j].2 + res[pass][j].3;
+                        let nznz = 100.0 * res[pass][j].2 as f64 / n as f64;
+                        print!("{nznz:.1}%");
+                    }
+                    println!("");
+                } else {
+                    print!("naive:");
+                    for j in 0..=10 {
+                        if j > 0 { 
+                            print!(",");
+                        }
+                        let n = res[pass][j].0 + res[pass][j].1;
+                        let nznz = 100.0 * res[pass][j].0 as f64 / n as f64;
+                        print!("{nznz:.1}%");
+                    }
+                    println!("");
+                }
+            }
+        } else {
+            public_print_results(&res, &res_cell, opt_many);
+        }
     }
 }
