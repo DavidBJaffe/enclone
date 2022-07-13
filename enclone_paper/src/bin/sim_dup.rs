@@ -16,12 +16,15 @@ fn main() {
     PrettyTrace::new().on();
     let args: Vec<String> = env::args().collect();
     let f = open_for_read![&args[1]];
-    // Data = pairs of heavy chain gene names and CDRH3 amino acid sequences.
-    let mut data = Vec::<(String, String)>::new();
+    // Data = pairs of heavy chain gene names and CDRH3 amino acid sequences.  Also capture D.
+    let mut data = Vec::<(String, String, String)>::new();
     for line in f.lines() {
         let s = line.unwrap();
+        if s.contains("fail") {
+            continue;
+        }
         let fields = s.split(',').collect::<Vec<&str>>();
-        data.push((fields[1].to_string(), fields[2].to_string()));
+        data.push((fields[1].to_string(), fields[2].to_string(), fields[8].to_string()));
     }
     let mut counts = Vec::new();
     counts.push((364703 as f64 * 0.304).round() as usize);
@@ -50,7 +53,7 @@ fn main() {
             results.par_iter_mut().for_each(|res| {
                 let k1 = res.0;
                 for k2 in start2..stop2 {
-                    if data[k1] == data[k2] {
+                    if data[k1].0 == data[k2].0 && data[k1].1 == data[k2].1 {
                         // push the entries for both cells
                         res.1.push(k1);
                         res.1.push(k2);
@@ -71,4 +74,13 @@ fn main() {
         }
     }
     println!("dups = {}", dups);
+    let mut dd = 0;
+    for i in 0..dup.len() {
+        if dup[i] {
+            if data[i].2.contains(":") {
+                dd += 1;
+            }
+        }
+    }
+    println!("of which {dd} are DD");
 }
