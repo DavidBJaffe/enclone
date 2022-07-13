@@ -1,7 +1,16 @@
 
 A single command was used to generate a file per_cell_stuff that was used by other commands:
 
-enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1,cdr3_aa2, jun_mat,jun_sub,jun_ins,hcomp,d1_name1,vj_aa_nl1,vj_aa_nl2 > per_cell_stuff
+enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL PCOLS=datasets_cell,donors_cell,v_name1,v_name2,j_name1,j_name2,dref,cdr3_aa1,cdr3_aa2,clonotype_ncells,const1,hcomp,jun_ins,jun_mat,jun_sub,cdr3_dna1,cdr3_dna2,d1_name1,vj_aa_nl1,vj_aa_nl2,barcode,group_id,exact_subclonotype_id,vj_seq1,vj_seq2,leader_dna1,leader_dna_ref1,fwr1_dna1,fwr1_dna_ref1,fwr2_dna1,fwr2_dna_ref1,fwr3_dna1,fwr3_dna_ref1,fwr4_dna1,fwr4_dna_ref1,cdr1_dna1,cdr1_dna_ref1,cdr2_dna1,cdr2_dna_ref1,leader_dna2,leader_dna_ref2,fwr1_dna2,fwr1_dna_ref2,fwr2_dna2,fwr2_dna_ref2,fwr3_dna2,fwr3_dna_ref2,fwr4_dna2,fwr4_dna_ref2,cdr1_dna2,cdr1_dna_ref2,cdr2_dna2,cdr2_dna_ref2 > per_cell_stuff
+
+The Phad2022 data, in a form suitable for input to enclone, may be found at
+https://github.com/DavidBJaffe/enclone-data/tree/master/big_inputs/version15/phad.
+
+This command was used to generate per_cell_stuff.phad, corresponding to the Phad2022 data:
+
+enclone PRE=repos/enclone-data/big_inputs/version15/phad META=phad.meta BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL ECHOC PCOLS=datasets_cell,donors_cell,v_name1,v_name2,j_name1,j_name2,dref,cdr3_aa1,cdr3_aa2,clonotype_ncells,const1,hcomp,jun_ins,jun_mat,jun_sub,cdr3_dna1,cdr3_dna2,d1_name1,vj_aa_nl1,vj_aa_nl2,barcode,group_id,exact_subclonotype_id,vj_seq1,vj_seq2,leader_dna1,leader_dna_ref1,fwr1_dna1,fwr1_dna_ref1,fwr2_dna1,fwr2_dna_ref1,fwr3_dna1,fwr3_dna_ref1,fwr4_dna1,fwr4_dna_ref1,cdr1_dna1,cdr1_dna_ref1,cdr2_dna1,cdr2_dna_ref1,leader_dna2,leader_dna_ref2,fwr1_dna2,fwr1_dna_ref2,fwr2_dna2,fwr2_dna_ref2,fwr3_dna2,fwr3_dna_ref2,fwr4_dna2,fwr4_dna_ref2,cdr1_dna2,cdr1_dna_ref2,cdr2_dna2,cdr2_dna_ref2 > per_cell_stuff.phad
+
+The PRE argument would need to be adjusted, depending on the location of one's data.
 
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
