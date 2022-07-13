@@ -100,3 +100,24 @@ EXTENDED FIGURE 5
 insertion_analysis per_cell_stuff
 
 For all other figures see the R scripts in ./src/vis.
+
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+Not included in this work but possibly of interest.
+
+1. Find the minimum distance for two cells in the Phad data that are placed in the same clonotype 
+and are from different donors.  This is part of addressing the issue of whether our results could 
+be accounted for by contamination.
+
+enclone MIN_CHAINS_EXACT=2 CHAINS_EXACT=2 MIN_DONORS=2 LVARSP=n,dref AMINO=cdr3 DIFF_DIST BUILT_IN PRE=~/repos/enclone-data/big_inputs/version15/phad META=phad.meta ECHO > phad_fps
+
+minimum distance 18
+
+2. Find the minimum distance for two cells in our data that are placed in the same clonotype and 
+are from different donors.  This is part of addressing the issue of whether our results could be 
+accounted for by contamination.
+
+enclone MIN_CHAINS_EXACT=2 CHAINS_EXACT=2 MIN_DONORS=2 LVARSP=n,dref AMINO=cdr3 DIFF_DIST BUILT_IN BCR=@test ECHO > diff_dist
+
+minimum distance 10
+
