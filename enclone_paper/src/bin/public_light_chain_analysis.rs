@@ -27,11 +27,13 @@
 // - MANY: work with many donors.
 // - SWITCH_AS_DREF: if class switching occurs and dref = 0, change to dref = 1.
 // - PERMUTE=n: permute the order of light chains n times.
+// - FLIP_MEMORY=p: randomly flip the memory/naive state for p% of cells.
 
 use enclone_core::test_def::test_donor_id;
 use enclone_paper::public::*;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
+use rand::RngCore;
 use rand::seq::SliceRandom;
 use rand_chacha;
 use rand_chacha::rand_core::SeedableRng;
@@ -76,6 +78,7 @@ fn main() {
     let mut flow_switched = false;
     let mut switch_as_dref = false;
     let mut permute = 0;
+    let mut flip_memory = 0.0;
     for i in 2..args.len() {
         if args[i] == "FLOW" {
             opt_flow = true;
@@ -97,6 +100,8 @@ fn main() {
             opt_many = true;
         } else if args[i].starts_with("PERMUTE=") {
             permute = args[i].after("PERMUTE=").force_usize();
+        } else if args[i].starts_with("FLIP_MEMORY=") {
+            flip_memory = args[i].after("FLIP_MEMORY=").force_f64();
         } else if args[i] == "SWITCH_AS_DREF" {
             switch_as_dref = true;
         }
@@ -232,10 +237,25 @@ fn main() {
         }
     }
 
+    // Flip memory and naive cells.
+
+    let mut randme = rand_chacha::ChaCha8Rng::seed_from_u64(123456789);
+    if flip_memory > 0.0 {
+        for i in 0..data.len() {
+            let r = randme.next_u64();
+            if r % 1_000_000 < ((flip_memory/100.0) * 1_000_000.0).round() as u64 {
+                if data[i].dref > 0 {
+                    data[i].dref = 0;
+                } else {
+                    data[i].dref = 1;
+                }
+            }
+        }
+    }
+
     // Permute.
 
     let mut reps = 1;
-    let mut randme = rand_chacha::ChaCha8Rng::seed_from_u64(123456789);
     if permute > 0 {
         reps = permute;
     }
