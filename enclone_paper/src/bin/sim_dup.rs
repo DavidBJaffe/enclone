@@ -24,7 +24,11 @@ fn main() {
             continue;
         }
         let fields = s.split(',').collect::<Vec<&str>>();
-        data.push((fields[1].to_string(), fields[2].to_string(), fields[8].to_string()));
+        data.push((
+            fields[1].to_string(),
+            fields[2].to_string(),
+            fields[8].to_string(),
+        ));
     }
     let mut counts = Vec::new();
     counts.push((364703 as f64 * 0.304).round() as usize);

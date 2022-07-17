@@ -33,8 +33,8 @@ use enclone_core::test_def::test_donor_id;
 use enclone_paper::public::*;
 use io_utils::*;
 use pretty_trace::PrettyTrace;
-use rand::RngCore;
 use rand::seq::SliceRandom;
+use rand::RngCore;
 use rand_chacha;
 use rand_chacha::rand_core::SeedableRng;
 use rayon::prelude::*;
@@ -243,7 +243,7 @@ fn main() {
     if flip_memory > 0.0 {
         for i in 0..data.len() {
             let r = randme.next_u64();
-            if r % 1_000_000 < ((flip_memory/100.0) * 1_000_000.0).round() as u64 {
+            if r % 1_000_000 < ((flip_memory / 100.0) * 1_000_000.0).round() as u64 {
                 if data[i].dref > 0 {
                     data[i].dref = 0;
                 } else {
@@ -275,9 +275,9 @@ fn main() {
         data.sort();
 
         // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    
+
         // Compute number of public naive and memory cells.
-    
+
         if permute == 0 {
             for pass in 1..=2 {
                 let mut p = 0;
@@ -285,8 +285,9 @@ fn main() {
                 while i < data.len() {
                     let mut j = i + 1;
                     while j < data.len() {
-                        if data[j].v_name1 != data[i].v_name1 
-                            || data[j].cdr3_aa1 != data[i].cdr3_aa1 {
+                        if data[j].v_name1 != data[i].v_name1
+                            || data[j].cdr3_aa1 != data[i].cdr3_aa1
+                        {
                             break;
                         }
                         j += 1;
@@ -316,11 +317,11 @@ fn main() {
                 }
             }
         }
-    
+
         // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    
+
         // Show the CDRH3 length distribution for naive cells.
-    
+
         if !opt_show && !opt_many && permute == 0 {
             println!("\nCDRH3 length distribution for naive cells");
             let mut bins = vec![0; 100];
@@ -347,17 +348,17 @@ fn main() {
             }
             println!("mean CDRH3 length = {:.1}", total_len as f64 / total as f64);
         }
-    
+
         // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    
+
         // Compute naive fraction for each of the sort classes.
-    
+
         let mut is_naive = vec![false; data.len()];
         let mut is_memory = vec![false; data.len()];
         let mut is_unswitched_flow = vec![false; data.len()];
         let mut is_switched_flow = vec![false; data.len()];
-        if (opt_naive || opt_flow || flow_unswitched || flow_switched) && !opt_many 
-            && permute == 0 {
+        if (opt_naive || opt_flow || flow_unswitched || flow_switched) && !opt_many && permute == 0
+        {
             let mut all = Vec::<usize>::new();
             all.append(&mut NAIVE.to_vec());
             all.append(&mut UNSWITCHED.to_vec());
@@ -541,9 +542,9 @@ fn main() {
                     }
                 }
             }
-    
+
             // Print tables.
-    
+
             if opt_naive {
                 let counts = [
                     &naive,
@@ -590,7 +591,7 @@ fn main() {
                 let mut log = String::new();
                 print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
                 println!("{}", log);
-    
+
                 println!("naive switched cells");
                 let mut rows = vec![row1.clone()];
                 for i in 0..counts.len() {
@@ -608,7 +609,7 @@ fn main() {
                 let mut log = String::new();
                 print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
                 println!("{}", log);
-    
+
                 println!("memory switched cells");
                 let mut rows = vec![row1.clone()];
                 for i in 0..counts.len() {
@@ -626,7 +627,7 @@ fn main() {
                 let mut log = String::new();
                 print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
                 println!("{}", log);
-    
+
                 println!("naive cell fractions");
                 let mut rows = vec![row1.clone()];
                 for i in 0..counts.len() {
@@ -647,15 +648,15 @@ fn main() {
                 let mut log = String::new();
                 print_tabular_vbox(&mut log, &rows, 0, &b"l|r|r|r|r|r".to_vec(), false, false);
                 println!("{}", log);
-    
+
                 std::process::exit(0);
             }
         }
-    
+
         // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    
+
         // Compute DD fraction.
-    
+
         let mut naive = (0, 0);
         let mut memory = (0, 0);
         if !opt_many && permute == 0 {
@@ -687,9 +688,9 @@ fn main() {
                 );
             }
         }
-    
+
         // Compute DD stuff.
-    
+
         let mut i = 0;
         let mut total = vec![0; 2];
         let mut dd_memory = 0;
@@ -740,20 +741,21 @@ fn main() {
                 );
             }
         }
-    
+
         // Define groups based on equal heavy chain gene names and CDRH3 length.
         // Plus placeholder for results, see next.
-        // We track the number of cell pairs (first vector), and the number of cells 
+        // We track the number of cell pairs (first vector), and the number of cells
         // (second vector).
-    
+
         let mut bounds = Vec::new();
         let mut i = 0;
         while i < data.len() {
             // let j = next_diff12_9(&data, i as i32) as usize;
             let mut j = i + 1;
             while j < data.len() {
-                if data[j].v_name1 != data[i].v_name1 
-                    || data[j].cdr3_aa1_len != data[i].cdr3_aa1_len {
+                if data[j].v_name1 != data[i].v_name1
+                    || data[j].cdr3_aa1_len != data[i].cdr3_aa1_len
+                {
                     break;
                 }
                 j += 1;
@@ -766,9 +768,9 @@ fn main() {
             ));
             i = j;
         }
-    
+
         // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-    
+
         // Results = for each percent identity, rounded down:
         // 1. count for equal light chain gene names and dref1 = 0 and dref2 = 0
         // 2. count for unequal light chain gene names and dref1 = 0 and dref2 = 0
@@ -776,7 +778,7 @@ fn main() {
         // 4. count for unequal light chain gene names and dref1 > 0 and dref2 > 0.
         //
         // Make one pass for all donors, and one pass each for each pair of donors.
-    
+
         bounds.par_iter_mut().for_each(|res| {
             let i = res.0;
             let j = res.1;
@@ -784,7 +786,7 @@ fn main() {
             for k1 in i..j {
                 for k2 in k1 + 1..j {
                     // Require different donors.
-    
+
                     if data[k1].donor == data[k2].donor {
                         continue;
                     }
@@ -792,9 +794,9 @@ fn main() {
                     if d1 > d2 {
                         swap(&mut d1, &mut d2);
                     }
-    
+
                     // Compute stuff.
-    
+
                     let mut same = 0;
                     for m in 0..data[k1].cdr3_aa1.len() {
                         if data[k1].cdr3_aa1[m] == data[k2].cdr3_aa1[m] {
@@ -806,12 +808,12 @@ fn main() {
                     let ident = ident / 10;
                     let (dref1, dref2) = (data[k1].dref, data[k2].dref);
                     let eq_light = data[k1].v_name2 == data[k2].v_name2;
-    
+
                     // Go through passes.
-    
+
                     for pass in 0..7 {
                         // Require specific donors.
-    
+
                         if pass == 0 {
                             if opt_show && ident == 10 && eq_light {
                                 let mut comment = String::new();
@@ -858,9 +860,9 @@ fn main() {
                                 continue;
                             }
                         }
-    
+
                         // Add to results.
-    
+
                         let mut naive = dref1 == 0 && dref2 == 0;
                         let mut memory = dref1 > 0 && dref2 > 0;
                         if opt_flow {
@@ -907,9 +909,9 @@ fn main() {
         if opt_show {
             std::process::exit(0);
         }
-    
+
         // Sum.
-    
+
         let mut res = vec![vec![(0, 0, 0, 0); 11]; 7];
         let mut res_cell = vec![vec![(0, 0); 11]; 7];
         for pass in 0..7 {
@@ -924,7 +926,7 @@ fn main() {
                 }
             }
         }
-    
+
         // Print results.
 
         if permute > 0 {
@@ -933,7 +935,7 @@ fn main() {
                 if xpass == 1 {
                     print!("memory:");
                     for j in 0..=10 {
-                        if j > 0 { 
+                        if j > 0 {
                             print!(",");
                         }
                         let n = res[pass][j].2 + res[pass][j].3;
@@ -944,7 +946,7 @@ fn main() {
                 } else {
                     print!("naive:");
                     for j in 0..=10 {
-                        if j > 0 { 
+                        if j > 0 {
                             print!(",");
                         }
                         let n = res[pass][j].0 + res[pass][j].1;
