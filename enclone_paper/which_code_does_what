@@ -1,7 +1,16 @@
 
 A single command was used to generate a file per_cell_stuff that was used by other commands:
 
-enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL PCOLS=donors_cell,v_name1,v_name2,dref,cdr3_aa1,cdr3_aa2, jun_mat,jun_sub,jun_ins,hcomp,d1_name1,vj_aa_nl1,vj_aa_nl2 > per_cell_stuff
+enclone BCR=@test BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL PCOLS=datasets_cell,donors_cell,v_name1,v_name2,j_name1,j_name2,dref,cdr3_aa1,cdr3_aa2,clonotype_ncells,const1,hcomp,jun_ins,jun_mat,jun_sub,cdr3_dna1,cdr3_dna2,d1_name1,vj_aa_nl1,vj_aa_nl2,barcode,group_id,exact_subclonotype_id,vj_seq1,vj_seq2,leader_dna1,leader_dna_ref1,fwr1_dna1,fwr1_dna_ref1,fwr2_dna1,fwr2_dna_ref1,fwr3_dna1,fwr3_dna_ref1,fwr4_dna1,fwr4_dna_ref1,cdr1_dna1,cdr1_dna_ref1,cdr2_dna1,cdr2_dna_ref1,leader_dna2,leader_dna_ref2,fwr1_dna2,fwr1_dna_ref2,fwr2_dna2,fwr2_dna_ref2,fwr3_dna2,fwr3_dna_ref2,fwr4_dna2,fwr4_dna_ref2,cdr1_dna2,cdr1_dna_ref2,cdr2_dna2,cdr2_dna_ref2 > per_cell_stuff
+
+The Phad2022 data, in a form suitable for input to enclone, may be found at
+https://github.com/DavidBJaffe/enclone-data/tree/master/big_inputs/version15/phad.
+
+This command was used to generate per_cell_stuff.phad, corresponding to the Phad2022 data:
+
+enclone PRE=repos/enclone-data/big_inputs/version15/phad META=phad.meta BUILT_IN CHAINS_EXACT=2 CHAINS=2 NOPRINT POUT=stdout PCELL ECHOC PCOLS=datasets_cell,donors_cell,v_name1,v_name2,j_name1,j_name2,dref,cdr3_aa1,cdr3_aa2,clonotype_ncells,const1,hcomp,jun_ins,jun_mat,jun_sub,cdr3_dna1,cdr3_dna2,d1_name1,vj_aa_nl1,vj_aa_nl2,barcode,group_id,exact_subclonotype_id,vj_seq1,vj_seq2,leader_dna1,leader_dna_ref1,fwr1_dna1,fwr1_dna_ref1,fwr2_dna1,fwr2_dna_ref1,fwr3_dna1,fwr3_dna_ref1,fwr4_dna1,fwr4_dna_ref1,cdr1_dna1,cdr1_dna_ref1,cdr2_dna1,cdr2_dna_ref1,leader_dna2,leader_dna_ref2,fwr1_dna2,fwr1_dna_ref2,fwr2_dna2,fwr2_dna_ref2,fwr3_dna2,fwr3_dna_ref2,fwr4_dna2,fwr4_dna_ref2,cdr1_dna2,cdr1_dna_ref2,cdr2_dna2,cdr2_dna_ref2 > per_cell_stuff.phad
+
+The PRE argument would need to be adjusted, depending on the location of one's data.
 
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
@@ -32,23 +41,18 @@ private_light_chain_analysis per_cell_stuff
 
 FIGURE 3 
 
-(a) weighted_light_chain_analysis per_cell_stuff
-
-(b) enclone BCR=@test MIN_GROUP_DONORS=2 SUMMARY MIN_CHAINS_EXACT=2 CHAINS=2 
+(a) enclone BCR=@test MIN_GROUP_DONORS=2 SUMMARY MIN_CHAINS_EXACT=2 CHAINS=2 
 GROUP=v_heavy_refname,cdr3_heavy_len,cdr3_aa_heavy≥90% BUILT_IN NOPRINT KEEP_CLONO_IF_CELL_MIN=”dref>0”
 
-and the same with the group argument changed to
+with several values substituted for 90.
 
-GROUP=v_heavy_refname,cdr3_heavy_len,cdr3_aa_heavy≥90%:h:@mat.575142
-
-in both cases with several values substituted for 90.
-
-(c) enclone BCR=@test MIN_CHAINS_EXACT=2 CHAINS=2 BUILT_IN SUMMARY
-
-GROUP=v_heavy_refname,cdr3_heavy_len,cdr3_aa_heavy≥95%:h:@mat.575142 HONEY=out=plot.svg,color=catvar,v_name2+donors_cell,maxcat:10 GROUP_CDR3=CARRVATKPVYCFDYW NOPRINT KEEP_CLONO_IF_CELL_MIN="dref>0" POUT=stdout PCOLS=cdr3_aa1,cdr3_aa2 PCELL NOPRINT
+(b)
+enclone PRE=enclone/datasets,repos/enclone,repos/enclone-data/big_inputs/version15/phad META=enclone_core/src/test_def.meta,phad.56.meta GROUP=v_heavy_refname,cdr3_heavy_len,cdr3_aa_heavy≥90% MIN_CHAINS_EXACT=2 CHAINS=2 ECHOC BUILT_IN KEEP_CLONO_IF_CELL_MIN="dref>0" LVARSP=donors,dref AMINO=cdr3 GROUP_CDR3=CIKDILPGGADSW POUT=stdout PCELL PCOLS=cdr3_aa1,cdr3_aa2,v_name2,j_name2 HONEY=out=efs/results/plot.90.six.CIKDILPGGADSW.full.svg,color=catvar,v_name2+donors_cell,maxcat:20
 
 which generated a plot of cells as plot.svg and generated CDR3 values as standard output, from 
-which the logo plots were created.
+which the logo plots were created.  The color of three cells was manually changed.
+
+The PRE argument would need to be adjusted, depending on the location of one's data.
 
 FIGURE 4
 
@@ -96,3 +100,24 @@ EXTENDED FIGURE 5
 insertion_analysis per_cell_stuff
 
 For all other figures see the R scripts in ./src/vis.
+
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+Not included in this work but possibly of interest.
+
+1. Find the minimum distance for two cells in the Phad data that are placed in the same clonotype 
+and are from different donors.  This is part of addressing the issue of whether our results could 
+be accounted for by contamination.
+
+enclone MIN_CHAINS_EXACT=2 CHAINS_EXACT=2 MIN_DONORS=2 LVARSP=n,dref AMINO=cdr3 DIFF_DIST BUILT_IN PRE=~/repos/enclone-data/big_inputs/version15/phad META=phad.meta ECHO > phad_fps
+
+minimum distance 18
+
+2. Find the minimum distance for two cells in our data that are placed in the same clonotype and 
+are from different donors.  This is part of addressing the issue of whether our results could be 
+accounted for by contamination.
+
+enclone MIN_CHAINS_EXACT=2 CHAINS_EXACT=2 MIN_DONORS=2 LVARSP=n,dref AMINO=cdr3 DIFF_DIST BUILT_IN BCR=@test ECHO > diff_dist
+
+minimum distance 10
+
