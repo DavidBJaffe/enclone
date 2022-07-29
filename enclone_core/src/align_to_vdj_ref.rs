@@ -169,11 +169,13 @@ pub fn cigar(
 
 pub fn align_to_vdj_ref(
     seq: &[u8],
+    u5ref: &[u8],
     vref: &[u8],
     dref: &[u8],
     d2ref: &[u8],
     jref: &[u8],
     cref: &[u8],
+    u3ref: &[u8],
     drefname: &str, // useful for debugging
     left: bool,
     jscore_match: i32,
@@ -256,11 +258,13 @@ pub fn align_to_vdj_ref(
     // Build concatenation.
 
     let mut concat = Vec::<u8>::new();
+    concat.append(&mut u5ref.to_vec());
     concat.append(&mut vref.to_vec());
     concat.append(&mut dref.to_vec());
     concat.append(&mut d2ref.to_vec());
     concat.append(&mut jref.to_vec());
     concat.append(&mut cref.to_vec());
+    concat.append(&mut u3ref.to_vec());
 
     // Set clip penalties.  Note that yclip_suffix was set to zero.   This was
     // accompanied by a change to bio_edit in commit ccabb0dd1768738bdeee5b62458048d74f6dcfab,

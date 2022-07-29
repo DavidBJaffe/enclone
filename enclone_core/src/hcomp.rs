@@ -117,10 +117,12 @@ pub fn heavy_complexity(
                 concat.append(&mut jref.clone());
                 let (ops, _score) = align_to_vdj_ref(
                     &seq,
+                    &Vec::new(),
                     &vref,
                     &drefx,
                     &d2ref,
                     &jref,
+                    &Vec::new(),
                     &Vec::new(),
                     &drefname,
                     true,

@@ -53,10 +53,12 @@ pub fn print_vis_align(
 
     let (ops, _score) = align_to_vdj_ref(
         seq,
+        &Vec::new(),
         vref,
         dref,
         d2ref,
         jref,
+        &Vec::new(),
         &Vec::new(),
         drefname,
         left,

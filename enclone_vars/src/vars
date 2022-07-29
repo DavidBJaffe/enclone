@@ -853,10 +853,12 @@ code:     let vref = refdata.refs[rsi.vids[col]].to_ascii_vec();
           let tig = &td.seq;
           let ops = align_to_vdj_ref(
               tig,
+              &Vec::new(),
               &vref,
               &dref,
               &d2ref,
               &jref,
+              &Vec::new(),
               &Vec::new(),
               "", // drefname
               ex.share[mid].left,

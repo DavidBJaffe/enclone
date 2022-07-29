@@ -482,10 +482,12 @@ pub fn proc_cvar_auto(
         let tig = &td.seq;
         let ops = align_to_vdj_ref(
             tig,
+            &Vec::new(),
             &vref,
             &dref,
             &d2ref,
             &jref,
+            &Vec::new(),
             &Vec::new(),
             "", // drefname
             ex.share[mid].left,
