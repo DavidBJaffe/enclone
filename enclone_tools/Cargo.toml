@@ -20,6 +20,7 @@ publish = false
 # in the root of the enclone repo.
 
 [dependencies]
+align_tools = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 amino = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 attohttpc = { version = "0.18", default-features = false, features = ["compress", "tls-rustls"] }
@@ -48,6 +49,7 @@ pretty_trace = { version = "0.5", git = "https://github.com/DavidBJaffe/rust-too
 rand_chacha = "0.3"
 rayon = "1"
 regex = { version = "1", default-features = false, features = ["std", "perf"] }
+serde = "1"
 serde_json = "1"
 statrs = "0.15"
 tables = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
@@ -56,6 +58,7 @@ string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-too
 vdj_ann = { version = "0.4", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 vdj_ann_ref = { version = "0.2", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+vdj_types = { version = "0.2", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 
 [target.'cfg(not(windows))'.dependencies]
 pager = "0.16"
