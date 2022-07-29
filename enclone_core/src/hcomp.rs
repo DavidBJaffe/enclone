@@ -121,6 +121,7 @@ pub fn heavy_complexity(
                     &drefx,
                     &d2ref,
                     &jref,
+                    &Vec::new(),
                     &drefname,
                     true,
                     ctl.gen_opt.jscore_match,

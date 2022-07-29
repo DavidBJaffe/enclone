@@ -857,6 +857,7 @@ code:     let vref = refdata.refs[rsi.vids[col]].to_ascii_vec();
               &dref,
               &d2ref,
               &jref,
+              &Vec::new(),
               "", // drefname
               ex.share[mid].left,
               ctl.gen_opt.jscore_match, 

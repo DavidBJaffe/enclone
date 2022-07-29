@@ -486,6 +486,7 @@ pub fn proc_cvar_auto(
             &dref,
             &d2ref,
             &jref,
+            &Vec::new(),
             "", // drefname
             ex.share[mid].left,
             ctl.gen_opt.jscore_match,

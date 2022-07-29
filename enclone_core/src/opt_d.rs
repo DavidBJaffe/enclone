@@ -106,6 +106,7 @@ pub fn evaluate_d(
         &dref,
         &d2ref,
         &jref,
+        &Vec::new(),
         &drefname,
         true,
         jscore_match,

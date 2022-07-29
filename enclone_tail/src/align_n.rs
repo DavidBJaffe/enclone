@@ -57,6 +57,7 @@ pub fn print_vis_align(
         dref,
         d2ref,
         jref,
+        &Vec::new(),
         drefname,
         left,
         jscore_match,
