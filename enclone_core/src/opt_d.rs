@@ -102,10 +102,13 @@ pub fn evaluate_d(
     concat.append(&mut jref.clone());
     let (ops, count) = align_to_vdj_ref(
         &seq,
+        &Vec::new(),
         &vref,
         &dref,
         &d2ref,
         &jref,
+        &Vec::new(),
+        &Vec::new(),
         &drefname,
         true,
         jscore_match,

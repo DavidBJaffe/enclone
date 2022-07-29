@@ -5,7 +5,7 @@
 // Do not do this unless you're highly confident that it's safe to do so, without
 // manually examining the outputs.
 //
-// NOTE: you have to run this from the enclone_main directory.  Otherwise it won't work.
+// NOTE: you have to run this from the enclone_exec directory.  Otherwise it won't work.
 
 use enclone_core::main_testlist::TESTS;
 use enclone_tools::run_test::run_test;
