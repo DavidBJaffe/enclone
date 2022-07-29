@@ -1597,7 +1597,6 @@ dependencies = [
 name = "enclone_tools"
 version = "0.5.216"
 dependencies = [
- "align_tools",
  "amino",
  "ansi_escape",
  "attohttpc",
@@ -1638,7 +1637,6 @@ dependencies = [
  "tables",
  "vdj_ann",
  "vdj_ann_ref",
- "vdj_types",
  "vector_utils",
 ]
 
