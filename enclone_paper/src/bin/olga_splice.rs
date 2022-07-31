@@ -328,7 +328,7 @@ fn main() {
                 let j_ref_id = j_ref_id;
                 opt_d(
                     v_ref_id,
-                    j_ref_id,
+                    &refdata.refs[j_ref_id].to_ascii_vec(),
                     &seq,
                     &annv,
                     &strme(&cdr3x[0].1),

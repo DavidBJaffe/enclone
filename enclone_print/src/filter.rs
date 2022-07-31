@@ -554,7 +554,7 @@ pub fn survives_filter(
                         let mid = rsi.mat[col][u].unwrap();
                         opt_d(
                             ex.share[mid].v_ref_id,
-                            ex.share[mid].j_ref_id,
+                            &refdata.refs[ex.share[mid].j_ref_id].to_ascii_vec(),
                             &ex.share[mid].seq_del,
                             &ex.share[mid].annv,
                             &ex.share[mid].cdr3_aa,
@@ -603,7 +603,7 @@ pub fn survives_filter(
                         let mid = rsi.mat[col][u].unwrap();
                         opt_d(
                             ex.share[mid].v_ref_id,
-                            ex.share[mid].j_ref_id,
+                            &refdata.refs[ex.share[mid].j_ref_id].to_ascii_vec(),
                             &ex.share[mid].seq_del,
                             &ex.share[mid].annv,
                             &ex.share[mid].cdr3_aa,
@@ -650,7 +650,7 @@ pub fn survives_filter(
                         let mid = rsi.mat[col][u].unwrap();
                         opt_d(
                             ex.share[mid].v_ref_id,
-                            ex.share[mid].j_ref_id,
+                            &refdata.refs[ex.share[mid].j_ref_id].to_ascii_vec(),
                             &ex.share[mid].seq_del,
                             &ex.share[mid].annv,
                             &ex.share[mid].cdr3_aa,

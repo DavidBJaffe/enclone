@@ -122,7 +122,7 @@ pub fn evaluate_d(
 
 pub fn opt_d(
     v_ref_id: usize,                       // ex.share[mid].v_ref_id
-    j_ref_id: usize,                       // ex.share[mid].j_ref_id
+    jref: &[u8],                           // reference J segment
     tig: &Vec<u8>,                         // ex.share[mid].seq_del
     annv: &Vec<(i32, i32, i32, i32, i32)>, // ex.share[mid].annv
     cdr3_aa: &str,                         // ex.share[mid].cdr3_aa
@@ -166,7 +166,6 @@ pub fn opt_d(
     if seq_start as usize > tig.len() {
         seq_start = tig.len() as isize;
     }
-    let jref = refdata.refs[j_ref_id].to_ascii_vec();
     const MIN_BITS_FOR_D2: f64 = 14.0;
     for di in 0..todo.len() {
         let (ops, count) = evaluate_d(

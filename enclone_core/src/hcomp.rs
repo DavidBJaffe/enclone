@@ -60,7 +60,7 @@ pub fn heavy_complexity(
                 let mut ds = Vec::<Vec<usize>>::new();
                 opt_d(
                     ex.share[r].v_ref_id,
-                    ex.share[r].j_ref_id,
+                    &refdata.refs[ex.share[r].j_ref_id].to_ascii_vec(),
                     &ex.share[r].seq_del,
                     &ex.share[r].annv,
                     &ex.share[r].cdr3_aa,
