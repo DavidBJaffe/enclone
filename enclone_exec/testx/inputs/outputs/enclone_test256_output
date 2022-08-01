@@ -72,21 +72,21 @@ chain 1, tig 1
 0-79 ==> 0-79 on |128|IGHV3-23|5'UTR| [len=79] (mis=0)
 79-432 ==> 0-353 on |129|IGHV3-23|L-REGION+V-REGION| [len=353] (mis=16)
 422-470 ==> 0-48 on |74|IGHJ4|J-REGION| [len=48] (mis=6)
-470-541 ==> 0-71 on |80|IGHM|C-REGION| [len=1421] (mis=0)
+470-541 ==> 0-71 on |80|IGHM|C-REGION| [len=1424] (mis=0)
 chain 1, tig 2
 0-79 ==> 0-79 on |128|IGHV3-23|5'UTR| [len=79] (mis=0)
 79-432 ==> 0-353 on |129|IGHV3-23|L-REGION+V-REGION| [len=353] (mis=17)
 422-470 ==> 0-48 on |74|IGHJ4|J-REGION| [len=48] (mis=6)
-470-541 ==> 0-71 on |80|IGHM|C-REGION| [len=1421] (mis=0)
+470-541 ==> 0-71 on |80|IGHM|C-REGION| [len=1424] (mis=0)
 chain 2, tig 1
 0-30 ==> 0-30 on |241|IGKV2-30|5'UTR| [len=30] (mis=0)
 30-390 ==> 0-360 on |242|IGKV2-30|L-REGION+V-REGION| [len=360] (mis=6)
 392-430 ==> 0-38 on |193|IGKJ1|J-REGION| [len=38] (mis=0)
-430-566 ==> 0-136 on |192|IGKC|C-REGION| [len=320] (mis=0)
+430-566 ==> 0-136 on |192|IGKC|C-REGION| [len=323] (mis=0)
 chain 2, tig 2
 0-30 ==> 0-30 on |241|IGKV2-30|5'UTR| [len=30] (mis=0)
 30-390 ==> 0-360 on |242|IGKV2-30|L-REGION+V-REGION| [len=360] (mis=5)
 392-430 ==> 0-38 on |193|IGKJ1|J-REGION| [len=38] (mis=1)
-430-566 ==> 0-136 on |192|IGKC|C-REGION| [len=320] (mis=0)
+430-566 ==> 0-136 on |192|IGKC|C-REGION| [len=323] (mis=0)
 
 
