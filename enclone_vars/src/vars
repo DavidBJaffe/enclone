@@ -3739,6 +3739,63 @@ avail:    public
 notes:
 code:     exact: format!("{}", ex.share[mid].v_start)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+name:     ulen_perf
+inputs:   cvar_vdj
+limits:
+class:    cvar
+level:    exact
+val:      nonnegative_integer
+doc:      TBD
+brief:    length of observed 5'-UTR sequence that perfectly matches the reference UTR
+page:     enclone help cvars
+avail:    public
+notes:
+code:     let utr = &ex.share[mid].full_seq[0..ex.share[mid].v_start];
+          let mut ulen_perf = 0;
+          if ex.share[mid].u_ref_id.is_some() {
+              let utr_ref = &refdata.refs[ex.share[mid].u_ref_id.unwrap()].to_ascii_vec();
+              let mlen = min(utr.len(), utr_ref.len());
+              for i in 1..=mlen {
+                  if utr[utr.len() - i] != utr_ref[utr_ref.len() - i] {
+                      break;
+                  }
+                  ulen_perf += 1;
+              }
+          }
+          exact: format!("{}", ulen_perf)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+name:     ulen_ref
+inputs:   cvar_vdj
+limits:
+class:    cvar
+level:    exact
+val:      nonnegative_integer
+doc:      TBD
+brief:    length of reference 5'-UTR sequence
+page:     enclone help cvars
+avail:    public
+notes:
+code:     let mut ulen_ref = 0;
+          if ex.share[mid].u_ref_id.is_some() {
+              let utr_ref = &refdata.refs[ex.share[mid].u_ref_id.unwrap()].to_ascii_vec();
+              ulen_ref = utr_ref.len();
+          }
+          exact: format!("{}", ulen_ref)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+name:     utr
+inputs:   cvar_vdj
+limits:
+class:    cvar
+level:    exact
+val:      string
+doc:      TBD
+brief:    5'-UTR sequence
+page:     enclone help cvars
+avail:    public
+notes:
+code:     let utr = &ex.share[mid].full_seq[0..ex.share[mid].v_start];
+          exact: stringme(&utr)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 name:     utr_id
 inputs:   cvar_vdj
 limits:

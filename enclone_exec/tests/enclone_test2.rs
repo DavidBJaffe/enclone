@@ -575,7 +575,7 @@ fn test_for_broken_links_and_spellcheck() {
         testlist thresholding timeline timepoint \
         tracebacks trb tsv \
         tttctgtgcgaga tttctgtgcgagat \
-        twosie ubuntu udiff umi umis underperforming unicode untarring \
+        twosie ubuntu udiff umi umis underperforming unicode untarring utrs \
         vddj vdj vdjc vilella vilfwym vilm vjlen wallclock website wget whitef whitelist wikimedia \
         wikipedia workaround workflow xcode xf xhtml xkcd \
         xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxx xy yvar zenodo zx";

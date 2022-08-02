@@ -382,6 +382,8 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
         );
         h.doc2("the universal reference V(D)J concatenation");
 
+        h.ldoc("utr", "the observed 5' UTR sequence");
+
         h.ldoc("leader_aa", "the leader amino acid sequence");
         h.doc("leader_dna", "the leader nucleotide sequence");
         h.ldoc(
@@ -563,6 +565,12 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
             "",
             "on the contig, and thus the length may include junk before the UTR",
         );
+        h.doc(
+            "ulen_perf",
+            "length of observed 5'-UTR sequence that perfectly",
+        );
+        h.doc2("matches the reference UTR");
+        h.doc("ulen_ref", "length of reference 5'-UTR sequence");
         h.doc(
             "cdiff",
             "differences with universal reference constant region, shown in the",

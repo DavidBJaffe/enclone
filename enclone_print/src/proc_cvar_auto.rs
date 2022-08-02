@@ -1455,6 +1455,33 @@ pub fn proc_cvar_auto(
             Vec::new(),
             "exact".to_string(),
         )
+    } else if vname == "ulen_perf" {
+        let utr = &ex.share[mid].full_seq[0..ex.share[mid].v_start];
+        let mut ulen_perf = 0;
+        if ex.share[mid].u_ref_id.is_some() {
+            let utr_ref = &refdata.refs[ex.share[mid].u_ref_id.unwrap()].to_ascii_vec();
+            let mlen = min(utr.len(), utr_ref.len());
+            for i in 1..=mlen {
+                if utr[utr.len() - i] != utr_ref[utr_ref.len() - i] {
+                    break;
+                }
+                ulen_perf += 1;
+            }
+        }
+
+        (format!("{}", ulen_perf), Vec::new(), "exact".to_string())
+    } else if vname == "ulen_ref" {
+        let mut ulen_ref = 0;
+        if ex.share[mid].u_ref_id.is_some() {
+            let utr_ref = &refdata.refs[ex.share[mid].u_ref_id.unwrap()].to_ascii_vec();
+            ulen_ref = utr_ref.len();
+        }
+
+        (format!("{}", ulen_ref), Vec::new(), "exact".to_string())
+    } else if vname == "utr" {
+        let utr = &ex.share[mid].full_seq[0..ex.share[mid].v_start];
+
+        (stringme(&utr), Vec::new(), "exact".to_string())
     } else if vname == "utr_id" {
         let mut u = String::new();
         let uid = ex.share[mid].u_ref_id;

@@ -51,7 +51,7 @@ pub const LVARS_ALLOWED: [&str; 42] = [
 
 // Chain variables that can be used for contigs and chains
 
-pub const CVARS_ALLOWED: [&str; 99] = [
+pub const CVARS_ALLOWED: [&str; 102] = [
     "var",
     "u",
     "u_min",
@@ -151,6 +151,9 @@ pub const CVARS_ALLOWED: [&str; 99] = [
     "leader_aa",
     "leader_dna_ref",
     "leader_aa_ref",
+    "ulen_perf",
+    "ulen_ref",
+    "utr",
 ];
 
 // We should not have to specify this.

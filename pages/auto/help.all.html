@@ -708,6 +708,8 @@ where each xi is one of:
 │cigar            │  the CIGAR string that defines the edit of the V..J contig sequence versus   │
 │                 │  the universal reference V(D)J concatenation                                 │
 ├─────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+│utr              │  the observed 5' UTR sequence                                                │
+├─────────────────┼──────────────────────────────────────────────────────────────────────────────┤
 │leader_aa        │  the leader amino acid sequence                                              │
 │leader_dna       │  the leader nucleotide sequence                                              │
 ├─────────────────┼──────────────────────────────────────────────────────────────────────────────┤
@@ -805,6 +807,9 @@ where each xi is one of:
 │ulen             │  length of observed 5'-UTR sequence;                                         │
 │                 │  note however that what report is just the start of the V segment            │
 │                 │  on the contig, and thus the length may include junk before the UTR          │
+│ulen_perf        │  length of observed 5'-UTR sequence that perfectly                           │
+│                 │  matches the reference UTR                                                   │
+│ulen_ref         │  length of reference 5'-UTR sequence                                         │
 │cdiff            │  differences with universal reference constant region, shown in the          │
 │                 │  abbreviated form e.g. 22T (ref changed to T at base 22) or 22T+10           │
 │                 │  (same but contig has 10 additional bases beyond end of ref C region         │

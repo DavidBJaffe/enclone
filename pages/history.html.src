@@ -37,6 +37,13 @@ part of a release.</p>
 
 <table rules="all" cellpadding="3" style="border: 1px solid black">
 
+<p><b>8/2/22</b>: 
+<ul>
+<li>Built-in human reference now includes 3' UTRs, and alignments now include these.</li>
+<li>Add cvars utr, ulen_perf and ulen_ref.</li>
+</ul>
+</p>
+
 <p><b>6/11/22</b>: 
 <ul>
 <li>Fix bug that caused the cvar <code>fwr4_dna_ref</code> to have its rightmost base removed.</li>
