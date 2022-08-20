@@ -574,11 +574,11 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
         h.doc("ulen_ref", "length of reference 5'-UTR sequence");
         h.doc(
             "cdiff",
-            "differences with universal reference constant region, shown in the",
+            "zero-based differences with universal reference constant region, shown",
         );
         h.doc(
             "",
-            "abbreviated form e.g. 22T (ref changed to T at base 22) or 22T+10",
+            "in the abbreviated form e.g. 22T (ref changed to T at base 22) or 22T+10",
         );
         h.doc(
             "",
