@@ -37,6 +37,8 @@ part of a release.</p>
 
 <table rules="all" cellpadding="3" style="border: 1px solid black">
 
+<p><b>8/19/22</b>: Add cvar <code>const_dna</code>.</p>
+
 <p><b>8/3/22</b>: Add missing 5' UTR sequences for ten human IG V genes, and lengthen 5' UTR
 for another.</p>
 

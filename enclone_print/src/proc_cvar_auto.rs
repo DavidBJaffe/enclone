@@ -531,6 +531,14 @@ pub fn proc_cvar_auto(
             Vec::new(),
             "exact".to_string(),
         )
+    } else if vname == "const_dna" {
+        let cstart = ex.share[mid].j_stop;
+
+        (
+            stringme(&ex.share[mid].full_seq[cstart..]),
+            Vec::new(),
+            "exact".to_string(),
+        )
     } else if vname == "const_id" {
         let mut const_id = String::new();
         if ex.share[mid].c_ref_id.is_some() {

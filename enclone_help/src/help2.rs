@@ -485,6 +485,7 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
             "For CDR1 and CDR2, please see \"enclone help amino\" and the page on",
         );
         h.docpr("", "\\green{bit.ly/enclone} on V(D)J features.");
+        h.ldoc("const_dna", "DNA sequence of observed constant region");
         h.ldoc("v_start", "start of V segment on full DNA sequence");
         h.doc(
             "d_start",
