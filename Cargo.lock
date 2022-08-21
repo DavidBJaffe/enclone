@@ -395,7 +395,7 @@ checksum = "4a69423e30444738eccc5e54eccee75779dd3f15ecc0469b95d8529d4b6b7586"
 dependencies = [
  "anyhow",
  "approx",
- "bio-types",
+ "bio-types 0.13.0",
  "bit-set",
  "bv",
  "bytecount",
@@ -440,11 +440,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "bio-types"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dfa990f40a28735fa598dc3dd58d73e62e6b41458959d623903b927ba7b04c80"
+dependencies = [
+ "derive-new",
+ "lazy_static",
+ "regex",
+ "strum_macros",
+ "thiserror",
+]
+
+[[package]]
 name = "bio_edit"
 version = "0.1.1"
 source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#71a240ad22b248536d8b1141dca297a35995b599"
 dependencies = [
- "bio-types",
+ "bio-types 0.12.1",
  "bit-set",
 ]
 
