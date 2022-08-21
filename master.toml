@@ -23,7 +23,7 @@ clipboard = "0.5"
 cocoa = "0.24"
 core-foundation = "0.9"
 core-graphics = "0.22"
-crc = "2"
+crc = "3"
 debruijn = "0.3"
 dirs = "4"
 dna = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
