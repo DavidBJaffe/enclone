@@ -644,6 +644,7 @@ fn test_cpu() {
 // 13. BSD-2-Clause: if no actual license is provided, we should not have to do anything.
 //     Applies to kamadak-exif and mutate_once.
 // 14. hdf5-src is actually OK.
+// 15. unicode-ident is OK.
 
 #[cfg(not(feature = "basic"))]
 #[cfg(not(feature = "cpu"))]
@@ -663,7 +664,7 @@ fn test_licenses() {
     ];
     const A2: &str = "Apache-2.0";
     const ACCEPTABLE_10X_PACKAGES: [&str; 2] = ["exons", "vdj_ann"];
-    const ACCEPTABLE_OTHER_PACKAGES: [&str; 20] = [
+    const ACCEPTABLE_OTHER_PACKAGES: [&str; 21] = [
         "arrayref",
         "cloudabi",
         "fuchsia-cprng",
@@ -684,6 +685,7 @@ fn test_licenses() {
         "tiny-skia",
         "webpki",
         "xi-unicode",
+        "unicode-ident",
     ];
     let new = Command::new("cargo-license").arg("-d").arg("-j").output();
     if new.is_err() {
