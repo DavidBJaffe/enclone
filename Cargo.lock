@@ -389,9 +389,9 @@ dependencies = [
 
 [[package]]
 name = "bio"
-version = "0.39.2"
+version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b338db6f3c8a8ede1779fad84b6e52f36101dbd79daacc4fb3746efc9fe6002"
+checksum = "4a69423e30444738eccc5e54eccee75779dd3f15ecc0469b95d8529d4b6b7586"
 dependencies = [
  "anyhow",
  "approx",
@@ -4937,7 +4937,7 @@ version = "1.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fee6b57c6a41524a810daee9286c02d7752c4253064d0b05472833a438f675"
 dependencies = [
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "rand",
  "static_assertions",
 ]
