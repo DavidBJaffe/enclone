@@ -619,8 +619,8 @@ fn test_cpu() {
 // Test licenses of included packages and their dependencies.
 //
 // The following rules are applied:
-// 1.  If the license field in Cargo.toml is set to MIT or ISC or Zlib or WTFPL or MPL-2.0 or 0BSD
-//     or CC0-1.0 or BSL-1.0, or is a logical expression for which one of those is sufficient, then
+// 1.  If the license field in Cargo.toml is set to one of ACCEPTABLE_LICENSE_TYPES, as defined
+//     below, or is a logical expression for which one of those is sufficient, then
 //     there is no problem.  Note that for MPL-2.0, we inform people how to get the source code for
 //     dependent crates.
 // 2.  If both license and license_field are null, then there is no problem.
@@ -644,17 +644,27 @@ fn test_cpu() {
 // 13. BSD-2-Clause: if no actual license is provided, we should not have to do anything.
 //     Applies to kamadak-exif and mutate_once.
 // 14. hdf5-src is actually OK.
+// 15. unicode-ident is OK.
 
 #[cfg(not(feature = "basic"))]
 #[cfg(not(feature = "cpu"))]
 #[test]
 fn test_licenses() {
-    const ACCEPTABLE_LICENSE_TYPES: [&str; 9] = [
-        "MIT", "ISC", "Zlib", "WTFPL", "MPL-2.0", "CC0-1.0", "BSL-1.0", "0BSD", "OFL-1.1",
+    const ACCEPTABLE_LICENSE_TYPES: [&str; 10] = [
+        "MIT",
+        "ISC",
+        "Zlib",
+        "WTFPL",
+        "MPL-2.0",
+        "CC0-1.0",
+        "BSL-1.0",
+        "0BSD",
+        "OFL-1.1",
+        "Unicode-DFS-2016",
     ];
     const A2: &str = "Apache-2.0";
     const ACCEPTABLE_10X_PACKAGES: [&str; 2] = ["exons", "vdj_ann"];
-    const ACCEPTABLE_OTHER_PACKAGES: [&str; 20] = [
+    const ACCEPTABLE_OTHER_PACKAGES: [&str; 21] = [
         "arrayref",
         "cloudabi",
         "fuchsia-cprng",
@@ -675,6 +685,7 @@ fn test_licenses() {
         "tiny-skia",
         "webpki",
         "xi-unicode",
+        "unicode-ident",
     ];
     let new = Command::new("cargo-license").arg("-d").arg("-j").output();
     if new.is_err() {

@@ -27,7 +27,7 @@ publish = false
 anyhow = "1"
 base64 = "0.13"
 chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
-crc = "2"
+crc = "3"
 dirs = "4"
 enclone_core = { path = "../enclone_core" }
 enclone_main = { path = "../enclone_main" }
@@ -47,7 +47,7 @@ jpeg-decoder = "0.2"
 lazy_static = "1"
 libc = "0.2"
 log = "0.4"
-nix = "0.23"
+nix = "0.25"
 num-traits = "0.2"
 perf_stats = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 png-decoder = "0.1"

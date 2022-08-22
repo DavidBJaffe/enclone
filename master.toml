@@ -14,7 +14,7 @@ async-trait = "0.1"
 attohttpc = { version = "0.18", default-features = false, features = ["compress", "tls-rustls"] }
 base64 = "0.13"
 binary_vec_io = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
-bio = "0.39"
+bio = "0.41"
 bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 byteorder = "1"
 bytes = "1"
@@ -23,7 +23,7 @@ clipboard = "0.5"
 cocoa = "0.24"
 core-foundation = "0.9"
 core-graphics = "0.22"
-crc = "2"
+crc = "3"
 debruijn = "0.3"
 dirs = "4"
 dna = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
@@ -68,7 +68,7 @@ lz4 = "1"
 mach = "0.3"
 mirror_sparse_matrix = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 ndarray = "0.15"
-nix = "0.23"
+nix = "0.25"
 num-traits = "0.2"
 objc = "0.2"
 pager = "0.16"
