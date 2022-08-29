@@ -18,6 +18,8 @@ pub struct PdbStructure {
     pub atoms: Vec<PdbAtom>,
 }
 
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
 // PdbAtom: for the first two fields, the identifiers are left justified and zero-byte filed.
 
 #[derive(Default, Clone)]
@@ -27,6 +29,20 @@ pub struct PdbAtom {
     pub amino_acid: u8,     // e.g. L for leucine etc.
     pub chain: u16,         // zero-based chain number
     pub chain_pos: u16,     // zero-based index of amino acid on chain
+    pub x: f32,             // x coordinate of atom
+    pub y: f32,             // y coordinate of atom
+    pub z: f32,             // y coordinate of atom
+}
+
+// PdbAtomoid same as PdbAtom except that chain_pos is a string, could be e.g. 82A.
+
+#[derive(Default, Clone)]
+pub struct PdbAtomoid {
+    pub atom_name: [u8; 2], // e.g. C for carbon etc.
+    pub atom_alt: [u8; 4],  // identifier for the atom location within the amino acid
+    pub amino_acid: u8,     // e.g. L for leucine etc.
+    pub chain: u16,         // zero-based chain number
+    pub chain_pos: String,  // string representing index of amino acid on chain
     pub x: f32,             // x coordinate of atom
     pub y: f32,             // y coordinate of atom
     pub z: f32,             // y coordinate of atom
@@ -50,6 +66,124 @@ impl PdbStructure {
         return u;
     }
 }
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+// Read an atom from an alternately formatted "PDB" file.  In this format, there is no field for
+// entity, which has to be inferred from the file as a whole.   We pass it as an argument.
+
+pub fn parse_atom_pidgin(line: &str, chain_count: usize) -> Result<PdbAtomoid, String> {
+    let fields = line.split_ascii_whitespace().collect::<Vec<&str>>();
+    let atom0 = fields[11].as_bytes();
+    let mut atom = [0 as u8; 2];
+    atom[0] = atom0[0];
+    if atom0.len() == 2 {
+        atom[1] = atom0[1];
+    }
+    if atom0.len() > 2 {
+        return Err(format!(
+            "Error reading PDB file, atom name appears to have more than two characters in this \
+                line:\n{line}",
+        ));
+    }
+    let atom_alt0 = fields[2].as_bytes();
+    if atom_alt0.len() > 4 {
+        return Err(format!(
+            "atom_alt0 = {} has length {}, but should be at most 4",
+            fields[2],
+            atom_alt0.len()
+        ));
+    }
+    let mut atom_alt = [0 as u8; 4];
+    for j in 0..atom_alt0.len() {
+        atom_alt[j] = atom_alt0[j];
+    }
+
+    // Check for defective amino acid.  Possibly these cases could be rescued.
+
+    if fields[3].len() != 3 || fields[3] == "UNK" {
+        return Err(format!(
+            "in pdb file, unknown amino acid {} in line {}",
+            fields[3], line
+        ));
+    }
+
+    // Create atom.
+
+    let aa = aa3_to_aa(&fields[3].as_bytes());
+    let pos_on_entity = fields[5].to_string();
+    let entity = chain_count as u16;
+    let xcoord = fields[6].force_f64() as f32;
+    let ycoord = fields[7].force_f64() as f32;
+    let zcoord = fields[8].force_f64() as f32;
+    let m = PdbAtomoid {
+        atom_name: atom,
+        atom_alt: atom_alt,
+        amino_acid: aa,
+        chain: entity,
+        chain_pos: pos_on_entity,
+        x: xcoord,
+        y: ycoord,
+        z: zcoord,
+    };
+    Ok(m)
+}
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+pub fn parse_atom(line: &str) -> Result<PdbAtom, String> {
+    let fields = line.split_ascii_whitespace().collect::<Vec<&str>>();
+    let atom0 = fields[2].as_bytes();
+    let mut atom = [0 as u8; 2];
+    atom[0] = atom0[0];
+    if atom0.len() == 2 {
+        atom[1] = atom0[1];
+    }
+    assert!(atom0.len() <= 2);
+    let atom_alt0 = fields[3].as_bytes();
+    if atom_alt0.len() > 4 {
+        return Err(format!(
+            "atom_alt0 = {} has length {}, but should be at most 4",
+            fields[3],
+            atom_alt0.len()
+        ));
+    }
+    let mut atom_alt = [0 as u8; 4];
+    for j in 0..atom_alt0.len() {
+        atom_alt[j] = atom_alt0[j];
+    }
+
+    // Check for defective amino acid.  Possibly these cases could be rescued.
+
+    if fields[5].len() != 3 || fields[5] == "UNK" {
+        return Err(format!(
+            "in pdb, unknown amino acid {} in line {}",
+            fields[5], line
+        ));
+    }
+
+    // Create atom.
+
+    let aa = aa3_to_aa(&fields[5].as_bytes());
+    let pos_on_entity = fields[8].force_usize() as u16;
+    let entity = fields[7].force_usize() as u16;
+    let xcoord = fields[10].force_f64() as f32;
+    let ycoord = fields[11].force_f64() as f32;
+    let zcoord = fields[12].force_f64() as f32;
+    let m = PdbAtom {
+        atom_name: atom,
+        atom_alt: atom_alt,
+        amino_acid: aa,
+        chain: entity - 1,
+        chain_pos: pos_on_entity - 1,
+        x: xcoord,
+        y: ycoord,
+        z: zcoord,
+    };
+    Ok(m)
+}
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 pub fn fetch_pdb_structure(name: &str) -> Result<PdbStructure, String> {
     fetch_pdb_structure_gen(&name, "antibody_sets/pdbs")
@@ -152,6 +286,16 @@ pub fn fetch_pdb_structure_gen(name: &str, dir: &str) -> Result<PdbStructure, St
             let mut j = i + 1;
             while j < lines.len() && !lines[j].starts_with('#') {
                 if lines[j].contains("'polypeptide(L)'") {
+                    if lines[j].ends_with("? ") {
+                        let s = lines[j]
+                            .after("no no ")
+                            .between(" ", " ")
+                            .as_bytes()
+                            .to_vec();
+                        chains.push(s);
+                        j += 1;
+                        continue;
+                    }
                     j += 1;
                     if lines[j].starts_with("#") {
                         break;
@@ -208,58 +352,7 @@ pub fn fetch_pdb_structure_gen(name: &str, dir: &str) -> Result<PdbStructure, St
             }
             i = j;
         } else if lines[i].starts_with("ATOM ") {
-            let fields = lines[i].split_ascii_whitespace().collect::<Vec<&str>>();
-            let atom0 = fields[2].as_bytes();
-            let mut atom = [0 as u8; 2];
-            atom[0] = atom0[0];
-            if atom0.len() == 2 {
-                atom[1] = atom0[1];
-            }
-            assert!(atom0.len() <= 2);
-
-            let atom_alt0 = fields[3].as_bytes();
-
-            if atom_alt0.len() > 4 {
-                return Err(format!(
-                    "atom_alt0 = {} has length {}, but should be at most 4",
-                    fields[3],
-                    atom_alt0.len()
-                ));
-            }
-            let mut atom_alt = [0 as u8; 4];
-            for j in 0..atom_alt0.len() {
-                atom_alt[j] = atom_alt0[j];
-            }
-
-            // Check for defective amino acid.  Possibly these cases could be rescued.
-
-            if fields[5].len() != 3 || fields[5] == "UNK" {
-                return Err(format!(
-                    "in pdb {name}, unknown amino acid {} in line {} = {}",
-                    fields[5],
-                    i + 1,
-                    lines[i]
-                ));
-            }
-
-            // Create atom.
-
-            let aa = aa3_to_aa(&fields[5].as_bytes());
-            let pos_on_entity = fields[8].force_usize() as u16;
-            let entity = fields[7].force_usize() as u16;
-            let xcoord = fields[10].force_f64() as f32;
-            let ycoord = fields[11].force_f64() as f32;
-            let zcoord = fields[12].force_f64() as f32;
-            let m = PdbAtom {
-                atom_name: atom,
-                atom_alt: atom_alt,
-                amino_acid: aa,
-                chain: entity - 1,
-                chain_pos: pos_on_entity - 1,
-                x: xcoord,
-                y: ycoord,
-                z: zcoord,
-            };
+            let m = parse_atom(&lines[i]).unwrap();
             ms.push(m);
             i += 1;
         } else {
@@ -308,4 +401,80 @@ pub fn fetch_pdb_structure_gen(name: &str, dir: &str) -> Result<PdbStructure, St
             atoms: ms,
         })
     }
+}
+
+// ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+pub fn fetch_pdb_structure_pidgin(name: &str, dir: &str) -> Result<PdbStructure, String> {
+    let mut lines = Vec::<String>::new();
+    let opath = format!("{}/{}.gz", dir, name);
+    let ppath = format!("{}/{}", dir, name);
+    if path_exists(&opath) {
+        let gz = MultiGzDecoder::new(File::open(&opath).unwrap());
+        let b = BufReader::new(gz);
+        for line in b.lines() {
+            let s = line.unwrap();
+            lines.push(s);
+        }
+    } else if path_exists(&ppath) {
+        let f = open_for_read![&ppath];
+        for line in f.lines() {
+            let s = line.unwrap();
+            lines.push(s);
+        }
+    } else {
+        return Err(format!("Unable to find PDB file {name}."));
+    }
+    if lines.is_empty() {
+        eprintln!("");
+        eprintme!(name, dir);
+        eprintln!("No lines read.\n");
+        std::process::exit(1);
+    }
+    let mut ms0 = Vec::<PdbAtomoid>::new();
+    let mut chain_count = 0;
+    for i in 0..lines.len() {
+        if lines[i].starts_with("ATOM ") {
+            let m = parse_atom_pidgin(&lines[i], chain_count).unwrap();
+            ms0.push(m);
+        } else if lines[i].starts_with("TER ") {
+            chain_count += 1;
+        } else if !lines[i].starts_with("END") {
+            return Err(format!("Don't understand {}.", lines[i]));
+        }
+    }
+
+    let mut pos = 0;
+    let mut ms = Vec::<PdbAtom>::new();
+    for i in 0..ms0.len() {
+        if i > 0 && ms0[i].chain != ms0[i - 1].chain {
+            pos = 0;
+        } else if i > 0 && ms0[i].chain_pos != ms0[i - 1].chain_pos {
+            pos += 1;
+        }
+        let m = PdbAtom {
+            atom_name: ms0[i].atom_name,
+            atom_alt: ms0[i].atom_alt,
+            amino_acid: ms0[i].amino_acid,
+            chain: ms0[i].chain,
+            chain_pos: pos,
+            x: ms0[i].x,
+            y: ms0[i].y,
+            z: ms0[i].z,
+        };
+        ms.push(m);
+    }
+
+    let mut chains = vec![Vec::<u8>::new(); chain_count];
+    let c = [b'C', 0, 0, 0];
+    for x in ms.iter() {
+        if x.atom_alt == c {
+            chains[x.chain as usize].push(x.amino_acid);
+        }
+    }
+    Ok(PdbStructure {
+        chain_names: Vec::new(),
+        chains: chains,
+        atoms: ms,
+    })
 }
