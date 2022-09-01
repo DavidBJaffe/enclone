@@ -1,9 +1,10 @@
 # This file contains a list of PDB structures that have exactly three proteins: a heavy
 # chain, a light chain, and a protein antigen chain.  The entries were a subset of those in
-# CoV-AbDab_261120.csv, but subsequently we added structures via group_structures_by_antigen.
+# CoV-AbDab_261120.csv (not in this codebase), but subsequently we added structures via 
+# group_structures_by_antigen.
 #
 # Each line in this file has a first field, which represents the antigen.  Not all structures
-# will have the same actual antigen chain, mostly because some are trunctated.
+# will have the same actual antigen chain, mostly because some are truncated.
 # (This excludes comment lines and blank lines.)
 #
 # The second field is a comma-separated list of structure codes.
