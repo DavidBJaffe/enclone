@@ -7,7 +7,8 @@
 # will have the same actual antigen chain, mostly because some are truncated.
 # (This excludes comment lines and blank lines.)
 #
-# The second field is a comma-separated list of structure codes.
+# The second field is a comma-separated list of structure codes, all for the same antibody
+# (at least the same for FWR1..FWR4).
 #
 # The fields are separated by a single blank.
 #
