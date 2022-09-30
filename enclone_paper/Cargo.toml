@@ -29,6 +29,7 @@ enclone_core = { path = "../enclone_core" }
 enclone_tail = { path = "../enclone_tail" }
 fasta_tools = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 flate2 = "1"
+home = "0.5"
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 itertools = "0.10"
 perf_stats = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }

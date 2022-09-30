@@ -1453,6 +1453,7 @@ dependencies = [
  "enclone_tail",
  "fasta_tools",
  "flate2",
+ "home",
  "io_utils",
  "itertools",
  "perf_stats",
