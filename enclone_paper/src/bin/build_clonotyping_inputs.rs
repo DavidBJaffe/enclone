@@ -71,7 +71,7 @@ pub fn main() {
         eprintln!(
             "\nThe directory ~/enclone does not exist.  This probably means that you have \
             not installed\nenclone.  Please see instructions at bit.ly/enclone and install using \
-            the large option\n(or colossus, but that is not needed by this code).\n"
+            the colossus option.\nThe large option will not work.\n"
         );
         std::process::exit(1);
     }
@@ -79,7 +79,7 @@ pub fn main() {
         eprintln!(
             "\nThe file `/enclone/datasets2/1287207 does not exist, so something is wrong \
             with your\nenclone installation.  Probably you should delete it and reinstall. See \
-            bit.ly\nenclone and use the large option.\n"
+            bit.ly\nenclone and use the colossus option.  The large option will not work.\n"
         );
         std::process::exit(1);
     }
