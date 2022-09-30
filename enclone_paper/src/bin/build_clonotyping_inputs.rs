@@ -11,7 +11,6 @@
 
 use enclone_core::defs::get_config;
 use enclone_core::test_def::replace_at_test;
-use enclone_core::testlist::*;
 use io_utils::*;
 use pretty_trace::*;
 use std::collections::HashMap;
@@ -60,9 +59,31 @@ pub fn main() {
     }
     let _ = get_config(&config_file, &mut config);
 
-    // Location of files.
+    // Locate the source files.
 
-    let pre = format!("{}/current{}", config["cloud"], TEST_FILES_VERSION);
+    let home = home::home_dir();
+    if home.is_none() {
+        eprintln!("Unable to determine home directory.  This is unexpected and pathological.\n");
+        std::process::exit(1);
+    }
+    let enclone = format!("{}/enclone", home.unwrap().display());
+    if !path_exists(&enclone) {
+        eprintln!(
+            "\nThe directory ~/enclone does not exist.  This probably means that you have \
+            not installed\nenclone.  Please see instructions at bit.ly/enclone and install using \
+            the large option\n(or colossus, but that is not needed by this code).\n"
+        );
+        std::process::exit(1);
+    }
+    if !path_exists(&format!("{enclone}/datasets2/1287207")) {
+        eprintln!(
+            "\nThe file `/enclone/datasets2/1287207 does not exist, so something is wrong \
+            with your\nenclone installation.  Probably you should delete it and reinstall. See \
+            bit.ly\nenclone and use the large option.\n"
+        );
+        std::process::exit(1);
+    }
+    let pre = format!("{enclone}/datasets2");
 
     // Concatenate the fasta files, prepending the id to the contig name.
     // Also concatenate the csv files, prepending the id to the contig name.
