@@ -1,11 +1,11 @@
 // Copyright (c) 2021 10X Genomics, Inc. All rights reserved.
 
 use crate::defs::{CloneInfo, EncloneControl, ExactClonotype, PotentialJoin};
-use crate::opt_d::jflank;
 use debruijn::{
     dna_string::{ndiffs, DnaString},
     Mer,
 };
+use enclone_base::opt_d::jflank;
 use enclone_proto::types::DonorReferenceItem;
 use qd::{dd, Double};
 use stats_utils::abs_diff;

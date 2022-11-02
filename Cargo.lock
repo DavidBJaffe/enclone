@@ -1290,9 +1290,13 @@ name = "enclone_base"
 version = "0.5.216"
 dependencies = [
  "amino",
+ "bio_edit",
+ "enclone_proto",
  "flate2",
  "io_utils",
+ "itertools",
  "string_utils",
+ "vdj_ann",
  "vector_utils",
 ]
 
@@ -1307,6 +1311,7 @@ dependencies = [
  "bio_edit",
  "chrono",
  "debruijn",
+ "enclone_base",
  "enclone_proto",
  "evalexpr",
  "hdf5",
@@ -1449,6 +1454,7 @@ dependencies = [
  "bio_edit",
  "debruijn",
  "edit-distance",
+ "enclone_base",
  "enclone_core",
  "enclone_tail",
  "fasta_tools",
@@ -1480,6 +1486,7 @@ dependencies = [
  "bytes",
  "debruijn",
  "enclone_args",
+ "enclone_base",
  "enclone_core",
  "enclone_proto",
  "enclone_vars",
@@ -1584,6 +1591,7 @@ dependencies = [
  "bio_edit",
  "crc",
  "debruijn",
+ "enclone_base",
  "enclone_core",
  "enclone_proto",
  "equiv",
@@ -1669,6 +1677,7 @@ dependencies = [
 name = "enclone_vars"
 version = "0.5.216"
 dependencies = [
+ "enclone_base",
  "io_utils",
  "itertools",
  "pretty_trace",

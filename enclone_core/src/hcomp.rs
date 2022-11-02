@@ -1,9 +1,9 @@
 // Copyright (c) 2022 10X Genomics, Inc. All rights reserved.
 
-use crate::align_to_vdj_ref::align_to_vdj_ref;
 use crate::defs::{EncloneControl, ExactClonotype, Junction};
-use crate::opt_d::{jflank, opt_d};
 use bio_edit::alignment::AlignmentOperation::{Del, Ins, Match, Subst};
+use enclone_base::align_to_vdj_ref::align_to_vdj_ref;
+use enclone_base::opt_d::{jflank, opt_d};
 use enclone_proto::types::DonorReferenceItem;
 use rayon::prelude::*;
 use vdj_ann::refx::RefData;

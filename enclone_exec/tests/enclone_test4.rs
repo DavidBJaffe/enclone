@@ -198,11 +198,13 @@ fn test_dependency_structure() {
     for line in f.lines() {
         if !line.starts_with("name =")
             && line.starts_with("enclone")
+            && !line.starts_with("enclone_base")
             && !line.starts_with("enclone_proto")
         {
             eprintln!(
                 "\nenclone_core should not depend on any other enclone crate\n\
-                except enclone_proto.  This restriction is there to reduce compile time.\n"
+                except enclone_base and enclone_proto.  This restriction is there to\
+                reduce compile time.\n"
             );
             std::process::exit(1);
         }

@@ -28,6 +28,7 @@ ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-tool
 bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 crc = "3"
 debruijn = "0.3"
+enclone_base = { path = "../enclone_base" }
 enclone_core = { path = "../enclone_core" }
 enclone_proto = { path = "../enclone_proto" }
 equiv = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }

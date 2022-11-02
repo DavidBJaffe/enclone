@@ -1,6 +1,5 @@
 // Copyright (c) 2021 10x Genomics, Inc. All rights reserved.
 
-pub mod align_to_vdj_ref;
 pub mod allowed_vars;
 pub mod cell_color;
 pub mod combine_group_pics;
@@ -13,7 +12,6 @@ pub mod logging;
 pub mod main_testlist;
 pub mod mammalian_fixed_len;
 pub mod median;
-pub mod opt_d;
 pub mod packing;
 pub mod prepare_for_apocalypse;
 pub mod print_tools;

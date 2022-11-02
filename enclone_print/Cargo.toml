@@ -28,6 +28,7 @@ bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox
 bytes = "1"
 debruijn = "0.3"
 enclone_args = { path = "../enclone_args" }
+enclone_base = { path = "../enclone_base" }
 enclone_core = { path = "../enclone_core" }
 enclone_proto = { path = "../enclone_proto" }
 enclone_vars = { path = "../enclone_vars" }

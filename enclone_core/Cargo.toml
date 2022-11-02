@@ -28,6 +28,7 @@ attohttpc = { version = "0.18", default-features = false, features = ["compress"
 bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
 debruijn = "0.3"
+enclone_base = { path = "../enclone_base" }
 enclone_proto = { path = "../enclone_proto" }
 evalexpr = "7"
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }

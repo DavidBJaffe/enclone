@@ -7,8 +7,8 @@
 use vdj_ann::refx;
 
 use self::refx::RefData;
+use enclone_base::opt_d::opt_d;
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype, GexInfo};
-use enclone_core::opt_d::opt_d;
 use enclone_proto::types::DonorReferenceItem;
 use std::cmp::{max, min};
 use string_utils::TextUtils;

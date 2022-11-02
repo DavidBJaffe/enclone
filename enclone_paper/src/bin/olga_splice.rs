@@ -31,9 +31,9 @@
 
 use bio_edit::alignment::AlignmentOperation::{Del, Ins, Match, Subst};
 use debruijn::dna_string::DnaString;
-use enclone_core::align_to_vdj_ref::align_to_vdj_ref;
+use enclone_base::align_to_vdj_ref::align_to_vdj_ref;
+use enclone_base::opt_d::{jflank, opt_d};
 use enclone_core::defs::Junction;
-use enclone_core::opt_d::{jflank, opt_d};
 use enclone_tail::align_n::print_vis_align;
 use io_utils::*;
 use pretty_trace::*;

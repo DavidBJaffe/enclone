@@ -5,9 +5,9 @@
 use align_tools::vis_align;
 use amino::codon_to_aa;
 use ansi_escape::{emit_end_escape, print_color};
-use enclone_core::align_to_vdj_ref::align_to_vdj_ref;
+use enclone_base::align_to_vdj_ref::align_to_vdj_ref;
+use enclone_base::opt_d::{jflank, opt_d};
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype};
-use enclone_core::opt_d::{jflank, opt_d};
 use enclone_proto::types::DonorReferenceItem;
 use io_utils::fwrite;
 use rayon::prelude::*;

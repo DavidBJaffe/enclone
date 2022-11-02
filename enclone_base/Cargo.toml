@@ -17,13 +17,18 @@ license-file = "LICENSE.txt"
 publish = false
 
 # THIS CRATE DOES NOT DEPEND ON ANY ENCLONE CRATE OR ON HDF5!  THAT IS THE PURPOSE OF THIS CRATE.
+# Exception: we allow enclone_proto.
 
 # Please do not edit crate versions within this file.  Instead edit the file master.toml
 # in the root of the enclone repo.
 
 [dependencies]
 amino = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+bio_edit = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+enclone_proto = { path = "../enclone_proto" }
 flate2 = "1"
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+itertools = "0.10"
 string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+vdj_ann = { version = "0.4", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }

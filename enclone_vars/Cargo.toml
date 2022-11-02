@@ -20,6 +20,7 @@ publish = false
 # in the root of the enclone repo.
 
 [dependencies]
+enclone_base = { path = "../enclone_base" }
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 itertools = "0.10"
 pretty_trace = { version = "0.5", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
