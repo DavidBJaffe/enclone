@@ -303,6 +303,9 @@ pub fn align_to_vdj_ref(
             gap_extend_fn[j] = gap_extend;
         }
     }
+    if concat.len() == 0 {
+        return (Vec::new(), 0.0);
+    }
     let mut al = aligner.custom_with_gap_fns(seq, &concat, &gap_open_fn, &gap_extend_fn);
     al.mode = AlignmentMode::Semiglobal;
     let mut ops = al.operations;
