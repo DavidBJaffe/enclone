@@ -74,6 +74,7 @@ pub fn heavy_complexity(
                     ctl.gen_opt.jscore_gap_extend,
                     ctl.gen_opt.jscore_bits_multiplier,
                     ex.share[r].v_ref_id_donor,
+                    false,
                 );
                 let mut opt = Vec::new();
                 if !ds.is_empty() {
@@ -131,6 +132,7 @@ pub fn heavy_complexity(
                     ctl.gen_opt.jscore_gap_open,
                     ctl.gen_opt.jscore_gap_extend,
                     ctl.gen_opt.jscore_bits_multiplier,
+                    false,
                 );
                 let mut tigpos = 0;
                 let mut hcomp = 0;

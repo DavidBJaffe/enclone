@@ -63,6 +63,7 @@ pub fn make_opt_d_val(
                                 ctl.gen_opt.jscore_gap_extend,
                                 ctl.gen_opt.jscore_bits_multiplier,
                                 rsi[i].vpids[col],
+                                false,
                             );
                             let mut opt = Vec::new();
                             if !ds.is_empty() {

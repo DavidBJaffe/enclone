@@ -67,6 +67,7 @@ pub fn print_vis_align(
         jscore_gap_open,
         jscore_gap_extend,
         jscore_bits_multiplier,
+        false,
     );
 
     // Make visual alignment.
@@ -296,6 +297,7 @@ pub fn align_n(
                                     ctl.gen_opt.jscore_gap_extend,
                                     ctl.gen_opt.jscore_bits_multiplier,
                                     rsi[oo].vpids[m],
+                                    false,
                                 );
                                 let mut opt = Vec::new();
                                 if !ds.is_empty() {

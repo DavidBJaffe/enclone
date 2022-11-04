@@ -496,6 +496,7 @@ pub fn proc_cvar_auto(
             ctl.gen_opt.jscore_gap_open,
             ctl.gen_opt.jscore_gap_extend,
             ctl.gen_opt.jscore_bits_multiplier,
+            false,
         )
         .0;
 
@@ -568,6 +569,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut opt = Vec::new();
             if !ds.is_empty() {
@@ -608,6 +610,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut delta = 0.0;
             if scores.len() > 1 {
@@ -639,6 +642,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut opt2 = Vec::new();
             if ds.len() > 1 {
@@ -679,6 +683,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut score = 0.0;
             if scores.len() > 1 {
@@ -710,6 +715,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut delta = 0.0;
             if scores.len() > 1 {
@@ -821,6 +827,7 @@ pub fn proc_cvar_auto(
                 ctl.gen_opt.jscore_gap_extend,
                 ctl.gen_opt.jscore_bits_multiplier,
                 rsi.vpids[col],
+                false,
             );
             let mut delta = 0.0;
             if scores.len() > 1 {

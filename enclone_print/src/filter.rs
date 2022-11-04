@@ -568,6 +568,7 @@ pub fn survives_filter(
                             ctl.gen_opt.jscore_gap_extend,
                             ctl.gen_opt.jscore_bits_multiplier,
                             rsi.vpids[col],
+                            false,
                         );
                         let mut opt = Vec::new();
                         if !ds.is_empty() {
@@ -617,6 +618,7 @@ pub fn survives_filter(
                             ctl.gen_opt.jscore_gap_extend,
                             ctl.gen_opt.jscore_bits_multiplier,
                             rsi.vpids[col],
+                            false,
                         );
                         let mut opt = Vec::new();
                         if !ds.is_empty() {
@@ -664,6 +666,7 @@ pub fn survives_filter(
                             ctl.gen_opt.jscore_gap_extend,
                             ctl.gen_opt.jscore_bits_multiplier,
                             rsi.vpids[col],
+                            false,
                         );
                         let mut opt = Vec::new();
                         if !ds.is_empty() {

@@ -342,6 +342,7 @@ fn main() {
                     jscore_gap_extend,
                     jscore_bits_multiplier,
                     None,
+                    false,
                 );
                 let mut opt = Vec::new();
                 if !ds.is_empty() {
@@ -396,6 +397,7 @@ fn main() {
                     jscore_gap_open,
                     jscore_gap_extend,
                     jscore_bits_multiplier,
+                    false,
                 );
                 let mut tigpos = 0;
                 let mut hcomp = 0;

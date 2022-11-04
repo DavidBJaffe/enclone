@@ -23,6 +23,7 @@
 
 use bio_edit::alignment::pairwise::{Aligner, Scoring, MIN_SCORE};
 use bio_edit::alignment::AlignmentMode;
+use bio_edit::alignment::AlignmentOperation;
 use bio_edit::alignment::AlignmentOperation::*;
 use string_utils::strme;
 
@@ -129,7 +130,6 @@ pub fn cigar(
     xend: usize,
     xlen: usize,
 ) -> String {
-    use bio_edit::alignment::AlignmentOperation;
     let clip_str = "S";
     let add_op = |op: AlignmentOperation, k, cigar: &mut String| match op {
         AlignmentOperation::Match => cigar.push_str(&format!("{}{}", k, "=")),
@@ -167,6 +167,8 @@ pub fn cigar(
 
 // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
+// new: should possibly always be true, but changes results
+
 pub fn align_to_vdj_ref(
     seq: &[u8],
     u5ref: &[u8],
@@ -183,6 +185,7 @@ pub fn align_to_vdj_ref(
     jscore_gap_open: i32,
     jscore_gap_extend: i32,
     jscore_bits_multiplier: f64,
+    new: bool,
 ) -> (Vec<bio_edit::alignment::AlignmentOperation>, f64) {
     // Define penalties.
 
@@ -306,9 +309,32 @@ pub fn align_to_vdj_ref(
     if concat.len() == 0 {
         return (Vec::new(), 0.0);
     }
-    let mut al = aligner.custom_with_gap_fns(seq, &concat, &gap_open_fn, &gap_extend_fn);
-    al.mode = AlignmentMode::Semiglobal;
-    let mut ops = al.operations;
+
+    let mut ops = Vec::<AlignmentOperation>::new();
+
+    // OLD CODE
+    if !new {
+        let al = aligner.custom_with_gap_fns(seq, &concat, &gap_open_fn, &gap_extend_fn);
+        ops.append(&mut al.operations.clone());
+
+    // NEW CODE
+    } else {
+        let mut al;
+        let global = false;
+        if !global {
+            al = aligner.semiglobal(seq, &concat);
+        } else {
+            al = aligner.global(seq, &concat);
+        }
+        al.mode = AlignmentMode::Semiglobal; // maybe this does not affect return value
+        for _ in 0..al.ystart {
+            ops.push(AlignmentOperation::Del);
+        }
+        ops.append(&mut al.operations.clone());
+        for _ in 0..concat.len() - al.yend {
+            ops.push(AlignmentOperation::Del);
+        }
+    }
 
     // Fix alignments.
 

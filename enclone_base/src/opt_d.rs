@@ -59,6 +59,7 @@ pub fn evaluate_d(
     jscore_gap_open: i32,
     jscore_gap_extend: i32,
     jscore_bits_multiplier: f64,
+    new: bool,
 ) -> (Vec<bio_edit::alignment::AlignmentOperation>, f64) {
     // Start to build reference concatenation.  First append the V segment.
 
@@ -116,6 +117,7 @@ pub fn evaluate_d(
         jscore_gap_open,
         jscore_gap_extend,
         jscore_bits_multiplier,
+        new,
     );
     (ops, count)
 }
@@ -136,6 +138,7 @@ pub fn opt_d(
     jscore_gap_extend: i32,
     jscore_bits_multiplier: f64,
     v_alt: Option<usize>,
+    new: bool,
 ) {
     let mut comp = 1000000.0;
 
@@ -180,6 +183,7 @@ pub fn opt_d(
             jscore_gap_open,
             jscore_gap_extend,
             jscore_bits_multiplier,
+            new,
         );
         counts.push(count);
         if !todo[di].is_empty() {
@@ -217,6 +221,7 @@ pub fn opt_d(
                 jscore_gap_open,
                 jscore_gap_extend,
                 jscore_bits_multiplier,
+                new,
             );
             counts.push(count);
             ds.push(todo[di].clone());
