@@ -62,7 +62,7 @@ dependencies = [
 [[package]]
 name = "align_tools"
 version = "0.1.12"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "bio_edit",
  "debruijn",
@@ -74,7 +74,7 @@ dependencies = [
 [[package]]
 name = "amino"
 version = "0.1.7"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "debruijn",
  "string_utils",
@@ -92,7 +92,7 @@ dependencies = [
 [[package]]
 name = "ansi_escape"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "string_utils",
  "vector_utils",
@@ -384,7 +384,7 @@ checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
 [[package]]
 name = "binary_vec_io"
 version = "0.1.12"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "itertools",
 ]
@@ -466,7 +466,7 @@ dependencies = [
 [[package]]
 name = "bio_edit"
 version = "0.1.1"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "bio-types 0.12.1",
  "bit-set",
@@ -1256,7 +1256,7 @@ dependencies = [
 [[package]]
 name = "dna"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 
 [[package]]
 name = "doc-comment"
@@ -1827,7 +1827,7 @@ dependencies = [
 [[package]]
 name = "equiv"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 
 [[package]]
 name = "errno"
@@ -1884,7 +1884,7 @@ checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 [[package]]
 name = "exons"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "io_utils",
  "string_utils",
@@ -1894,7 +1894,7 @@ dependencies = [
 [[package]]
 name = "expr_tools"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "evalexpr",
  "statrs",
@@ -1905,7 +1905,7 @@ dependencies = [
 [[package]]
 name = "fasta_tools"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "debruijn",
  "flate2",
@@ -2338,7 +2338,7 @@ dependencies = [
 [[package]]
 name = "graph_simple"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "petgraph",
  "vector_utils",
@@ -2620,7 +2620,7 @@ dependencies = [
 [[package]]
 name = "hyperbase"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "debruijn",
  "equiv",
@@ -2849,7 +2849,7 @@ dependencies = [
 [[package]]
 name = "io_utils"
 version = "0.3.2"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "bincode",
  "flate2",
@@ -2952,7 +2952,7 @@ dependencies = [
 [[package]]
 name = "kmer_lookup"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "debruijn",
  "rayon",
@@ -3260,7 +3260,7 @@ dependencies = [
 [[package]]
 name = "mirror_sparse_matrix"
 version = "0.1.17"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "binary_vec_io",
 ]
@@ -3741,7 +3741,7 @@ checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
 [[package]]
 name = "perf_stats"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "io_utils",
  "libc",
@@ -4008,7 +4008,7 @@ dependencies = [
 [[package]]
 name = "pretty_trace"
 version = "0.5.23"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "backtrace",
  "io_utils",
@@ -4715,12 +4715,12 @@ dependencies = [
 [[package]]
 name = "stats_utils"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 
 [[package]]
 name = "stirling_numbers"
 version = "0.1.7"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "num-traits",
 ]
@@ -4734,7 +4734,7 @@ checksum = "9e08d8363704e6c71fc928674353e6b7c23dcea9d82d7012c8faf2a3a025f8d0"
 [[package]]
 name = "string_utils"
 version = "0.1.4"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "vector_utils",
 ]
@@ -4858,7 +4858,7 @@ dependencies = [
 [[package]]
 name = "tables"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "ansi_escape",
  "io_utils",
@@ -5369,7 +5369,7 @@ checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
 [[package]]
 name = "vdj_ann"
 version = "0.4.4"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "align_tools",
  "amino",
@@ -5391,7 +5391,7 @@ dependencies = [
 [[package]]
 name = "vdj_ann_ref"
 version = "0.2.1"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "debruijn",
  "exons",
@@ -5410,7 +5410,7 @@ dependencies = [
 [[package]]
 name = "vdj_types"
 version = "0.2.0"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "serde",
 ]
@@ -5427,7 +5427,7 @@ dependencies = [
 [[package]]
 name = "vector_utils"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#9d770775d7bf9a53ca4a778b8b52def10bcab0ec"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=dj/fix_5prime_utrs#aacea83dc0b8bd89623e2756a660f8992355d369"
 dependencies = [
  "permutation",
  "superslice",
