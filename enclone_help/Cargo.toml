@@ -20,12 +20,12 @@ publish = false
 # in the root of the enclone repo.
 
 [dependencies]
-ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
+ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 enclone_core = { path = "../enclone_core" }
-io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
+io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 itertools = "0.10"
-string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
-tables = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
+string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+tables = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 
 
 

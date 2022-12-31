@@ -637,8 +637,8 @@ fn test_cpu() {
 //     the ring license.
 // 8.  webpki OK because we include the webpki license and also that for chromium.
 // 9.  instant OK because we include the license.
-// 10. nalgebra and gethostname and xi-unicode OK because currently licensed under Apache-2.0
-//     and there is not NOTICE file.
+// 10. nalgebra and gethostname and xi-unicode and unicode-general-category OK because currently
+//     licensed under Apache-2.0 and there is no NOTICE file.
 // 11. iced_wgpu OK because it is MIT AND OFL-1.1.
 // 12. png-decoder is OK because it is MIT but for some reason cargo-license returns null.
 // 13. BSD-2-Clause: if no actual license is provided, we should not have to do anything.
@@ -664,7 +664,7 @@ fn test_licenses() {
     ];
     const A2: &str = "Apache-2.0";
     const ACCEPTABLE_10X_PACKAGES: [&str; 2] = ["exons", "vdj_ann"];
-    const ACCEPTABLE_OTHER_PACKAGES: [&str; 21] = [
+    const ACCEPTABLE_OTHER_PACKAGES: [&str; 22] = [
         "arrayref",
         "cloudabi",
         "fuchsia-cprng",
@@ -683,9 +683,10 @@ fn test_licenses() {
         "png-decoder",
         "ring",
         "tiny-skia",
+        "unicode-general-category",
+        "unicode-ident",
         "webpki",
         "xi-unicode",
-        "unicode-ident",
     ];
     let new = Command::new("cargo-license").arg("-d").arg("-j").output();
     if new.is_err() {

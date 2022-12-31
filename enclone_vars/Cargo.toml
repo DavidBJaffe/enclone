@@ -21,8 +21,8 @@ publish = false
 
 [dependencies]
 enclone_base = { path = "../enclone_base" }
-io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
+io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 itertools = "0.10"
-pretty_trace = { version = "0.5", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
-string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
-vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "dj/fix_5prime_utrs" }
+pretty_trace = { version = "0.5", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
+vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
