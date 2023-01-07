@@ -96,7 +96,7 @@ serde_derive = "1"
 serde_json = "1"
 sha2 = "0.10"
 stats_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
-statrs = "0.15"
+statrs = "0.16"
 stirling_numbers = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 superslice = "1"
