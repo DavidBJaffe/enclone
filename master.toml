@@ -8,7 +8,7 @@ align_tools = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-tool
 amino = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 anyhow = "1"
 ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
-arboard = "2"
+arboard = "3"
 assert_cmd = "2"
 async-trait = "0.1"
 attohttpc = { version = "0.18", default-features = false, features = ["compress", "tls-rustls"] }
