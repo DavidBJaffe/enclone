@@ -60,7 +60,7 @@ image = { version = "0.23", features = ["jpeg", "png", "jpeg_rayon"], default-fe
 include_dir = { version = "0.6", features = ["search"] }
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 itertools = "0.10"
-jpeg-decoder = "0.2"
+jpeg-decoder = "0.3"
 kmer_lookup = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 lazy_static = "1"
 libc = "0.2"
