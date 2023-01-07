@@ -2,7 +2,7 @@
 
 // Unoptimized functions for packing and unpacking some data structures.
 
-use zstd::block::{Compressor, Decompressor};
+use zstd::bulk::{Compressor, Decompressor};
 
 // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
@@ -12,11 +12,12 @@ use zstd::block::{Compressor, Decompressor};
 // that it's a good tradeoff.
 
 pub fn compress_bytes(x: &Vec<u8>) -> Vec<u8> {
-    Compressor::new().compress(x, 0).unwrap()
+    Compressor::new(0).unwrap().compress(x).unwrap()
 }
 
 pub fn uncompress_bytes(x: &[u8], uncompressed_size: usize) -> Vec<u8> {
     Decompressor::new()
+        .unwrap()
         .decompress(x, uncompressed_size)
         .unwrap()
 }

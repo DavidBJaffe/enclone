@@ -118,4 +118,4 @@ vdj_ann_ref = { version = "0.2", git = "https://github.com/DavidBJaffe/rust-tool
 vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 whoami = "1"
 yaml-rust = "0.4"
-zstd = "0.9"
+zstd = "0.12"
