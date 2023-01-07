@@ -42,7 +42,7 @@ enclone_tail = { path = "../enclone_tail" }
 enclone_vars = { path = "../enclone_vars" }
 enclone_version = { path = "../enclone_version" }
 equiv = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
-evalexpr = "7"
+evalexpr = "8"
 expr_tools = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 fasta_tools = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git", branch = "master" }
 file-lock = "2"

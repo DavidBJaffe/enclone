@@ -4,9 +4,9 @@ version = 3
 
 [[package]]
 name = "ab_glyph"
-version = "0.2.18"
+version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dcdbc68024b653943864d436fe8a24b028095bc1cf91a8926f8241e4aaffe59"
+checksum = "e5568a4aa5ba8adf5175c5c460b030e27d8893412976cc37bef0e4fbc16cfbba"
 dependencies = [
  "ab_glyph_rasterizer",
  "owned_ttf_parser",
@@ -62,7 +62,7 @@ dependencies = [
 [[package]]
 name = "align_tools"
 version = "0.1.12"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "bio_edit",
  "debruijn",
@@ -74,7 +74,7 @@ dependencies = [
 [[package]]
 name = "amino"
 version = "0.1.7"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "debruijn",
  "string_utils",
@@ -92,7 +92,7 @@ dependencies = [
 [[package]]
 name = "ansi_escape"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "string_utils",
  "vector_utils",
@@ -324,9 +324,9 @@ checksum = "7a40729d2133846d9ed0ea60a8b9541bccddab49cd30f0715a1da672fe9a2524"
 
 [[package]]
 name = "async-trait"
-version = "0.1.60"
+version = "0.1.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "677d1d8ab452a3936018a687b20e6f7cf5363d713b732b8884001317b0e48aa3"
+checksum = "705339e0e4a9690e2908d2b3d049d85682cf19fbd5782494498fbf7003a6a282"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -385,7 +385,7 @@ checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
 [[package]]
 name = "binary_vec_io"
 version = "0.1.12"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "itertools",
 ]
@@ -407,7 +407,7 @@ checksum = "e07645dcc036557a09cf078268b4666f0ce737bd797b0ee554de29ea81981ab2"
 dependencies = [
  "anyhow",
  "approx",
- "bio-types 0.13.0",
+ "bio-types",
  "bit-set",
  "bv",
  "bytecount",
@@ -430,25 +430,12 @@ dependencies = [
  "regex",
  "serde",
  "serde_derive",
- "statrs 0.15.0",
+ "statrs",
  "strum",
- "strum_macros 0.24.3",
+ "strum_macros",
  "thiserror",
  "triple_accel",
  "vec_map",
-]
-
-[[package]]
-name = "bio-types"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13bc4296477f37f54e4fd21efaf48a7fa40fbb289bfbf338af5fbbe42797acb6"
-dependencies = [
- "derive-new",
- "lazy_static",
- "regex",
- "strum_macros 0.23.1",
- "thiserror",
 ]
 
 [[package]]
@@ -460,16 +447,16 @@ dependencies = [
  "derive-new",
  "lazy_static",
  "regex",
- "strum_macros 0.24.3",
+ "strum_macros",
  "thiserror",
 ]
 
 [[package]]
 name = "bio_edit"
 version = "0.1.1"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
- "bio-types 0.12.1",
+ "bio-types",
  "bit-set",
 ]
 
@@ -616,9 +603,9 @@ checksum = "dfb24e866b15a1af2a1b663f10c6b6b8f397a84aadb828f12e5b289ec23a3a3c"
 
 [[package]]
 name = "bzip2"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6afcd980b5f3a45017c57e57a2fcccbb351cc43a356ce117ef760ef8052b89b0"
+checksum = "bdb116a6ef3f6c3698828873ad02c3014b3c85cadb88496095628e3ef1e347f8"
 dependencies = [
  "bzip2-sys",
  "libc",
@@ -1257,7 +1244,7 @@ dependencies = [
 [[package]]
 name = "dna"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 
 [[package]]
 name = "doc-comment"
@@ -1722,7 +1709,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
- "statrs 0.16.0",
+ "statrs",
  "stats_utils",
  "string_utils",
  "tables",
@@ -1828,7 +1815,7 @@ dependencies = [
 [[package]]
 name = "equiv"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 
 [[package]]
 name = "errno"
@@ -1872,9 +1859,9 @@ dependencies = [
 
 [[package]]
 name = "evalexpr"
-version = "7.2.0"
+version = "8.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d4fd7bd9e32c1205549decf6f36772d7b606a579b26afaffa335ae148151a5d"
+checksum = "aacfb566035f8cd02f6ec9247c242f3f9904a0b288ea383abcf4e95df6436a34"
 
 [[package]]
 name = "event-listener"
@@ -1885,7 +1872,7 @@ checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 [[package]]
 name = "exons"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "io_utils",
  "string_utils",
@@ -1895,10 +1882,10 @@ dependencies = [
 [[package]]
 name = "expr_tools"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "evalexpr",
- "statrs 0.15.0",
+ "statrs",
  "string_utils",
  "vector_utils",
 ]
@@ -1906,7 +1893,7 @@ dependencies = [
 [[package]]
 name = "fasta_tools"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "debruijn",
  "flate2",
@@ -2230,9 +2217,9 @@ dependencies = [
 
 [[package]]
 name = "glob"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b919933a397b79c37e33b77bb2aa3dc8eb6e165ad809e58ff75bc7db2e34574"
+checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
 name = "gloo-timers"
@@ -2339,7 +2326,7 @@ dependencies = [
 [[package]]
 name = "graph_simple"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "petgraph",
  "vector_utils",
@@ -2621,7 +2608,7 @@ dependencies = [
 [[package]]
 name = "hyperbase"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "debruijn",
  "equiv",
@@ -2864,7 +2851,7 @@ dependencies = [
 [[package]]
 name = "io_utils"
 version = "0.3.2"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "bincode",
  "flate2",
@@ -2967,7 +2954,7 @@ dependencies = [
 [[package]]
 name = "kmer_lookup"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "debruijn",
  "rayon",
@@ -3275,7 +3262,7 @@ dependencies = [
 [[package]]
 name = "mirror_sparse_matrix"
 version = "0.1.17"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "binary_vec_io",
 ]
@@ -3315,24 +3302,6 @@ dependencies = [
 
 [[package]]
 name = "nalgebra"
-version = "0.27.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "462fffe4002f4f2e1f6a9dcf12cc1a6fc0e15989014efc02a941d3e0f5dc2120"
-dependencies = [
- "approx",
- "matrixmultiply",
- "nalgebra-macros",
- "num-complex",
- "num-rational 0.4.1",
- "num-traits",
- "rand",
- "rand_distr",
- "simba 0.5.1",
- "typenum",
-]
-
-[[package]]
-name = "nalgebra"
 version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d506eb7e08d6329505faa8a3a00a5dcc6de9f76e0c77e4b75763ae3c770831ff"
@@ -3345,7 +3314,7 @@ dependencies = [
  "num-traits",
  "rand",
  "rand_distr",
- "simba 0.6.0",
+ "simba",
  "typenum",
 ]
 
@@ -3489,9 +3458,9 @@ dependencies = [
 
 [[package]]
 name = "nom"
-version = "7.1.1"
+version = "7.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a8903e5a29a317527874d0402f867152a3d21c908bb0b933e416c65e301d4c36"
+checksum = "e5507769c4919c998e69e49c839d9dc6e693ede4cc4290d6ad8b41d4f09c548c"
 dependencies = [
  "memchr",
  "minimal-lexical",
@@ -3631,9 +3600,9 @@ dependencies = [
 
 [[package]]
 name = "object"
-version = "0.30.0"
+version = "0.30.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "239da7f290cfa979f43f85a8efeee9a8a76d0827c356d37f9d3d7254d6b537fb"
+checksum = "8d864c91689fdc196779b98dba0aceac6118594c2df6ee5d943eb6a8df4d107a"
 dependencies = [
  "memchr",
 ]
@@ -3655,11 +3624,11 @@ dependencies = [
 
 [[package]]
 name = "owned_ttf_parser"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18904d3c65493a9f0d7542293d1a7f69bfdc309a6b9ef4f46dc3e58b0577edc5"
+checksum = "2a5f3c7ca08b6879e7965fb25e24d1f5eeb32ea73f9ad99b3854778a38c57e93"
 dependencies = [
- "ttf-parser 0.17.1",
+ "ttf-parser 0.18.0",
 ]
 
 [[package]]
@@ -3765,7 +3734,7 @@ checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
 [[package]]
 name = "perf_stats"
 version = "0.1.8"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "io_utils",
  "libc",
@@ -4032,13 +4001,13 @@ dependencies = [
 [[package]]
 name = "pretty_trace"
 version = "0.5.23"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "backtrace",
  "io_utils",
  "lazy_static",
  "libc",
- "nix 0.22.3",
+ "nix 0.23.2",
  "pprof 0.11.0",
  "pprof 0.6.2",
  "stats_utils",
@@ -4598,18 +4567,6 @@ dependencies = [
 
 [[package]]
 name = "simba"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e82063457853d00243beda9952e910b82593e4b07ae9f721b9278a99a0d3d5c"
-dependencies = [
- "approx",
- "num-complex",
- "num-traits",
- "paste",
-]
-
-[[package]]
-name = "simba"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f0b7840f121a46d63066ee7a99fc81dcabbc6105e437cae43528cea199b5a05f"
@@ -4747,26 +4704,13 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "statrs"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05bdbb8e4e78216a85785a85d3ec3183144f98d0097b9281802c019bb07a6f05"
-dependencies = [
- "approx",
- "lazy_static",
- "nalgebra 0.27.1",
- "num-traits",
- "rand",
-]
-
-[[package]]
-name = "statrs"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d08e5e1748192713cc281da8b16924fb46be7b0c2431854eadc785823e5696e"
 dependencies = [
  "approx",
  "lazy_static",
- "nalgebra 0.29.0",
+ "nalgebra",
  "num-traits",
  "rand",
 ]
@@ -4774,12 +4718,12 @@ dependencies = [
 [[package]]
 name = "stats_utils"
 version = "0.1.3"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 
 [[package]]
 name = "stirling_numbers"
 version = "0.1.7"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "num-traits",
 ]
@@ -4793,7 +4737,7 @@ checksum = "9e08d8363704e6c71fc928674353e6b7c23dcea9d82d7012c8faf2a3a025f8d0"
 [[package]]
 name = "string_utils"
 version = "0.1.4"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "vector_utils",
 ]
@@ -4806,22 +4750,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "strum"
-version = "0.23.0"
+version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cae14b91c7d11c9a851d3fbc80a963198998c2a64eec840477fa92d8ce9b70bb"
-
-[[package]]
-name = "strum_macros"
-version = "0.23.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bb0dc7ee9c15cea6199cde9a127fa16a4c5819af85395457ad72d68edc85a38"
-dependencies = [
- "heck 0.3.3",
- "proc-macro2",
- "quote",
- "rustversion",
- "syn",
-]
+checksum = "063e6045c0e62079840579a7e47a355ae92f60eb74daaf156fb1e84ba164e63f"
 
 [[package]]
 name = "strum_macros"
@@ -4917,7 +4848,7 @@ dependencies = [
 [[package]]
 name = "tables"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "ansi_escape",
  "io_utils",
@@ -5036,9 +4967,9 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.23.0"
+version = "1.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eab6d665857cc6ca78d6e80303a02cea7a7851e85dfbd77cbdc09bd129f1ef46"
+checksum = "1d9f76183f91ecfb55e1d7d5602bd1d979e38a3a522fe900241cf195624d67ae"
 dependencies = [
  "autocfg",
  "bytes",
@@ -5247,9 +5178,9 @@ checksum = "22048bc95dfb2ffd05b1ff9a756290a009224b60b2f0e7525faeee7603851e63"
 
 [[package]]
 name = "try-lock"
-version = "0.2.3"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
+checksum = "3528ecfd12c466c6f163363caf2d02a71161dd5e1cc6ae7b34207ea2d42d81ed"
 
 [[package]]
 name = "ttf-parser"
@@ -5259,9 +5190,9 @@ checksum = "7ae2f58a822f08abdaf668897e96a5656fe72f5a9ce66422423e8849384872e6"
 
 [[package]]
 name = "ttf-parser"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "375812fa44dab6df41c195cd2f7fecb488f6c09fbaafb62807488cefab642bff"
+checksum = "dbf554b6e535f9a160b2ed4ea83f99000f21cbc0a693df26e258eaf2c226a151"
 
 [[package]]
 name = "twox-hash"
@@ -5428,7 +5359,7 @@ checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
 [[package]]
 name = "vdj_ann"
 version = "0.4.4"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "align_tools",
  "amino",
@@ -5450,7 +5381,7 @@ dependencies = [
 [[package]]
 name = "vdj_ann_ref"
 version = "0.2.1"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "debruijn",
  "exons",
@@ -5469,7 +5400,7 @@ dependencies = [
 [[package]]
 name = "vdj_types"
 version = "0.2.0"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "serde",
 ]
@@ -5486,7 +5417,7 @@ dependencies = [
 [[package]]
 name = "vector_utils"
 version = "0.1.5"
-source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#55744303dc3436db18bbfd56298dcfe1d0532011"
+source = "git+https://github.com/DavidBJaffe/rust-toolbox.git?branch=master#d34edc7974de00085b25d9711d7fec0054f2558b"
 dependencies = [
  "permutation",
  "superslice",
