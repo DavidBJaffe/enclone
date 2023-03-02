@@ -342,7 +342,7 @@ pub const TESTS: [&str; 310] = [
     // 140. test cvar vj_aa_nl
     r###"BCR=85333 CHAINS=1 CDR3=CAAWDDSLNGWVF POUT=stdout PCOLS=vj_aa_nl1"###,
     // 141. test cvar aa%
-    r###"BCR=85333 CDR3=CAKGDRTGYSYGGGIFDYW CVARS=aa%,dna%"###,
+    r###"BCR=85333 CDR3=CAKGDRTGYSYGGGIFDYW CVARS=aa%,aa_nl%,dna%"###,
     // 142. test 1/3 of DIFF_STYLE
     r###"BCR=123085 CDR3=CARVRDILTGDYGMDVW DIFF_STYLE=C1"###,
     // 143. test 2/3 of DIFF_STYLE

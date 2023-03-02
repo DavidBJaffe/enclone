@@ -88,6 +88,44 @@ pub fn proc_cvar_auto(
             Vec::new(),
             "exact".to_string(),
         )
+    } else if vname == "aa_nl%" {
+        let xm = &ex.share[mid];
+        let mut diffs = 0;
+        let mut denom = 0;
+        let aa_seq = &xm.aa_mod_indel;
+        let mut vref = refdata.refs[xm.v_ref_id].to_ascii_vec();
+        if xm.v_ref_id_donor_alt_id.is_some() {
+            vref = dref[xm.v_ref_id_donor.unwrap()].nt_sequence.clone();
+        }
+        let jref = refdata.refs[xm.j_ref_id].to_ascii_vec();
+        let z = 3 * aa_seq.len() + 1;
+        for p in xm.fr1_start / 3..aa_seq.len() {
+            if aa_seq[p] == b'-' {
+                diffs += 1;
+                denom += 1;
+                continue;
+            }
+            if 3 * p + 3 <= vref.len() - ctl.heur.ref_v_trim {
+                denom += 1;
+                if aa_seq[p] != codon_to_aa(&vref[3 * p..3 * p + 3]) {
+                    diffs += 1;
+                }
+            }
+            if 3 * p > z - (jref.len() - ctl.heur.ref_j_trim) + 3 {
+                denom += 1;
+                if aa_seq[p]
+                    != codon_to_aa(&jref[jref.len() - (z - 3 * p)..jref.len() - (z - 3 * p) + 3])
+                {
+                    diffs += 1;
+                }
+            }
+        }
+
+        (
+            format!("{:.1}", percent_ratio(denom - diffs, denom)),
+            Vec::new(),
+            "exact".to_string(),
+        )
     } else if vname == "allele" {
         let mut allele = 0;
         if ex.share[mid].v_ref_id_donor_alt_id.is_some() {

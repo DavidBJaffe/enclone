@@ -507,6 +507,11 @@ pub fn help2(args: &Vec<String>, _ctl: &EncloneControl, h: &mut HelpDesk) -> Res
             "dna%",
             "nucleotide percent identity with donor reference, outside junction region",
         );
+        h.doc(
+            "aa_nl%",
+            "amino acid percent identity with donor reference, excluding leader,",
+        );
+        h.doc2("outside junction region");
 
         h.ldoc(
             "v_name_orig",
