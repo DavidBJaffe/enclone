@@ -100,6 +100,6 @@ pub fn copy_bytes_to_clipboard(bytes: &[u8]) {
     if bytes.len() > 0 {
         let mut clipboard = Clipboard::new().unwrap();
         let the_string = strme(&bytes);
-        clipboard.set_text(the_string.into()).unwrap();
+        clipboard.set_text::<String>(the_string.into()).unwrap();
     }
 }
