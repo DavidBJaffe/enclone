@@ -31,7 +31,7 @@ pub fn jflank(seq: &[u8], jref: &[u8]) -> usize {
     for i in 0..=jref.len() - MATCHLEN {
         let mut matchlen = 0;
         for j in 0..MATCHLEN {
-            if seq[seq.len() - jref.len() + i + j] != jref[i + j] {
+            if seq.len() >= jref.len() && seq[seq.len() - jref.len() + i + j] != jref[i + j] {
                 break;
             }
             matchlen += 1;
