@@ -94,7 +94,12 @@ pub fn evaluate_d(
 
     // Align the V..J sequence on the contig to the reference concatenation.
 
-    let mut seq_end = tig.len() - (jref.len() - jend);
+    let mut seq_end;
+    if tig.len() < jref.len() - jend {
+        seq_end = tig.len();
+    } else {
+        seq_end = tig.len() - (jref.len() - jend);
+    }
     if seq_end <= seq_start as usize {
         seq_end = tig.len(); // bug fix for problem found by customer, couldn't reproduce internally
     }
