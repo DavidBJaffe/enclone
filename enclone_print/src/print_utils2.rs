@@ -608,7 +608,7 @@ pub fn row_fill(
         for p in vv.iter() {
             // what does it mean if this fails?
             if 3 * p + 3 <= seq_amino.len() {
-                if seq_amino[3 * p..3 * p + 3].to_vec() == b"---".to_vec() {
+                if seq_amino[3 * p..3 * p + 3].contains(&b'-') {
                     varaa.push(b'-');
                 } else {
                     varaa.push(codon_to_aa(&seq_amino[3 * p..3 * p + 3]));
