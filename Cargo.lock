@@ -1278,6 +1278,7 @@ dependencies = [
  "ansi_escape",
  "assert_cmd",
  "debruijn",
+ "enclone_base",
  "enclone_core",
  "enclone_proto",
  "equiv",
@@ -1335,6 +1336,7 @@ name = "enclone_base"
 version = "0.5.216"
 dependencies = [
  "amino",
+ "ansi_escape",
  "bio_edit",
  "enclone_proto",
  "flate2",
@@ -1453,6 +1455,7 @@ name = "enclone_help"
 version = "0.5.216"
 dependencies = [
  "ansi_escape",
+ "enclone_base",
  "enclone_core",
  "io_utils",
  "itertools",

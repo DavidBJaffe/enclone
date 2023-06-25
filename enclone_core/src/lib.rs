@@ -13,7 +13,6 @@ pub mod main_testlist;
 pub mod mammalian_fixed_len;
 pub mod median;
 pub mod prepare_for_apocalypse;
-pub mod print_tools;
 pub mod set_speakers;
 pub mod slurp;
 pub mod stringulate;

@@ -21,6 +21,7 @@ publish = false
 
 [dependencies]
 ansi_escape = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git" }
+enclone_base = { path = "../enclone_base" }
 enclone_core = { path = "../enclone_core" }
 io_utils = { version = "0.3", git = "https://github.com/DavidBJaffe/rust-toolbox.git" }
 itertools = "0.10"

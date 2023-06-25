@@ -4,8 +4,8 @@
 
 use crate::help_utils::{colored_codon_table, HelpDesk};
 use ansi_escape::{best_color_order, emit_end_escape, emit_green_escape, print_color};
+use enclone_base::print_tools::color_by_property;
 use enclone_core::defs::EncloneControl;
-use enclone_core::print_tools::color_by_property;
 use enclone_core::version_string;
 use io_utils::fwrite;
 use std::io::Write;

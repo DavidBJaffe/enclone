@@ -3,8 +3,8 @@
 use crate::print_utils1::aa_classes;
 use amino::codon_to_aa;
 use ansi_escape::emit_end_escape;
+use enclone_base::print_tools::emit_codon_color_escape;
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype};
-use enclone_core::print_tools::emit_codon_color_escape;
 use enclone_proto::types::DonorReferenceItem;
 use itertools::Itertools;
 use std::cmp::max;

@@ -4,9 +4,9 @@ use amino::codon_to_aa;
 use ansi_escape::{
     emit_bold_escape, emit_eight_bit_color_escape, emit_end_escape, emit_red_escape,
 };
+use enclone_base::print_tools::{color_by_property, emit_codon_color_escape};
 use enclone_core::cell_color::CellColor;
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype, GexInfo, TigData1, POUT_SEP};
-use enclone_core::print_tools::{color_by_property, emit_codon_color_escape};
 use enclone_vars::decode_arith;
 use expr_tools::vars_of_node;
 use io_utils::{fwrite, fwriteln};
