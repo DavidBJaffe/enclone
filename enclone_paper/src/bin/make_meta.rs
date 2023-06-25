@@ -1,6 +1,6 @@
 // Make a meta file for the test data.
 
-use enclone_core::expand_integer_ranges;
+use enclone_base::expand_integer_ranges;
 use enclone_core::test_def::*;
 
 fn main() {

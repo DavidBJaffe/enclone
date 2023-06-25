@@ -2,8 +2,9 @@
 
 // This file contains the two functions proc_xcr and proc_meta.
 
+use enclone_base::expand_integer_ranges;
 use enclone_core::defs::{EncloneControl, OriginInfo};
-use enclone_core::{expand_integer_ranges, fetch_url, tilde_expand_me};
+use enclone_core::{fetch_url, tilde_expand_me};
 use io_utils::*;
 use itertools::Itertools;
 use rayon::prelude::*;

@@ -1312,6 +1312,7 @@ version = "0.5.216"
 dependencies = [
  "attohttpc",
  "debruijn",
+ "enclone_base",
  "enclone_core",
  "enclone_vars",
  "evalexpr",

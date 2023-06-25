@@ -30,8 +30,6 @@ use std::time::Duration;
 #[cfg(not(target_os = "windows"))]
 use string_utils::stringme;
 
-use string_utils::TextUtils;
-
 #[cfg(not(target_os = "windows"))]
 use tilde_expand::tilde_expand;
 
@@ -66,50 +64,6 @@ pub fn hcat(col1: &[String], col2: &[String], sep: usize) -> Vec<String> {
         cat.push(s);
     }
     cat
-}
-
-pub fn expand_integer_ranges(x: &str) -> String {
-    let mut tokens = Vec::<String>::new();
-    let mut token = String::new();
-    for c in x.chars() {
-        if c == ',' || c == ':' || c == ';' {
-            if !token.is_empty() {
-                tokens.push(token.clone());
-                token.clear();
-            }
-            tokens.push(c.to_string());
-        } else {
-            token.push(c);
-        }
-    }
-    if !token.is_empty() {
-        tokens.push(token);
-    }
-    let mut tokens2 = Vec::<String>::new();
-    for i in 0..tokens.len() {
-        if tokens[i].contains('-')
-            && tokens[i].before("-").parse::<usize>().is_ok()
-            && tokens[i].after("-").parse::<usize>().is_ok()
-        {
-            let n1 = tokens[i].before("-").force_usize();
-            let n2 = tokens[i].after("-").force_usize();
-            if n1 <= n2 {
-                for n in n1..=n2 {
-                    if n > n1 {
-                        tokens2.push(",".to_string());
-                    }
-                    tokens2.push(format!("{}", n));
-                }
-                continue;
-            }
-        }
-        tokens2.push(tokens[i].clone());
-    }
-    let mut y = String::new();
-    for i in 0..tokens2.len() {
-        y += &tokens2[i];
-    }
-    y
 }
 
 lazy_static! {

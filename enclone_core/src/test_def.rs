@@ -2,7 +2,7 @@
 
 // Define enclone paper test sets.
 
-use crate::expand_integer_ranges;
+use enclone_base::expand_integer_ranges;
 use string_utils::TextUtils;
 
 pub const TEST1: &str = "1279053,1279061,1287192-1287195,1287200-1287203:\

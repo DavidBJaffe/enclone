@@ -25,6 +25,7 @@ publish = false
 [dependencies]
 attohttpc = { version = "0.18", default-features = false, features = ["compress", "tls-rustls"] }
 debruijn = "0.3"
+enclone_base = { path = "../enclone_base" }
 enclone_core = { path = "../enclone_core" }
 enclone_vars = { path = "../enclone_vars" }
 evalexpr = "8"
