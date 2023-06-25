@@ -1343,6 +1343,7 @@ dependencies = [
  "string_utils",
  "vdj_ann",
  "vector_utils",
+ "zstd",
 ]
 
 [[package]]
@@ -1752,6 +1753,7 @@ dependencies = [
  "core-graphics 0.22.3",
  "crc",
  "dirs",
+ "enclone_base",
  "enclone_core",
  "enclone_main",
  "enclone_stuff",

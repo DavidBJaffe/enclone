@@ -32,3 +32,4 @@ itertools = "0.10"
 string_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git" }
 vdj_ann = { version = "0.4", git = "https://github.com/DavidBJaffe/rust-toolbox.git" }
 vector_utils = { version = "0.1", git = "https://github.com/DavidBJaffe/rust-toolbox.git" }
+zstd = "0.12"

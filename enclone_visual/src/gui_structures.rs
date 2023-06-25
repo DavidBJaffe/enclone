@@ -5,7 +5,7 @@ use crate::messages::*;
 use crate::*;
 use canvas_view::CanvasView;
 use chrono::prelude::*;
-use enclone_core::packing::*;
+use enclone_base::packing::*;
 use flate2::read::GzDecoder;
 use iced::{button, scrollable, text_input, Color};
 // use iced::Subscription;
