@@ -3,6 +3,7 @@
 pub mod align_to_vdj_ref;
 pub mod blacklist;
 pub mod opt_d;
+pub mod median;
 pub mod packing;
 pub mod pdb;
 pub mod print_tools;

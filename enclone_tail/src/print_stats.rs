@@ -6,8 +6,8 @@ use crate::alluvial_fb::*;
 use crate::fate::print_fate;
 use crate::print_dataset_vars::print_dataset_vars;
 // use crate::sens_spec::*;
+use enclone_base::median::median;
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype, GexInfo};
-use enclone_core::median::median;
 use io_utils::{fwrite, fwriteln};
 use perf_stats::elapsed;
 

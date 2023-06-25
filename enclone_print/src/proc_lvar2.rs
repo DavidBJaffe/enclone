@@ -4,8 +4,8 @@
 // plus a small helper function get_gex_matrix_entry.
 
 use crate::print_utils4::get_gex_matrix_entry;
+use enclone_base::median::rounded_median;
 use enclone_core::defs::{EncloneControl, ExactClonotype, GexInfo, POUT_SEP};
-use enclone_core::median::rounded_median;
 use itertools::Itertools;
 use std::collections::HashMap;
 use string_utils::TextUtils;

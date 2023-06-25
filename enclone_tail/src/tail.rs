@@ -3,8 +3,8 @@
 // Group and print clonotypes.  For now, limited grouping functionality.
 
 use crate::group::group_and_print_clonotypes;
+use enclone_base::median::median_f64;
 use enclone_core::defs::{ColInfo, EncloneControl, ExactClonotype, GexInfo};
-use enclone_core::median::median_f64;
 use enclone_proto::types::DonorReferenceItem;
 use io_utils::fwrite;
 use ndarray::s;
