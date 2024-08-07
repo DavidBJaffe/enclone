@@ -180,7 +180,7 @@ pub fn get_fwr3(x: &TigData1) -> Option<String> {
         let mut dna = Vec::<u8>::new();
         let mut cdr3_start = x.cdr3_start;
         for p in 0..x.cdr3_start {
-            if x.seq_del_amino[p] == b'-' {
+            if p < x.seq_del_amino.len() && x.seq_del_amino[p] == b'-' {
                 cdr3_start += 1;
             }
         }
